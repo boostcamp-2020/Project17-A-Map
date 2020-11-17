@@ -62,5 +62,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>CLIENT_ID</key>
+	<string>$(CLIENT_ID)</string>
 </dict>
 </plist>

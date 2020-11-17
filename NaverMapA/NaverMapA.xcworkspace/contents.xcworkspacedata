@@ -5,6 +5,9 @@
       location = "group:NaverMapA.xcodeproj">
    </FileRef>
    <FileRef
+      location = "group:.swiftlint.yml">
+   </FileRef>
+   <FileRef
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
 </Workspace>
