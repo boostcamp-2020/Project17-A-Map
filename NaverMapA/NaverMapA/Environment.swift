@@ -12,15 +12,15 @@ public enum Environment {
     enum Keys {
         static let clientId = "CLIENT_ID"
     }
-    private static let infoDictionary: [String: Any] = {
+    private static let infoDictionary: [String: Any]? = {
         guard let dict = Bundle.main.infoDictionary else {
-            fatalError("Plist file not found")
+            return nil
         }
         return dict
     }()
-    static let clientId: String = {
-        guard let id = Environment.infoDictionary[Keys.clientId] as? String else {
-            fatalError("API Key not set in plist for this environment")
+    static let clientId: String? = {
+        guard let id = Environment.infoDictionary?[Keys.clientId] as? String else {
+            return nil
         }
         return id
     }()
