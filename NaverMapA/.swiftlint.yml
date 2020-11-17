@@ -1,0 +1,8 @@
+disabled_rules:
+- line_length
+- unused_optional_binding
+- identifier_name
+- cyclomatic_complexity
+- function_body_length
+excluded:
+- Pods
