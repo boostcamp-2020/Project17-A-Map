@@ -6,12 +6,14 @@
 //
 
 import UIKit
+import NMapsMap
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        NMFAuthManager.shared().clientId = Environment.clientId
         guard let _ = (scene as? UIWindowScene) else { return }
     }
 

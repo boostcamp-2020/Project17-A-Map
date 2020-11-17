@@ -20,6 +20,7 @@
 		E0059FBF2563726B00CE6BD7 /* NaverMapATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FBE2563726B00CE6BD7 /* NaverMapATests.swift */; };
 		E0059FCA2563726C00CE6BD7 /* NaverMapAUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FC92563726C00CE6BD7 /* NaverMapAUITests.swift */; };
 		E0059FEA2563741500CE6BD7 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E0059FE92563741500CE6BD7 /* .swiftlint.yml */; };
+		E0BCC6C625638972005AD87F /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BCC6C525638972005AD87F /* Environment.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +65,7 @@
 		E0059FC92563726C00CE6BD7 /* NaverMapAUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverMapAUITests.swift; sourceTree = "<group>"; };
 		E0059FCB2563726C00CE6BD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E0059FE92563741500CE6BD7 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		E0BCC6C525638972005AD87F /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		EBA4CDE9A7CC6FCBCDA4598B /* Pods-NaverMapATests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapATests.release.xcconfig"; path = "Target Support Files/Pods-NaverMapATests/Pods-NaverMapATests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -152,6 +154,7 @@
 				E0059FB22563726B00CE6BD7 /* LaunchScreen.storyboard */,
 				E0059FB52563726B00CE6BD7 /* Info.plist */,
 				E0059FAD2563726900CE6BD7 /* NaverMapA.xcdatamodeld */,
+				E0BCC6C525638972005AD87F /* Environment.swift */,
 			);
 			path = NaverMapA;
 			sourceTree = "<group>";
@@ -435,6 +438,7 @@
 				E0059FAF2563726900CE6BD7 /* NaverMapA.xcdatamodeld in Sources */,
 				E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */,
 				E0059FA72563726900CE6BD7 /* SceneDelegate.swift in Sources */,
+				E0BCC6C625638972005AD87F /* Environment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
