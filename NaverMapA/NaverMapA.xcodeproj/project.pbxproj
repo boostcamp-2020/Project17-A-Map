@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		61901DB53EE8A32FCC52335C /* Pods_NaverMapA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40CAD620339B506C86FDA0AC /* Pods_NaverMapA.framework */; };
 		997FE8701C4893C3A09145F8 /* Pods_NaverMapATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87992EA48C88244E5F3BD1C3 /* Pods_NaverMapATests.framework */; };
+		D429CFE2256582BC00B1EECA /* Place+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D429CFE0256582BC00B1EECA /* Place+CoreDataClass.swift */; };
+		D429CFE3256582BC00B1EECA /* Place+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = D429CFE1256582BC00B1EECA /* Place+CoreDataProperties.swift */; };
 		D506A0E6CC326EDBF1BE4462 /* Pods_NaverMapA_NaverMapAUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE572E6A770EBAC94B87E86 /* Pods_NaverMapA_NaverMapAUITests.framework */; };
 		E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FA42563726900CE6BD7 /* AppDelegate.swift */; };
 		E0059FA72563726900CE6BD7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FA62563726900CE6BD7 /* SceneDelegate.swift */; };
@@ -49,6 +51,8 @@
 		BEE572E6A770EBAC94B87E86 /* Pods_NaverMapA_NaverMapAUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NaverMapA_NaverMapAUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C216106B7FE5408B63595379 /* Pods-NaverMapATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapATests.debug.xcconfig"; path = "Target Support Files/Pods-NaverMapATests/Pods-NaverMapATests.debug.xcconfig"; sourceTree = "<group>"; };
 		C6BD3042AD95BA3CF13B5BF8 /* Pods-NaverMapA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapA.debug.xcconfig"; path = "Target Support Files/Pods-NaverMapA/Pods-NaverMapA.debug.xcconfig"; sourceTree = "<group>"; };
+		D429CFE0256582BC00B1EECA /* Place+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Place+CoreDataClass.swift"; sourceTree = "<group>"; };
+		D429CFE1256582BC00B1EECA /* Place+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Place+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E0059FA12563726900CE6BD7 /* NaverMapA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaverMapA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0059FA42563726900CE6BD7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0059FA62563726900CE6BD7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -120,6 +124,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D429CFDF2565828B00B1EECA /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				D429CFE0256582BC00B1EECA /* Place+CoreDataClass.swift */,
+				D429CFE1256582BC00B1EECA /* Place+CoreDataProperties.swift */,
+				E0059FAD2563726900CE6BD7 /* NaverMapA.xcdatamodeld */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		E0059F982563726900CE6BD7 = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +160,7 @@
 		E0059FA32563726900CE6BD7 /* NaverMapA */ = {
 			isa = PBXGroup;
 			children = (
+				D429CFDF2565828B00B1EECA /* Model */,
 				E0059FA42563726900CE6BD7 /* AppDelegate.swift */,
 				E0059FA62563726900CE6BD7 /* SceneDelegate.swift */,
 				E0059FA82563726900CE6BD7 /* ViewController.swift */,
@@ -153,7 +168,6 @@
 				E0059FB02563726B00CE6BD7 /* Assets.xcassets */,
 				E0059FB22563726B00CE6BD7 /* LaunchScreen.storyboard */,
 				E0059FB52563726B00CE6BD7 /* Info.plist */,
-				E0059FAD2563726900CE6BD7 /* NaverMapA.xcdatamodeld */,
 				E0BCC6C525638972005AD87F /* Environment.swift */,
 			);
 			path = NaverMapA;
@@ -434,11 +448,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D429CFE3256582BC00B1EECA /* Place+CoreDataProperties.swift in Sources */,
 				E0059FA92563726900CE6BD7 /* ViewController.swift in Sources */,
 				E0059FAF2563726900CE6BD7 /* NaverMapA.xcdatamodeld in Sources */,
 				E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */,
 				E0059FA72563726900CE6BD7 /* SceneDelegate.swift in Sources */,
 				E0BCC6C625638972005AD87F /* Environment.swift in Sources */,
+				D429CFE2256582BC00B1EECA /* Place+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
