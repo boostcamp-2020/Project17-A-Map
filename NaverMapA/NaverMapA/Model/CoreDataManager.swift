@@ -22,6 +22,15 @@ class CoreDataManager {
     var context: NSManagedObjectContext {
         return self.persistentContainer.viewContext
     }
+    func fetch<T: NSManagedObject>(request: NSFetchRequest<T>) -> [T] {
+        do {
+            let fetchResult = try self.context.fetch(request)
+            return fetchResult
+        } catch {
+            print(error.localizedDescription)
+            return []
+        }
+    }
     @discardableResult
     func insertPlace(place: JsonPlace) -> Bool {
         let entity = NSEntityDescription.entity(forEntityName: "Place", in: self.context)
