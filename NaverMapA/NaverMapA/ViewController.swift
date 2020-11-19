@@ -14,6 +14,9 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         let mapView = NMFMapView(frame: view.frame)
         view.addSubview(mapView)
+        DispatchQueue.main.async { [weak self] in
+            self?.loadJson()
+        }
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -29,5 +32,18 @@ class ViewController: UIViewController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(action)
         present(alert, animated: false, completion: nil)
+    }
+    func loadJson() {
+        guard let count = CoreDataManager.shared.count(request: Place.fetchRequest()),
+              count == 0 else { return }
+
+        guard let data = NSDataAsset(name: "restaurant_list")?.data else {
+            fatalError("Missing data asset: restaurant_list")
+        }
+        do {
+            let json = try JSONDecoder().decode([JsonPlace].self, from: data)
+        } catch {
+            print(error)
+        }
     }
 }
