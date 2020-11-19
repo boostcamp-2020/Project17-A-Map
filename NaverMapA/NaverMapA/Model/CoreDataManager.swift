@@ -9,7 +9,7 @@ import Foundation
 import CoreData
 
 class CoreDataManager {
-    static var shared: CoreDataManager = CoreDataManager()
+    static let shared: CoreDataManager = CoreDataManager()
     var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "NaverMapA")
         container.loadPersistentStores(completionHandler: { (_, error) in
@@ -39,8 +39,8 @@ class CoreDataManager {
             print(entity.attributesByName.keys)
             managedObject.setValue(place.id, forKey: "id")
             managedObject.setValue(place.name, forKey: "name")
-            managedObject.setValue(place.lng, forKey: "lng")
-            managedObject.setValue(place.lat, forKey: "lat")
+            managedObject.setValue(place.longitude, forKey: "longitude")
+            managedObject.setValue(place.latitude, forKey: "latitude")
             managedObject.setValue(place.imageUrl, forKey: "imageUrl")
             managedObject.setValue(place.category, forKey: "category")
             do {
@@ -55,7 +55,8 @@ class CoreDataManager {
         }
     }
     @discardableResult
-    func delete(object: NSManagedObject) -> Bool { self.context.delete(object)
+    func delete(object: NSManagedObject) -> Bool {
+        self.context.delete(object)
         do {
             try context.save()
             return true
