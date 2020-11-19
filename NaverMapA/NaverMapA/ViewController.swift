@@ -7,6 +7,7 @@
 
 import UIKit
 import NMapsMap
+import CoreData
 
 class ViewController: UIViewController {
 
@@ -42,6 +43,9 @@ class ViewController: UIViewController {
         }
         do {
             let json = try JSONDecoder().decode([JsonPlace].self, from: data)
+            json.forEach({
+                CoreDataManager.shared.insertPlace(place: $0)
+            })
         } catch {
             print(error)
         }
