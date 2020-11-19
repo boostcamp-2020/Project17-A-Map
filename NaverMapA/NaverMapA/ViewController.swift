@@ -20,6 +20,8 @@ class ViewController: UIViewController {
             let places = CoreDataManager.shared.fetch(request: Place.fetchRequest())
             places.forEach({
                 print($0.name)
+                let marker = NMFMarker(position: NMGLatLng(lat: $0.latitude, lng: $0.longitude))
+                marker.mapView = mapView
             })
         }
     }
