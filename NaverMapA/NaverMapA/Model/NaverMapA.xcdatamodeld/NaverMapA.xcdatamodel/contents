@@ -4,8 +4,8 @@
         <attribute name="category" attributeType="String"/>
         <attribute name="id" attributeType="String"/>
         <attribute name="imageUrl" optional="YES" attributeType="String"/>
-        <attribute name="lat" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <attribute name="lng" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="latitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="name" attributeType="String"/>
     </entity>
     <elements>

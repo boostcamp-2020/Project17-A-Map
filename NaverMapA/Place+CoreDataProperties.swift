@@ -18,8 +18,8 @@ extension Place {
     @NSManaged public var category: String
     @NSManaged public var id: String
     @NSManaged public var imageUrl: String?
-    @NSManaged public var lat: Double
-    @NSManaged public var lng: Double
+    @NSManaged public var latitude: Double
+    @NSManaged public var longitude: Double
     @NSManaged public var name: String
 
 }

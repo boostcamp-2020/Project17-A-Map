@@ -17,6 +17,10 @@ class ViewController: UIViewController {
         view.addSubview(mapView)
         DispatchQueue.main.async { [weak self] in
             self?.loadJson()
+            let places = CoreDataManager.shared.fetch(request: Place.fetchRequest())
+            places.forEach({
+                print($0.name)
+            })
         }
     }
     override func viewDidAppear(_ animated: Bool) {
