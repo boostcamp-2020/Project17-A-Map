@@ -33,11 +33,11 @@ extension Place {
         case place = "Place"
     }
     enum Key: String {
-        case category = "category"
-        case id = "id"
-        case imageUrl = "imageUrl"
-        case latitude = "latitude"
-        case longitude = "longitude"
-        case name = "name"
+        case category
+        case id
+        case imageUrl
+        case latitude
+        case longitude
+        case name
     }
 }
