@@ -11,7 +11,7 @@ import CoreData
 class CoreDataManager {
     static let shared: CoreDataManager = CoreDataManager()
     var persistentContainer: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "NaverMapA")
+        let container = NSPersistentContainer(name: CoreDataManagerInputGuide.persistentContainerName.rawValue)
         container.loadPersistentStores(completionHandler: { (_, error) in
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
@@ -33,16 +33,16 @@ class CoreDataManager {
     }
     @discardableResult
     func insertPlace(place: JsonPlace) -> Bool {
-        let entity = NSEntityDescription.entity(forEntityName: "Place", in: self.context)
+        let entity = NSEntityDescription.entity(forEntityName: CoreDataManagerInputGuide.entityName.rawValue, in: self.context)
         if let entity = entity {
             let managedObject = NSManagedObject(entity: entity, insertInto: self.context)
             print(entity.attributesByName.keys)
-            managedObject.setValue(place.id, forKey: "id")
-            managedObject.setValue(place.name, forKey: "name")
-            managedObject.setValue(place.longitude, forKey: "longitude")
-            managedObject.setValue(place.latitude, forKey: "latitude")
-            managedObject.setValue(place.imageUrl, forKey: "imageUrl")
-            managedObject.setValue(place.category, forKey: "category")
+            managedObject.setValue(place.id, forKey: Place.Key.id.rawValue)
+            managedObject.setValue(place.name, forKey: Place.Key.name.rawValue)
+            managedObject.setValue(place.longitude, forKey: Place.Key.longitude.rawValue)
+            managedObject.setValue(place.latitude, forKey: Place.Key.latitude.rawValue)
+            managedObject.setValue(place.imageUrl, forKey: Place.Key.imageUrl.rawValue)
+            managedObject.setValue(place.category, forKey: Place.Key.category.rawValue)
             do {
                 try self.context.save()
                 return true
@@ -83,5 +83,12 @@ class CoreDataManager {
         } catch {
             return nil
         }
+    }
+}
+
+extension CoreDataManager {
+    enum CoreDataManagerInputGuide: String {
+        case persistentContainerName = "NaverMapA"
+        case entityName = "Place"
     }
 }
