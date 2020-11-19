@@ -7,6 +7,7 @@
 
 import UIKit
 import NMapsMap
+import CoreData
 
 class ViewController: UIViewController {
 
