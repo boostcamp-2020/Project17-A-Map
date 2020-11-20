@@ -10,16 +10,20 @@ import NMapsMap
 import CoreData
 
 class ViewController: UIViewController {
-
+    
+    private var places: [Place] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let mapView = NMFMapView(frame: view.frame)
         view.addSubview(mapView)
         DispatchQueue.main.async { [weak self] in
             self?.loadJson()
-            let places = CoreDataManager.shared.fetch(request: Place.fetchRequest())
-            places.forEach({
+            self?.places = CoreDataManager.shared.fetch(request: Place.fetchRequest())
+            self?.places.forEach({
                 print($0.name)
+                let marker = NMFMarker(position: NMGLatLng(lat: $0.latitude, lng: $0.longitude))
+                marker.mapView = mapView
             })
         }
     }
@@ -42,7 +46,7 @@ class ViewController: UIViewController {
         guard let count = CoreDataManager.shared.count(request: Place.fetchRequest()),
               count == 0 else { return }
 
-        guard let data = NSDataAsset(name: "restaurant_list")?.data else {
+        guard let data = NSDataAsset(name: ViewControllerInputGuide.jsonAsset.rawValue)?.data else {
             fatalError("Missing data asset: restaurant_list")
         }
         do {
@@ -53,5 +57,11 @@ class ViewController: UIViewController {
         } catch {
             print(error)
         }
+    }
+}
+
+extension ViewController {
+    enum ViewControllerInputGuide: String {
+        case jsonAsset = "restaurant_list"
     }
 }

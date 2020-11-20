@@ -12,7 +12,7 @@ import CoreData
 extension Place {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Place> {
-        return NSFetchRequest<Place>(entityName: "Place")
+        return NSFetchRequest<Place>(entityName: PlaceInputGuide.place.rawValue)
     }
 
     @NSManaged public var category: String
@@ -26,4 +26,18 @@ extension Place {
 
 extension Place: Identifiable {
 
+}
+
+extension Place {
+    enum PlaceInputGuide: String {
+        case place = "Place"
+    }
+    enum Key: String {
+        case category
+        case id
+        case imageUrl
+        case latitude
+        case longitude
+        case name
+    }
 }
