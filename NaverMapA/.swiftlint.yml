@@ -4,5 +4,6 @@ disabled_rules:
 - identifier_name
 - cyclomatic_complexity
 - function_body_length
+- trailing_whitespace
 excluded:
 - Pods
