@@ -69,7 +69,7 @@ class PlaceProvider {
         }
     }
     
-    func fetch(minLng: Double, maxLng: Double, minLat: Double, maxLat: Double) -> [Place]? {
+    func fetch(minLng: Double, maxLng: Double, minLat: Double, maxLat: Double) -> [Place] {
         let fetchRequest: NSFetchRequest<Place> = Place.fetchRequest()
         
         let lngPredict = NSPredicate(format: "longitude >= %lf && longitude <= %lf", minLng, maxLng)
@@ -77,7 +77,7 @@ class PlaceProvider {
 
         fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [lngPredict, latPredict])
 
-        return try? mainContext.fetch(fetchRequest)
+        return (try? mainContext.fetch(fetchRequest)) ?? []
     }
     
     func fetchAll() -> [Place] {
