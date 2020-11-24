@@ -30,7 +30,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
 
     func sceneDidEnterBackground(_ scene: UIScene) {
-        PlaceProvider.shared.saveContext()
+        PlaceProvider.shared.saveContext { _ in }
     }
 
 }
