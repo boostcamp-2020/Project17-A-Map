@@ -10,9 +10,9 @@ import NMapsMap
 import CoreData
 
 class ViewController: UIViewController {
-    
+    // MARK: - Properties
     private var places: [Place] = []
-    
+    // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         let mapView = NMFMapView(frame: view.frame)
@@ -37,6 +37,7 @@ class ViewController: UIViewController {
             return
         }
     }
+    // MARK: - Methods
     private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, action: UIAlertAction) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(action)
@@ -45,7 +46,6 @@ class ViewController: UIViewController {
     func loadJson() {
         guard let count = CoreDataManager.shared.count(request: Place.fetchRequest()),
               count == 0 else { return }
-
         guard let data = NSDataAsset(name: ViewControllerInputGuide.jsonAsset.rawValue)?.data else {
             fatalError("Missing data asset: restaurant_list")
         }
