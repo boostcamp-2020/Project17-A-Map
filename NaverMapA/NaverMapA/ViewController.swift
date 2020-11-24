@@ -29,7 +29,6 @@ class ViewController: UIViewController {
         if dataProvider.objectCount == 0 {
             dataProvider.insert(completionHandler: handleBatchOperationCompletion)
         }
-        setMarkers()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -44,12 +43,16 @@ class ViewController: UIViewController {
     }
     
     func setMarkers() {
-        DispatchQueue.main.async { [weak self] in
+        DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-            self.dataProvider.fetchAll().forEach({
-                let marker = NMFMarker(position: NMGLatLng(lat: $0.latitude, lng: $0.longitude))
-                marker.mapView = self.mapView
-            })
+            let markers = self.dataProvider.fetchAll().map {
+                return NMFMarker(position: NMGLatLng(lat: $0.latitude, lng: $0.longitude))
+            }
+            DispatchQueue.main.async {
+                markers.forEach {
+                    $0.mapView = self.mapView
+                }
+            }
         }
     }
     
