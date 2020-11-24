@@ -10,14 +10,28 @@ import NMapsMap
 import CoreData
 
 class ViewController: UIViewController {
-    // MARK: - Properties
-    private var places: [Place] = []
-    // MARK: - View Life Cycle
+    
+    private var places: [Place]? = []
+    
+    private lazy var dataProvider: PlaceProvider = {
+        let provider = PlaceProvider.shared
+        provider.fetchedResultsController.delegate = self
+        return provider
+    }()
+    var mapView: NMFMapView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        let mapView = NMFMapView(frame: view.frame)
+        mapView = NMFMapView(frame: view.frame)
+
         view.addSubview(mapView)
+        
+        if dataProvider.objectCount == 0 {
+            dataProvider.insert(completionHandler: handleBatchOperationCompletion)
+        }
+        
         let coordBounds = mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
+        
         let datas: [JsonPlace] = (0..<20).map { _ in
             let randomLng = Double.random(in: coordBounds.southWestLng...coordBounds.northEastLng)
             let randomLat = Double.random(in: coordBounds.southWestLat...coordBounds.northEastLat)
@@ -32,11 +46,12 @@ class ViewController: UIViewController {
                     let marker = NMFMarker(position: NMGLatLng(lat: $0.latitude, lng: $0.longitude))
                     marker.iconImage = NMF_MARKER_IMAGE_BLACK
                     marker.iconTintColor = .red
-                    marker.mapView = mapView
+                    marker.mapView = self?.mapView
                 }
             }
         }
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let _ = NMFAuthManager.shared().clientId else {
@@ -47,27 +62,39 @@ class ViewController: UIViewController {
             return
         }
     }
+    
     // MARK: - Methods
+    
+    func setMarkers() {
+        DispatchQueue.global().async { [weak self] in
+            guard let self = self else { return }
+            let markers = self.dataProvider.fetchAll().map {
+                return NMFMarker(position: NMGLatLng(lat: $0.latitude, lng: $0.longitude))
+            }
+            DispatchQueue.main.async {
+                markers.forEach {
+                    $0.mapView = self.mapView
+                }
+            }
+        }
+    }
+    
     private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, action: UIAlertAction) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(action)
         present(alert, animated: false, completion: nil)
     }
-    private func loadJson() {
-        guard let count = CoreDataManager.shared.count(request: Place.fetchRequest()),
-              count == 0 else { return }
-        guard let data = NSDataAsset(name: ViewControllerInputGuide.jsonAsset.rawValue)?.data else {
-            fatalError("Missing data asset: restaurant_list")
-        }
-        do {
-            let json = try JSONDecoder().decode([JsonPlace].self, from: data)
-            json.forEach({
-                CoreDataManager.shared.insertPlace(place: $0)
-            })
-        } catch {
-            print(error)
+    
+    private func handleBatchOperationCompletion(error: Error?) {
+        if let error = error {
+            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            showAlert(title: "Executing batch operation error!", message: error.localizedDescription, preferredStyle: .alert, action: okAction)
+        } else {
+            dataProvider.resetAndRefetch()
+            setMarkers()
         }
     }
+    
     private func kMeansClustering(_ datas: [JsonPlace], completion: ([JsonPlace]) -> Void) {
         let K_COUNT = 5
         var centroids = [JsonPlace]()
@@ -102,8 +129,8 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController {
-    enum ViewControllerInputGuide: String {
-        case jsonAsset = "restaurant_list"
+extension ViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
     }
 }
