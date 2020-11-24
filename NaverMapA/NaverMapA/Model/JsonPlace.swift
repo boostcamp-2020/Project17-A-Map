@@ -55,3 +55,7 @@ extension JsonPlace {
         case blank = ""
     }
 }
+
+extension JsonPlace: Equatable {
+    
+}
