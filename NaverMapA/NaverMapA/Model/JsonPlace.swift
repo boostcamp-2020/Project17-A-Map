@@ -22,6 +22,7 @@ extension JsonPlace: Decodable {
         case latitude = "y"
         case id, name, imageUrl, category
     }
+    
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.name = try container.decode(String.self, forKey: .name)
@@ -31,9 +32,11 @@ extension JsonPlace: Decodable {
         self.imageUrl = try container.decode(String?.self, forKey: .imageUrl)
         self.category = try container.decode(String.self, forKey: .category)
     }
+    
     func distanceTo(_ jsonPlace: JsonPlace) -> Double {
         return sqrt(pow(latitude - jsonPlace.latitude, 2) + pow(longitude - jsonPlace.longitude, 2))
     }
+    
     static func centroid(of jsonPlaces: [JsonPlace]) -> JsonPlace {
         let sum: (longitude: Double, latitude: Double) = jsonPlaces.reduce(
             (0.0, 0.0), {($0.0 + $1.longitude, $0.1 + $1.latitude)}

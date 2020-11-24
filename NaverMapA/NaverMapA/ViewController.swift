@@ -62,6 +62,7 @@ class ViewController: UIViewController {
             return
         }
     }
+    
     // MARK: - Methods
     
     func setMarkers() {
@@ -93,6 +94,7 @@ class ViewController: UIViewController {
             setMarkers()
         }
     }
+    
     private func kMeansClustering(_ datas: [JsonPlace], completion: ([JsonPlace]) -> Void) {
         let K_COUNT = 5
         var centroids = [JsonPlace]()
