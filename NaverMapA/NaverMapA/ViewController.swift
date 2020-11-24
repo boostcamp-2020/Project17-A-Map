@@ -43,7 +43,7 @@ class ViewController: UIViewController {
         alert.addAction(action)
         present(alert, animated: false, completion: nil)
     }
-    func loadJson() {
+    private func loadJson() {
         guard let count = CoreDataManager.shared.count(request: Place.fetchRequest()),
               count == 0 else { return }
         guard let data = NSDataAsset(name: ViewControllerInputGuide.jsonAsset.rawValue)?.data else {
