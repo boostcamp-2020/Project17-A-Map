@@ -6,43 +6,47 @@
 //
 
 import Foundation
-struct Centroid {
+struct Cluster {
     var totalLatitude: Double = 0
     var totalLongitude: Double = 0
-    var clusters: [JsonPlace] = [JsonPlace]()
+    var places: [Place] = [Place]()
 }
 class ScaleBasedClustering {
-    private func distance(origin: Centroid, destination: Centroid) -> Double {
-        return sqrt(pow(origin.totalLatitude / Double(origin.clusters.count) - destination.totalLatitude / Double(destination.clusters.count), 2) + pow(origin.totalLongitude / Double(origin.clusters.count) - destination.totalLongitude / Double(destination.clusters.count), 2))
+    private func distance(origin: Cluster, destination: Cluster) -> Double {
+        return sqrt(pow(origin.totalLatitude / Double(origin.places.count) - destination.totalLatitude / Double(destination.places.count), 2) + pow(origin.totalLongitude / Double(origin.places.count) - destination.totalLongitude / Double(destination.places.count), 2))
     }
-    public func Run(datas: [JsonPlace], mapScale: Double, completion: ([Centroid]) -> Void) {
+    public func Run(datas: [Place], mapScale: Double, completion: ([Cluster]) -> Void) {
         if datas.count == 0 {
             completion([])
         }
-        var cluster = [Centroid]()
+        var cluster = [Cluster]()
         for place in datas {
-            cluster.append(Centroid(totalLatitude: place.latitude, totalLongitude: place.longitude, clusters: [place]))
+            cluster.append(Cluster(totalLatitude: place.latitude, totalLongitude: place.longitude, places: [place]))
         }
         var isUpdate = true
-        while cluster.count != 0 && isUpdate != false {
+        while isUpdate != false {
             isUpdate = false
-            var curPlace = cluster.removeFirst()
-            var clusterCount = cluster.count
-            var index = 0
-            while index < clusterCount {
-                if distance(origin: curPlace, destination: cluster[index]) <= mapScale {
-                    curPlace.totalLatitude += cluster[index].totalLatitude
-                    curPlace.totalLongitude += cluster[index].totalLongitude
-                    curPlace.clusters.append(contentsOf: cluster[index].clusters)
-                    cluster.remove(at: index)
-                    isUpdate = true
-                    index = 0
-                    clusterCount -= 1
-                } else {
-                    index += 1
+            var tempClusters = cluster
+            cluster.removeAll()
+            while tempClusters.count != 0 {
+                var curPlace = tempClusters.removeFirst()
+                var clusterCount = tempClusters.count
+                var index = 0
+                while index < clusterCount {
+                    if distance(origin: curPlace, destination: tempClusters[index]) <= mapScale {
+                        curPlace.totalLatitude += tempClusters[index].totalLatitude
+                        curPlace.totalLongitude += tempClusters[index].totalLongitude
+                        curPlace.places.append(contentsOf: tempClusters[index].places)
+                        tempClusters.remove(at: index)
+                        isUpdate = true
+                        index = 0
+                        clusterCount -= 1
+                    } else {
+                        index += 1
+                    }
                 }
+                cluster.append(curPlace)
             }
-            cluster.append(curPlace)
         }
         completion(cluster)
     }
