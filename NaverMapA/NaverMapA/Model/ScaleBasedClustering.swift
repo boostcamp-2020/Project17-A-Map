@@ -10,11 +10,27 @@ struct Cluster {
     var totalLatitude: Double = 0
     var totalLongitude: Double = 0
     var places: [Place] = [Place]()
+    func distanceTo(_ cluster: Cluster) -> Double {
+        return sqrt(pow(totalLatitude / Double(places.count) - cluster.totalLatitude / Double(cluster.places.count), 2) + pow(totalLongitude / Double(places.count) - cluster.totalLongitude / Double(cluster.places.count), 2))
+    }
+    func distanceTo(lat: Double, lng: Double) -> Double {
+        return sqrt(pow(totalLatitude / Double(places.count) - lat, 2) + pow(totalLongitude / Double(places.count) - lng, 2))
+    }
+}
+extension Cluster: Comparable {
+    static func < (left: Cluster, right: Cluster) -> Bool {
+        let leftDistance = left.distanceTo(lat: ViewController.zeroPosition.lat, lng: ViewController.zeroPosition.lat)
+        let rightDistance = right.distanceTo(lat: ViewController.zeroPosition.lat, lng: ViewController.zeroPosition.lat)
+        if leftDistance < rightDistance {
+            return true
+        } else if leftDistance > rightDistance {
+            return false
+        } else {
+            return left.totalLatitude / Double(left.places.count) < right.totalLatitude / Double(right.places.count)
+        }
+    }
 }
 class ScaleBasedClustering {
-    private func distance(origin: Cluster, destination: Cluster) -> Double {
-        return sqrt(pow(origin.totalLatitude / Double(origin.places.count) - destination.totalLatitude / Double(destination.places.count), 2) + pow(origin.totalLongitude / Double(origin.places.count) - destination.totalLongitude / Double(destination.places.count), 2))
-    }
     public func Run(datas: [Place], mapScale: Double, completion: ([Cluster]) -> Void) {
         if datas.count == 0 {
             completion([])
@@ -28,12 +44,13 @@ class ScaleBasedClustering {
             isUpdate = false
             var tempClusters = cluster
             cluster.removeAll()
+            tempClusters.sort()
             while tempClusters.count != 0 {
                 var curPlace = tempClusters.removeFirst()
                 var clusterCount = tempClusters.count
                 var index = 0
                 while index < clusterCount {
-                    if distance(origin: curPlace, destination: tempClusters[index]) <= mapScale {
+                    if curPlace.distanceTo(tempClusters[index]) <= mapScale {
                         curPlace.totalLatitude += tempClusters[index].totalLatitude
                         curPlace.totalLongitude += tempClusters[index].totalLongitude
                         curPlace.places.append(contentsOf: tempClusters[index].places)

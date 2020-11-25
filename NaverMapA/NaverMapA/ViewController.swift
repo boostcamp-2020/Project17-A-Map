@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         return provider
     }()
     var mapView: NMFMapView!
-    
+    static var zeroPosition = NMGLatLng()
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView = NMFMapView(frame: view.frame)
@@ -31,7 +31,6 @@ class ViewController: UIViewController {
         }
         KimsClustering()
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let _ = NMFAuthManager.shared().clientId else {
@@ -108,21 +107,19 @@ class ViewController: UIViewController {
         completion(centroids)
     }
     private func KimsClustering() {
+        let distance: CGFloat = 10
         let coordBounds = mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
         var datas = [Place]()
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-            var temp: [NMFMarker] = self.dataProvider.fetch(minLng: coordBounds.southWestLng, maxLng: coordBounds.northEastLng, minLat: coordBounds.southWestLat, maxLat: coordBounds.northEastLat).map {
+            self.dataProvider.fetch(minLng: coordBounds.southWestLng, maxLng: coordBounds.northEastLng, minLat: coordBounds.southWestLat, maxLat: coordBounds.northEastLat).map {
                 datas.append($0)
-                return NMFMarker(position: NMGLatLng(lat: $0.latitude, lng: $0.longitude))
             }
             DispatchQueue.main.async {
-                temp.forEach {
-                    $0.mapView = self.mapView
-                }
                 let coord1 = self.mapView.projection.latlng(from: CGPoint(x: 0, y: 0))
-                let coord2 = self.mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height / 4))
+                let coord2 = self.mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height / distance))
                 let distance = sqrt(pow(coord1.lat - coord2.lat, 2) + pow(coord1.lng - coord2.lng, 2))
+                ViewController.zeroPosition = self.mapView.projection.latlng(from: CGPoint(x: 0, y: 0))
                 let scaleBased = ScaleBasedClustering()
                 scaleBased.Run(datas: datas, mapScale: distance, completion: { centroids in
                     for centroid in centroids {
@@ -156,7 +153,7 @@ extension ViewController: NMFMapViewCameraDelegate {
         markers.forEach {
             $0.mapView = nil
         }
-        markers = []
+        markers.removeAll()
         KimsClustering()
     }
 }
