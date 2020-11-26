@@ -8,7 +8,6 @@
 import Foundation
 
 protocol Clusterable {
-    
     func execute(places: [Place]) -> [Cluster]
 }
 
