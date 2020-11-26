@@ -23,19 +23,22 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         viewModel = MainViewModel(algorithm: MockCluster())
         bindViewModel()
-        mapView = NMFMapView(frame: view.frame)
-        mapView.addCameraDelegate(delegate: self)
-        view.addSubview(mapView)
-        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5655271, lng: 126.9904267), zoom: 18)))
+        setupMapView()
         if dataProvider.objectCount == 0 {
             dataProvider.insert(completionHandler: handleBatchOperationCompletion)
         }
-        
+    }
+    
+    func setupMapView() {
+        mapView = NMFMapView(frame: view.frame)
+        mapView.addCameraDelegate(delegate: self)
+        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5655271, lng: 126.9904267), zoom: 18)))
+        view.addSubview(mapView)
     }
     
     func bindViewModel() {
         if let viewModel = viewModel {
-            viewModel.markers.bind({ (markers) in
+            viewModel.markers.bind({ _ in
                 // rendering
             })
         }
@@ -54,20 +57,6 @@ class MainViewController: UIViewController {
     
     // MARK: - Methods
     
-    func setMarkers() {
-        DispatchQueue.global().async { [weak self] in
-            guard let self = self else { return }
-            let markers = self.dataProvider.fetchAll().map {
-                return NMFMarker(position: NMGLatLng(lat: $0.latitude, lng: $0.longitude))
-            }
-            DispatchQueue.main.async {
-                markers.forEach {
-                    $0.mapView = self.mapView
-                }
-            }
-        }
-    }
-    
     private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, action: UIAlertAction) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(action)
@@ -80,7 +69,6 @@ class MainViewController: UIViewController {
             showAlert(title: "Executing batch operation error!", message: error.localizedDescription, preferredStyle: .alert, action: okAction)
         } else {
             dataProvider.resetAndRefetch()
-            setMarkers()
         }
     }
 }
