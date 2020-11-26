@@ -95,13 +95,14 @@ extension MainViewController: NMFMapViewCameraDelegate {
     
     func mapViewCameraIdle(_ mapView: NMFMapView) {
         let coordBounds = mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
-        
         DispatchQueue.global().async {
-            let places = self.dataProvider.fetch(minLng: coordBounds.southWestLng,
-                                                 maxLng: coordBounds.northEastLng,
-                                                 minLat: coordBounds.southWestLat,
-                                                 maxLat: coordBounds.northEastLat)
-            self.viewModel?.updatePlaces(places: places)
+            let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
+                                          northEastLng: coordBounds.northEastLng,
+                                          southWestLat: coordBounds.southWestLat,
+                                          northEastLat: coordBounds.northEastLat)
+            
+            let places = self.dataProvider.fetch(bounds: bounds)
+            self.viewModel?.updatePlaces(places: places, bounds: bounds)
         }
     }
 }
