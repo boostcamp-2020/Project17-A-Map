@@ -7,14 +7,20 @@
 
 import Foundation
 struct Cluster {
-    var totalLatitude: Double = 0
-    var totalLongitude: Double = 0
-    var places: [Place] = [Place]()
+    var latitude: Double = 0
+    var longitude: Double = 0
+    var places: [Place] = [Place]() {
+        didSet {
+            let n = oldValue.count
+            latitude = (Double(n)*latitude + places.last!.latitude) / Double(n + 1)
+            longitude = (Double(n)*longitude + places.last!.longitude) / Double(n + 1)
+        }
+    }
     func distanceTo(_ cluster: Cluster) -> Double {
-        return sqrt(pow(totalLatitude / Double(places.count) - cluster.totalLatitude / Double(cluster.places.count), 2) + pow(totalLongitude / Double(places.count) - cluster.totalLongitude / Double(cluster.places.count), 2))
+        return sqrt(pow(latitude - cluster.latitude, 2) + pow(longitude - cluster.longitude, 2))
     }
     func distanceTo(lat: Double, lng: Double) -> Double {
-        return sqrt(pow(totalLatitude / Double(places.count) - lat, 2) + pow(totalLongitude / Double(places.count) - lng, 2))
+        return sqrt(pow(latitude - lat, 2) + pow(longitude - lng, 2))
     }
 }
 extension Cluster: Comparable {
@@ -26,7 +32,7 @@ extension Cluster: Comparable {
         } else if leftDistance > rightDistance {
             return false
         } else {
-            return left.totalLatitude / Double(left.places.count) < right.totalLatitude / Double(right.places.count)
+            return left.latitude < right.latitude
         }
     }
 }
@@ -37,7 +43,7 @@ class ScaleBasedClustering {
         }
         var cluster = [Cluster]()
         for place in datas {
-            cluster.append(Cluster(totalLatitude: place.latitude, totalLongitude: place.longitude, places: [place]))
+            cluster.append(Cluster(latitude: place.latitude, longitude: place.longitude, places: [place]))
         }
         var isUpdate = true
         while isUpdate != false {
@@ -51,9 +57,9 @@ class ScaleBasedClustering {
                 var index = 0
                 while index < clusterCount {
                     if curPlace.distanceTo(tempClusters[index]) <= mapScale {
-                        curPlace.totalLatitude += tempClusters[index].totalLatitude
-                        curPlace.totalLongitude += tempClusters[index].totalLongitude
-                        curPlace.places.append(contentsOf: tempClusters[index].places)
+                        for p in tempClusters[index].places {
+                            curPlace.places.append(p)
+                        }
                         tempClusters.remove(at: index)
                         isUpdate = true
                         index = 0

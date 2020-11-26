@@ -123,8 +123,8 @@ class ViewController: UIViewController {
                 let scaleBased = ScaleBasedClustering()
                 scaleBased.Run(datas: datas, mapScale: distance, completion: { centroids in
                     for centroid in centroids {
-                        let lat = centroid.totalLatitude / Double(centroid.places.count)
-                        let lng = centroid.totalLongitude / Double(centroid.places.count)
+                        let lat = centroid.latitude
+                        let lng = centroid.longitude
                         let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
                         marker.iconImage = NMF_MARKER_IMAGE_BLACK
                         if centroid.places.count == 1 {
