@@ -8,12 +8,13 @@
 import Foundation
 
 protocol Clusterable {
-    func execute(places: [Place]) -> [Cluster]
+    
+    func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster]
 }
 
 class MockCluster: Clusterable {
     
-    func execute(places: [Place]) -> [Cluster] {
+    func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
         return []
     }
 }

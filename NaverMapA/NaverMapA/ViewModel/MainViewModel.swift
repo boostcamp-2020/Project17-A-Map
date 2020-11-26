@@ -16,9 +16,9 @@ class MainViewModel {
         clusteringAlgorithm = algorithm
     }
     
-    func updatePlaces(places: [Place]) {
+    func updatePlaces(places: [Place], bounds: CoordinateBounds) {
         DispatchQueue.global().async {
-            self.markers.value = self.clusteringAlgorithm.execute(places: places)
+            self.markers.value = self.clusteringAlgorithm.execute(places: places, bounds: bounds)
         }
     }
 }
