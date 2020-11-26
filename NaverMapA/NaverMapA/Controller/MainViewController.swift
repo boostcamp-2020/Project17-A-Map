@@ -41,26 +41,26 @@ class MainViewController: UIViewController {
         if let viewModel = viewModel {
             viewModel.markers.bind({ _ in
                 // rendering
-                for clusterMarker in self.clusterMarkers {
-                    clusterMarker.mapView = nil
-                }
-                self.clusterMarkers.removeAll()
-                for cluster in viewModel.markers.value {
-                    let lat = cluster.latitude
-                    let lng = cluster.longitude
-                    let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
-                    marker.iconImage = NMF_MARKER_IMAGE_BLACK
-                    if cluster.places.count == 1 {
-                        marker.iconTintColor = .green
-                    } else {
-                        marker.iconTintColor = .red
+                DispatchQueue.main.async {
+                    for clusterMarker in self.clusterMarkers {
+                        clusterMarker.mapView = nil
                     }
-                    marker.captionText = "\(cluster.places.count)"
-                    marker.zIndex = 1
-                    DispatchQueue.main.async {
+                    self.clusterMarkers.removeAll()
+                    for cluster in viewModel.markers.value {
+                        let lat = cluster.latitude
+                        let lng = cluster.longitude
+                        let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
+                        marker.iconImage = NMF_MARKER_IMAGE_BLACK
+                        if cluster.places.count == 1 {
+                            marker.iconTintColor = .green
+                        } else {
+                            marker.iconTintColor = .red
+                        }
+                        marker.captionText = "\(cluster.places.count)"
+                        marker.zIndex = 1
                         marker.mapView = self.mapView
+                        self.clusterMarkers.append(marker)
                     }
-                    self.clusterMarkers.append(marker)
                 }
             })
         }
