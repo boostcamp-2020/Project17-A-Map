@@ -9,27 +9,36 @@ import UIKit
 import NMapsMap
 import CoreData
 
-class ViewController: UIViewController {
-    
-    private var places: [Place]? = []
-    private var markers: [NMFMarker] = []
+class MainViewController: UIViewController {
+        
+    var mapView: NMFMapView!
+    var viewModel: MainViewModel?
     private lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
         provider.fetchedResultsController.delegate = self
         return provider
     }()
-    var mapView: NMFMapView!
-    static var zeroPosition = NMGLatLng()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel = MainViewModel(algorithm: MockCluster())
+        bindViewModel()
         mapView = NMFMapView(frame: view.frame)
         mapView.addCameraDelegate(delegate: self)
-        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5655271, lng: 126.9904267), zoom: 18)))
         view.addSubview(mapView)
+        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5655271, lng: 126.9904267), zoom: 18)))
         if dataProvider.objectCount == 0 {
             dataProvider.insert(completionHandler: handleBatchOperationCompletion)
         }
-        KimsClustering()
+        
+    }
+    
+    func bindViewModel() {
+        if let viewModel = viewModel {
+            viewModel.markers.bind({ (markers) in
+                // rendering
+            })
+        }
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -73,38 +82,11 @@ class ViewController: UIViewController {
             setMarkers()
         }
     }
+}
+
+extension MainViewController: NSFetchedResultsControllerDelegate {
     
-    private func kMeansClustering(_ datas: [JsonPlace], completion: ([JsonPlace]) -> Void) {
-        let K_COUNT = 3
-        var centroids = [JsonPlace]()
-        (0..<K_COUNT).forEach { centroids.append(datas[$0]) }
-        var flag: Bool
-        repeat {
-            flag = false
-            var temp = [[JsonPlace]](repeating: [], count: K_COUNT)
-            for i in (0..<datas.count) {
-                var minDistance = Double.greatestFiniteMagnitude
-                var indexOfNearest = 0
-                for (index, centroid) in centroids.enumerated() {
-                    let distance = datas[i].distanceTo(centroid)
-                    if distance < minDistance {
-                        minDistance = distance
-                        indexOfNearest = index
-                    }
-                }
-                temp[indexOfNearest].append(datas[i])
-            }
-            var newCentroids = temp.map {
-                JsonPlace.centroid(of: $0)
-            }
-            newCentroids.sort(by: { $0.longitude < $1.longitude })
-            centroids.sort(by: { $0.longitude < $1.longitude })
-            if !newCentroids.elementsEqual(centroids) {
-                flag = true
-                centroids = newCentroids
-            }
-        } while flag
-        completion(centroids)
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
     }
     private func KimsClustering() {
         let distance: CGFloat = 10
@@ -143,8 +125,18 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: NSFetchedResultsControllerDelegate {
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+extension MainViewController: NMFMapViewCameraDelegate {
+    
+    func mapViewCameraIdle(_ mapView: NMFMapView) {
+        let coordBounds = mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
+        
+        DispatchQueue.global().async {
+            let places = self.dataProvider.fetch(minLng: coordBounds.southWestLng,
+                                                 maxLng: coordBounds.northEastLng,
+                                                 minLat: coordBounds.southWestLat,
+                                                 maxLat: coordBounds.northEastLat)
+            self.viewModel?.updatePlaces(places: places)
+        }
     }
 }
 
