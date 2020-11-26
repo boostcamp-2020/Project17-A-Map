@@ -13,6 +13,7 @@ class MainViewController: UIViewController {
         
     var mapView: NMFMapView!
     var viewModel: MainViewModel?
+    var markersAnimation: [UIViewPropertyAnimator] = [] // 추후 애니메이션을 제어하기 위한 배열
     private lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
         provider.fetchedResultsController.delegate = self
@@ -95,7 +96,7 @@ class MainViewController: UIViewController {
                 startPoint.y -= markerView.frame.height
                 markerView.frame.origin = startPoint
                 self.mapView.addSubview(markerView)
-                let markerAnimation = UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 2, delay: 0, options: .curveLinear, animations: {
+                let markerAnimation = UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 1, delay: 0, options: .curveLinear, animations: {
                     markerView.frame.origin = CGPoint(x: endPoint.x - (markerView.frame.width / 2), y: endPoint.y - markerView.frame.height)
                 }, completion: { _ in
                     markerView.removeFromSuperview()
