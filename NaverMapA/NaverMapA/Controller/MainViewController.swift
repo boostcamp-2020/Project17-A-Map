@@ -83,6 +83,29 @@ class MainViewController: UIViewController {
             setMarkers()
         }
     }
+    
+    private func markerAnimation(clusterArray: [Cluster]) {
+        clusterArray.forEach { cluster in
+            let endPoint = mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longigude))
+            
+            cluster.places.forEach { place in
+                var startPoint = self.mapView.projection.point(from: NMGLatLng(lat: place.latitude, lng: place.longitude))
+                let markerView = self.view(with: NMFMarker())
+                startPoint.x -= (markerView.frame.width / 2)
+                startPoint.y -= markerView.frame.height
+                markerView.frame.origin = startPoint
+                self.mapView.addSubview(markerView)
+                let markerAnimation = UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 2, delay: 0, options: .curveLinear, animations: {
+                    markerView.frame.origin = CGPoint(x: endPoint.x - (markerView.frame.width / 2), y: endPoint.y - markerView.frame.height)
+                }, completion: { _ in
+                    markerView.removeFromSuperview()
+                })
+                markerAnimation.startAnimation()
+                //markerAnimation.stopAnimation(false)
+                //markerAnimation.finishAnimation(at: .current)
+            }
+        }
+    }
 }
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
