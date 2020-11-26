@@ -10,9 +10,10 @@ import NMapsMap
 import CoreData
 
 class MainViewController: UIViewController {
-        
+    
     var mapView: NMFMapView!
     var viewModel: MainViewModel?
+    var clusterMarkers = [NMFMarker]()
     private lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
         provider.fetchedResultsController.delegate = self
@@ -40,6 +41,27 @@ class MainViewController: UIViewController {
         if let viewModel = viewModel {
             viewModel.markers.bind({ _ in
                 // rendering
+                for clusterMarker in self.clusterMarkers {
+                    clusterMarker.mapView = nil
+                }
+                self.clusterMarkers.removeAll()
+                for cluster in viewModel.markers.value {
+                    let lat = cluster.latitude
+                    let lng = cluster.longitude
+                    let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
+                    marker.iconImage = NMF_MARKER_IMAGE_BLACK
+                    if cluster.places.count == 1 {
+                        marker.iconTintColor = .green
+                    } else {
+                        marker.iconTintColor = .red
+                    }
+                    marker.captionText = "\(cluster.places.count)"
+                    marker.zIndex = 1
+                    DispatchQueue.main.async {
+                        marker.mapView = self.mapView
+                    }
+                    self.clusterMarkers.append(marker)
+                }
             })
         }
     }
@@ -73,42 +95,7 @@ class MainViewController: UIViewController {
 }
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    }
-    private func KimsClustering() {
-//        let distance: CGFloat = 10
-//        let coordBounds = mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
-//        var datas = [Place]()
-//        DispatchQueue.global().async { [weak self] in
-//            guard let self = self else { return }
-//            self.dataProvider.fetch(minLng: coordBounds.southWestLng, maxLng: coordBounds.northEastLng, minLat: coordBounds.southWestLat, maxLat: coordBounds.northEastLat).map {
-//                datas.append($0)
-//            }
-//            DispatchQueue.main.async {
-//                let coord1 = self.mapView.projection.latlng(from: CGPoint(x: 0, y: 0))
-//                let coord2 = self.mapView.projection.latlng(from: CGPoint(x: 0, y: UIScreen.main.bounds.height / distance))
-//                let distance = sqrt(pow(coord1.lat - coord2.lat, 2) + pow(coord1.lng - coord2.lng, 2))
-//                let scaleBased = ScaleBasedClustering()
-//                scaleBased.Run(datas: datas, mapScale: distance, completion: { centroids in
-//                    for centroid in centroids {
-//                        let lat = centroid.latitude
-//                        let lng = centroid.longitude
-//                        let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
-//                        marker.iconImage = NMF_MARKER_IMAGE_BLACK
-//                        if centroid.places.count == 1 {
-//                            marker.iconTintColor = .green
-//                        } else {
-//                            marker.iconTintColor = .red
-//                        }
-//                        marker.captionText = "\(centroid.places.count)"
-//                        marker.zIndex = 1
-//                        marker.mapView = self.mapView
-//                        self.markers.append(marker)
-//                    }
-//                })
-//            }
-//        }
     }
 }
 

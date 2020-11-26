@@ -7,8 +7,8 @@
 
 import Foundation
 class ScaleBasedClustering: Clusterable {
-    var mapScale: Double = 0
-    func execute(places: [Place]) -> [Cluster] {
+    func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
+        let mapScale = sqrt(pow(bounds.northEastLat - bounds.southWestLat, 2) + pow(bounds.northEastLng - bounds.southWestLng, 2)) / 12
         if places.count == 0 {
             return []
         }
