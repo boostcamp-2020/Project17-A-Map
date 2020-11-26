@@ -10,9 +10,10 @@ import NMapsMap
 import CoreData
 
 class MainViewController: UIViewController {
-        
+    
     var mapView: NMFMapView!
     var viewModel: MainViewModel?
+    var clusterMarkers = [NMFMarker]()
     private lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
         provider.fetchedResultsController.delegate = self
@@ -21,7 +22,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel = MainViewModel(algorithm: MockCluster())
+        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         bindViewModel()
         setupMapView()
         if dataProvider.objectCount == 0 {
@@ -40,10 +41,30 @@ class MainViewController: UIViewController {
         if let viewModel = viewModel {
             viewModel.markers.bind({ _ in
                 // rendering
+                for clusterMarker in self.clusterMarkers {
+                    clusterMarker.mapView = nil
+                }
+                self.clusterMarkers.removeAll()
+                for cluster in viewModel.markers.value {
+                    let lat = cluster.latitude
+                    let lng = cluster.longitude
+                    let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
+                    marker.iconImage = NMF_MARKER_IMAGE_BLACK
+                    if cluster.places.count == 1 {
+                        marker.iconTintColor = .green
+                    } else {
+                        marker.iconTintColor = .red
+                    }
+                    marker.captionText = "\(cluster.places.count)"
+                    marker.zIndex = 1
+                    DispatchQueue.main.async {
+                        marker.mapView = self.mapView
+                    }
+                    self.clusterMarkers.append(marker)
+                }
             })
         }
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let _ = NMFAuthManager.shared().clientId else {
@@ -74,7 +95,6 @@ class MainViewController: UIViewController {
 }
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
     }
 }

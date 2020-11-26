@@ -8,12 +8,12 @@
 import Foundation
 
 struct JsonPlace {
-    var id: String
-    var name: String
-    var longitude: Double
-    var latitude: Double
+    var id: String = ""
+    var name: String = ""
+    var longitude: Double = 0
+    var latitude: Double = 0
     var imageUrl: String?
-    var category: String
+    var category: String = ""
 }
 
 extension JsonPlace: Decodable {
@@ -32,7 +32,15 @@ extension JsonPlace: Decodable {
         self.imageUrl = try container.decode(String?.self, forKey: .imageUrl)
         self.category = try container.decode(String.self, forKey: .category)
     }
-    
+    init(place: Place) {
+        self.name = place.name
+        self.id = place.id
+        self.longitude = place.longitude
+        self.latitude = place.latitude
+        self.imageUrl = place.imageUrl
+        self.category = place.category
+    }
+
     func distanceTo(_ jsonPlace: JsonPlace) -> Double {
         return sqrt(pow(latitude - jsonPlace.latitude, 2) + pow(longitude - jsonPlace.longitude, 2))
     }
