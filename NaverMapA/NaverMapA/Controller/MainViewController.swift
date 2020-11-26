@@ -10,9 +10,10 @@ import NMapsMap
 import CoreData
 
 class MainViewController: UIViewController {
-        
+    
     var mapView: NMFMapView!
     var viewModel: MainViewModel?
+    var clusterMarkers = [NMFMarker]()
     var markersAnimation: [UIViewPropertyAnimator] = [] // 추후 애니메이션을 제어하기 위한 배열
     private lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
@@ -22,26 +23,49 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel = MainViewModel(algorithm: MockCluster())
+        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         bindViewModel()
-        mapView = NMFMapView(frame: view.frame)
-        mapView.addCameraDelegate(delegate: self)
-        view.addSubview(mapView)
-        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5655271, lng: 126.9904267), zoom: 18)))
+        setupMapView()
         if dataProvider.objectCount == 0 {
             dataProvider.insert(completionHandler: handleBatchOperationCompletion)
         }
-        
+    }
+    
+    func setupMapView() {
+        mapView = NMFMapView(frame: view.frame)
+        mapView.addCameraDelegate(delegate: self)
+        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5655271, lng: 126.9904267), zoom: 18)))
+        view.addSubview(mapView)
     }
     
     func bindViewModel() {
         if let viewModel = viewModel {
-            viewModel.markers.bind({ (markers) in
+            viewModel.markers.bind({ _ in
                 // rendering
+                for clusterMarker in self.clusterMarkers {
+                    clusterMarker.mapView = nil
+                }
+                self.clusterMarkers.removeAll()
+                for cluster in viewModel.markers.value {
+                    let lat = cluster.latitude
+                    let lng = cluster.longitude
+                    let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
+                    marker.iconImage = NMF_MARKER_IMAGE_BLACK
+                    if cluster.places.count == 1 {
+                        marker.iconTintColor = .green
+                    } else {
+                        marker.iconTintColor = .red
+                    }
+                    marker.captionText = "\(cluster.places.count)"
+                    marker.zIndex = 1
+                    DispatchQueue.main.async {
+                        marker.mapView = self.mapView
+                    }
+                    self.clusterMarkers.append(marker)
+                }
             })
         }
     }
-    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let _ = NMFAuthManager.shared().clientId else {
@@ -55,20 +79,6 @@ class MainViewController: UIViewController {
     
     // MARK: - Methods
     
-    func setMarkers() {
-        DispatchQueue.global().async { [weak self] in
-            guard let self = self else { return }
-            let markers = self.dataProvider.fetchAll().map {
-                return NMFMarker(position: NMGLatLng(lat: $0.latitude, lng: $0.longitude))
-            }
-            DispatchQueue.main.async {
-                markers.forEach {
-                    $0.mapView = self.mapView
-                }
-            }
-        }
-    }
-    
     private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, action: UIAlertAction) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
         alert.addAction(action)
@@ -81,7 +91,6 @@ class MainViewController: UIViewController {
             showAlert(title: "Executing batch operation error!", message: error.localizedDescription, preferredStyle: .alert, action: okAction)
         } else {
             dataProvider.resetAndRefetch()
-            setMarkers()
         }
     }
     
@@ -110,7 +119,6 @@ class MainViewController: UIViewController {
 }
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
     }
 }
@@ -119,13 +127,14 @@ extension MainViewController: NMFMapViewCameraDelegate {
     
     func mapViewCameraIdle(_ mapView: NMFMapView) {
         let coordBounds = mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
-        
         DispatchQueue.global().async {
-            let places = self.dataProvider.fetch(minLng: coordBounds.southWestLng,
-                                                 maxLng: coordBounds.northEastLng,
-                                                 minLat: coordBounds.southWestLat,
-                                                 maxLat: coordBounds.northEastLat)
-            self.viewModel?.updatePlaces(places: places)
+            let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
+                                          northEastLng: coordBounds.northEastLng,
+                                          southWestLat: coordBounds.southWestLat,
+                                          northEastLat: coordBounds.northEastLat)
+            
+            let places = self.dataProvider.fetch(bounds: bounds)
+            self.viewModel?.updatePlaces(places: places, bounds: bounds)
         }
     }
 }
