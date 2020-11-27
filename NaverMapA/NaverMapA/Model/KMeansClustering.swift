@@ -16,12 +16,11 @@ final class KMeansClustering: Clusterable {
         let k = bestK ?? ks[0]
         var minTotalDistance = Double.greatestFiniteMagnitude
         (0..<EXECUTE_TIMES).forEach { _ in
-            clustering(k: k, places: places.shuffled()) { (temp) in
-                let totalDistance = temp.reduce(0.0, {$0 + $1.totalDistance})
-                if totalDistance < minTotalDistance {
-                    minTotalDistance = totalDistance
-                    centroids = temp
-                }
+            let temp = clustering(k: k, places: places.shuffled())
+            let totalDistance = temp.reduce(0.0, {$0 + $1.totalDistance})
+            if totalDistance < minTotalDistance {
+                minTotalDistance = totalDistance
+                centroids = temp
             }
         }
         return centroids
@@ -54,7 +53,7 @@ final class KMeansClustering: Clusterable {
         }
         return centroids
     }
-    private func clustering(k: Int, places: [Place], completion: ([Cluster]) -> Void) {
+    private func clustering(k: Int, places: [Place]) -> [Cluster] {
         let K_COUNT = k
         guard places.count > K_COUNT else {
             let centroids: [Cluster] = places.map {
@@ -62,8 +61,7 @@ final class KMeansClustering: Clusterable {
                 centroid.places.append($0)
                 return centroid
             }
-            completion(centroids)
-            return
+            return centroids
         }
         var centroids = optimalCentroids(k: K_COUNT, places: places)
         var indexes = [Int](repeating: -1, count: places.count)
@@ -92,7 +90,7 @@ final class KMeansClustering: Clusterable {
                 }
             }
         } while flag
-        completion(centroids)
+        return centroids
     }
 
     private func elbow(of places: [Place]) -> Int {
