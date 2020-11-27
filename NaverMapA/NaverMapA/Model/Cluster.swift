@@ -13,9 +13,24 @@ struct Cluster {
     var places: [Place] = [Place]() {
         didSet {
             let n = oldValue.count
-            latitude = (Double(n)*latitude + places.last!.latitude) / Double(n + 1)
-            longitude = (Double(n)*longitude + places.last!.longitude) / Double(n + 1)
+            if n < places.count {
+                latitude = (Double(n)*latitude + places.last!.latitude) / Double(n + 1)
+                longitude = (Double(n)*longitude + places.last!.longitude) / Double(n + 1)
+            }
         }
+    }
+    
+    mutating func remove(_ place: Place) {
+        if let index = places.firstIndex(of: place) {
+            let n = places.count
+            places.remove(at: index)
+            latitude = n == 1 ? 0 : (Double(n)*latitude - place.latitude) / Double(n - 1)
+            longitude = n == 1 ? 0 : (Double(n)*longitude - place.longitude) / Double(n - 1)
+        }
+    }
+    
+    var totalDistance: Double {
+        places.reduce(0.0, {$0 + $1.distanceTo(self)})
     }
     
     func distanceTo(_ cluster: Cluster) -> Double {
@@ -25,6 +40,7 @@ struct Cluster {
     func distanceTo(lat: Double, lng: Double) -> Double {
         return sqrt(pow(latitude - lat, 2) + pow(longitude - lng, 2))
     }
+    
 }
 
 extension Cluster: Comparable {

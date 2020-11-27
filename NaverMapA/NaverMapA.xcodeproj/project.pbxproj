@@ -10,6 +10,7 @@
 		61901DB53EE8A32FCC52335C /* Pods_NaverMapA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40CAD620339B506C86FDA0AC /* Pods_NaverMapA.framework */; };
 		8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8898E854256D914C00CFE5B4 /* ScaleBasedClustering.swift */; };
 		997FE8701C4893C3A09145F8 /* Pods_NaverMapATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87992EA48C88244E5F3BD1C3 /* Pods_NaverMapATests.framework */; };
+		D430320E2570663200BCEB54 /* KMeansClustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = D430320D2570663200BCEB54 /* KMeansClustering.swift */; };
 		C8D647D8256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D647D7256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift */; };
 		D44558CA25660D79006D9D66 /* JsonPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558C925660D79006D9D66 /* JsonPlace.swift */; };
 		D44558CF256611DF006D9D66 /* PlaceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558CE256611DF006D9D66 /* PlaceProvider.swift */; };
@@ -60,6 +61,7 @@
 		BEE572E6A770EBAC94B87E86 /* Pods_NaverMapA_NaverMapAUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NaverMapA_NaverMapAUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C216106B7FE5408B63595379 /* Pods-NaverMapATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapATests.debug.xcconfig"; path = "Target Support Files/Pods-NaverMapATests/Pods-NaverMapATests.debug.xcconfig"; sourceTree = "<group>"; };
 		C6BD3042AD95BA3CF13B5BF8 /* Pods-NaverMapA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapA.debug.xcconfig"; path = "Target Support Files/Pods-NaverMapA/Pods-NaverMapA.debug.xcconfig"; sourceTree = "<group>"; };
+		D430320D2570663200BCEB54 /* KMeansClustering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KMeansClustering.swift; sourceTree = "<group>"; };
 		C8D647D7256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+NMFOverlayImageDataSource.swift"; sourceTree = "<group>"; };
 		D44558C925660D79006D9D66 /* JsonPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonPlace.swift; sourceTree = "<group>"; };
 		D44558CE256611DF006D9D66 /* PlaceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceProvider.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 				D44558E325661638006D9D66 /* NaverMapA.xcdatamodeld */,
 				D44558C925660D79006D9D66 /* JsonPlace.swift */,
 				D44558CE256611DF006D9D66 /* PlaceProvider.swift */,
+				D430320D2570663200BCEB54 /* KMeansClustering.swift */,
 				E0AE5431256F4F0200F799E1 /* Cluster.swift */,
 				E0AE5436256F50D900F799E1 /* Clustering.swift */,
 				8898E854256D914C00CFE5B4 /* ScaleBasedClustering.swift */,
@@ -497,6 +500,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D44558CA25660D79006D9D66 /* JsonPlace.swift in Sources */,
+				D430320E2570663200BCEB54 /* KMeansClustering.swift in Sources */,
 				E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */,
 				E0059FA92563726900CE6BD7 /* MainViewController.swift in Sources */,
 				E0AE5437256F50D900F799E1 /* Clustering.swift in Sources */,

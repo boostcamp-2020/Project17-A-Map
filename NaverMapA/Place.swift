@@ -35,6 +35,12 @@ extension Place {
     @NSManaged public var longitude: Double
     @NSManaged public var name: String
 
+    func distanceTo(_ centroid: Cluster) -> Double {
+        return sqrt(pow(latitude - centroid.latitude, 2) + pow(longitude - centroid.longitude, 2))
+    }
+    func distanceTo(_ place: Place) -> Double {
+        return sqrt(pow(latitude - place.latitude, 2) + pow(longitude - place.longitude, 2))
+    }
 }
 
 extension Place: Identifiable {
