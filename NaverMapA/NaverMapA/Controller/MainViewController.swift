@@ -14,6 +14,7 @@ class MainViewController: UIViewController {
     var mapView: NMFMapView!
     var viewModel: MainViewModel?
     var clusterMarkers = [NMFMarker]()
+    var markersAnimation: [UIViewPropertyAnimator] = [] // 추후 애니메이션을 제어하기 위한 배열
     private lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
         provider.fetchedResultsController.delegate = self
@@ -47,6 +48,7 @@ class MainViewController: UIViewController {
                         clusterMarker.mapView = nil
                     }
                     self.clusterMarkers.removeAll()
+                    self.markerAnimation(clusterArray: viewModel.markers.value)
                     for cluster in viewModel.markers.value {
                         let lat = cluster.latitude
                         let lng = cluster.longitude
@@ -91,6 +93,29 @@ class MainViewController: UIViewController {
             showAlert(title: "Executing batch operation error!", message: error.localizedDescription, preferredStyle: .alert, action: okAction)
         } else {
             dataProvider.resetAndRefetch()
+        }
+    }
+    
+    private func markerAnimation(clusterArray: [Cluster]) {
+        //화면에 존재하던 마커들만이 아닌, 군집에 속한 마커들이 모두 애니메이션이 된다. Cluster 구조를 개선할 필요가 있음.
+        clusterArray.forEach { cluster in
+            let endPoint = mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longitude))
+            cluster.places.forEach { place in
+                var startPoint = self.mapView.projection.point(from: NMGLatLng(lat: place.latitude, lng: place.longitude))
+                let markerView = self.view(with: NMFMarker())
+                startPoint.x -= (markerView.frame.width / 2)
+                startPoint.y -= markerView.frame.height
+                markerView.frame.origin = startPoint
+                self.mapView.addSubview(markerView)
+                let markerAnimation = UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 1, delay: 0, options: .curveLinear, animations: {
+                    markerView.frame.origin = CGPoint(x: endPoint.x - (markerView.frame.width / 2), y: endPoint.y - markerView.frame.height)
+                }, completion: { _ in
+                    markerView.removeFromSuperview()
+                })
+                markerAnimation.startAnimation()
+                //markerAnimation.stopAnimation(false)
+                //markerAnimation.finishAnimation(at: .current)
+            }
         }
     }
 }
