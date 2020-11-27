@@ -38,8 +38,13 @@ extension Place {
     func distanceTo(_ centroid: Cluster) -> Double {
         return sqrt(pow(latitude - centroid.latitude, 2) + pow(longitude - centroid.longitude, 2))
     }
+    
     func distanceTo(_ place: Place) -> Double {
         return sqrt(pow(latitude - place.latitude, 2) + pow(longitude - place.longitude, 2))
+    }
+    
+    func distanceTo(lat: Double, lng: Double) -> Double {
+        return sqrt(pow(latitude - lat, 2) + pow(longitude - lng, 2))
     }
 }
 
