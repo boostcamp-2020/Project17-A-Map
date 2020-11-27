@@ -101,7 +101,7 @@ final class KMeansClustering: Clusterable {
         if maxK <= 3 { return maxK }
         (1...maxK).forEach { K_COUNT in
             var centroids = optimalCentroids(k: K_COUNT, places: places)
-            var iii = [Int](repeating: -1, count: places.count)
+            var indexes = [Int](repeating: -1, count: places.count)
             var flag: Bool
             repeat {
                 flag = false
@@ -115,14 +115,14 @@ final class KMeansClustering: Clusterable {
                             indexOfNearest = index
                         }
                     }
-                    if iii[i] == -1 {
+                    if indexes[i] == -1 {
                         centroids[indexOfNearest].places.append(places[i])
-                        iii[i] = indexOfNearest
+                        indexes[i] = indexOfNearest
                         flag = true
-                    } else if iii[i] != indexOfNearest {
-                        centroids[iii[i]].remove(places[i])
+                    } else if indexes[i] != indexOfNearest {
+                        centroids[indexes[i]].remove(places[i])
                         centroids[indexOfNearest].places.append(places[i])
-                        iii[i] = indexOfNearest
+                        indexes[i] = indexOfNearest
                         flag = true
                     }
                 }
