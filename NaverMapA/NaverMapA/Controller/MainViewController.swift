@@ -116,61 +116,6 @@ class MainViewController: UIViewController {
                 //markerAnimation.finishAnimation(at: .current)
             }
         }
-        
-        /* 기존 마커가 새로 추가되는 마커에서 가장 가까운 마커로 애니메이션
-        self.clusterMarkers.forEach { beforeMaker in
-            var endPoint = CGPoint()
-            var distance = Double.greatestFiniteMagnitude
-            for cluster in clusterArray { // 새로 찍히는 마커들
-                let lat = beforeMaker.position.lat - cluster.latitude
-                let lng = beforeMaker.position.lng - cluster.longitude
-                if distance > sqrt(pow(lat, 2) + pow(lng, 2)) {
-                    distance = sqrt(pow(lat, 2) + pow(lng, 2))
-                    endPoint = mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longitude))
-                }
-            }
-            var startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeMaker.position.lat, lng: beforeMaker.position.lng))
-            let markerView = self.view(with: NMFMarker())
-            startPoint.x -= (markerView.frame.width / 2)
-            startPoint.y -= markerView.frame.height
-            markerView.frame.origin = startPoint
-            self.mapView.addSubview(markerView)
-            let markerAnimation = UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 2, delay: 0, options: .curveLinear, animations: {
-                print("startPoint : \(startPoint.x), \(startPoint.y)")
-                print("endPoint : \(endPoint.x - (markerView.frame.width / 2)), \(endPoint.y - markerView.frame.height)")
-                markerView.frame.origin = CGPoint(x: endPoint.x - (markerView.frame.width / 2), y: endPoint.y - markerView.frame.height)
-                //markerView.frame.origin = CGPoint(x: 10, y: 10)
-            }, completion: { _ in
-                print("test")
-                markerView.removeFromSuperview()
-            })
-            markerAnimation.startAnimation()
-        }*/
-        
-        /* 새로 추가되는 마커들이 기존에 존재하던 마커들을 places로 가지고 있을 때
-        self.clusterMarkers.forEach { beforeMaker in
-            var endPoint = CGPoint(x: 0, y: 0)
-            forLoop: for cluster in clusterArray {
-                for place in cluster.places {
-                    if beforeMaker.position.lat == place.latitude && beforeMaker.position.lng == place.longitude {
-                        endPoint = mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longitude))
-                        break forLoop
-                    }
-                }
-            }
-            var startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeMaker.position.lat, lng: beforeMaker.position.lng))
-            let markerView = self.view(with: NMFMarker())
-            startPoint.x -= (markerView.frame.width / 2)
-            startPoint.y -= markerView.frame.height
-            markerView.frame.origin = startPoint
-            self.mapView.addSubview(markerView)
-            let markerAnimation = UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 1, delay: 0, options: .curveLinear, animations: {
-                markerView.frame.origin = CGPoint(x: endPoint.x - (markerView.frame.width / 2), y: endPoint.y - markerView.frame.height)
-            }, completion: { _ in
-                markerView.removeFromSuperview()
-            })
-            markerAnimation.startAnimation()
-        }*/
     }
 }
 
