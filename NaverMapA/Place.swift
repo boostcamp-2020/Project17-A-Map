@@ -42,10 +42,6 @@ extension Place {
     func distanceTo(_ place: Place) -> Double {
         return sqrt(pow(latitude - place.latitude, 2) + pow(longitude - place.longitude, 2))
     }
-    
-    func distanceTo(lat: Double, lng: Double) -> Double {
-        return sqrt(pow(latitude - lat, 2) + pow(longitude - lng, 2))
-    }
 }
 
 extension Place: Identifiable {

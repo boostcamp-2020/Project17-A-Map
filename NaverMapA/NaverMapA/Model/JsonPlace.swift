@@ -32,6 +32,7 @@ extension JsonPlace: Decodable {
         self.imageUrl = try container.decode(String?.self, forKey: .imageUrl)
         self.category = try container.decode(String.self, forKey: .category)
     }
+    
     init(place: Place) {
         self.name = place.name
         self.id = place.id
@@ -43,6 +44,14 @@ extension JsonPlace: Decodable {
 
     func distanceTo(_ jsonPlace: JsonPlace) -> Double {
         return sqrt(pow(latitude - jsonPlace.latitude, 2) + pow(longitude - jsonPlace.longitude, 2))
+    }
+    
+    func distanceTo(_ place: Place) -> Double {
+        return sqrt(pow(latitude - place.latitude, 2) + pow(longitude - place.longitude, 2))
+    }
+    
+    func distanceTo(lat: Double, lng: Double) -> Double {
+        return sqrt(pow(latitude - lat, 2) + pow(longitude - lng, 2))
     }
     
     static func centroid(of jsonPlaces: [JsonPlace]) -> JsonPlace {
