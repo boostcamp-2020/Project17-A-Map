@@ -119,19 +119,19 @@ class MainViewController: UIViewController {
             }
             let startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeMarker.position.lat, lng: beforeMarker.position.lng))
             let markerView = self.view(with: beforeMarker)
-            markerView.frame.origin = startPoint
+            markerView.frame.origin = CGPoint(x: -100, y: -100)
             mapView.addSubview(markerView)
             let markerViewLayer = markerView.layer
             DispatchQueue.global().async {
                 CATransaction.begin()
-                let markerAnimation = CABasicAnimation(keyPath: #keyPath(CALayer.position))
-                markerAnimation.duration = 0.3
+                let markerAnimation = CABasicAnimation(keyPath: "position")
+                markerAnimation.duration = 0.4
                 markerAnimation.fromValue = startPoint
                 markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y - (markerView.frame.height / 2))
                 CATransaction.setCompletionBlock({
                     markerView.removeFromSuperview()
                 })
-                markerViewLayer.add(markerAnimation, forKey: #keyPath(CALayer.position))
+                markerViewLayer.add(markerAnimation, forKey: "position")
                 CATransaction.commit()
             }
         }
