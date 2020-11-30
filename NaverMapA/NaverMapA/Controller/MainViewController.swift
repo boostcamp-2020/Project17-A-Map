@@ -120,7 +120,7 @@ class MainViewController: UIViewController {
     }
     
     private func moveCamera(to marker: NMFMarker) {
-        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(marker.position, zoom: 21)))
+        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(marker.position, zoom: marker.captionMaxZoom)))
     }
 }
 
