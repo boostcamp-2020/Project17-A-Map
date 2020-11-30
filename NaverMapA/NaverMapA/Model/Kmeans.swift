@@ -72,15 +72,13 @@ final class Kmeans: Clusterable {
         var distances = clusters.map { candidate in
             candidate.reduce(0.0, { $0 + $1.totalDistance })
         }
-
         let diffDistance = (0..<(distances.count) - 1).map { i -> Double in
             return distances[i] - distances[i + 1]
         }
-
         let decreaseAverage = diffDistance.reduce(0.0, {$0 + $1}) / Double(diffDistance.count)
-
         var minDistance = Double.greatestFiniteMagnitude
         var minIdx = 0
+        
         for i in 0..<distances.count {
             distances[i] -= decreaseAverage * Double(i)
             if distances[i] > 0 && distances[i] < minDistance {
@@ -110,7 +108,6 @@ final class Kmeans: Clusterable {
             let idx = Int.random(in: 0..<places.count)
             return places[idx]
         }
-        
         var centerOfCentroid = Centroid(places: initailRandomCentroid)
         
         for place in places {
@@ -123,6 +120,7 @@ final class Kmeans: Clusterable {
         
         let centroidToCluster = centerOfCentroid.places.map { Centroid(places: [$0]) }
         centroidToCluster.forEach { $0.clearPlaces() }
+        
         return centroidToCluster
     }
     
