@@ -7,7 +7,13 @@
 
 import Foundation
 
-struct Cluster {
+protocol Cluster {
+    var latitude: Double { get set }
+    var longitude: Double { get set }
+    var places: [Place] { get set }
+}
+
+struct BasicCluster: Cluster {
     var latitude: Double = 0
     var longitude: Double = 0
     var places: [Place] = [Place]() {
@@ -33,7 +39,7 @@ struct Cluster {
         places.reduce(0.0, {$0 + $1.distanceTo(self)})
     }
     
-    func distanceTo(_ cluster: Cluster) -> Double {
+    func distanceTo(_ cluster: BasicCluster) -> Double {
         return sqrt(pow(latitude - cluster.latitude, 2) + pow(longitude - cluster.longitude, 2))
     }
     
@@ -43,8 +49,8 @@ struct Cluster {
     
 }
 
-extension Cluster: Comparable {
-    static func < (left: Cluster, right: Cluster) -> Bool {
+extension BasicCluster: Comparable {
+    static func < (left: BasicCluster, right: BasicCluster) -> Bool {
         let lPow = pow(left.latitude, 2) + pow(left.longitude, 2)
         let rPow = pow(right.latitude, 2) + pow(right.longitude, 2)
         return lPow<rPow
