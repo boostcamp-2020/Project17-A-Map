@@ -7,7 +7,7 @@
 
 import Foundation
 
-class Centroid: Equatable {
+class PenaltyCluster: Cluster, Equatable {
     
     var latitude: Double
     var longitude: Double
@@ -49,16 +49,20 @@ class Centroid: Equatable {
         return sqrt(pow(latitude - jsonPlace.latitude, 2) + pow(longitude - jsonPlace.longitude, 2))
     }
     
-    static func == (lhs: Centroid, rhs: Centroid) -> Bool {
+    var totalDistance: Double {
+        places.reduce(0.0, {$0 + $1.distanceTo(self)})
+    }
+    
+    static func == (lhs: PenaltyCluster, rhs: PenaltyCluster) -> Bool {
         return lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude
     }
 }
 
-final class PaneltyKmeans: Clusterable {
+final class PenaltyKmeans: Clusterable {
     
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
         guard places.count != 0 else { return [] }
-        var candidateCluster: [[Cluster]] = []
+        var candidateCluster: [[PenaltyCluster]] = []
         let maximumK = determinateMaxK(count: places.count, bounds: bounds)
         
         for k in 1..<maximumK {
@@ -69,20 +73,20 @@ final class PaneltyKmeans: Clusterable {
         return bestCluster(clusters: candidateCluster, count: places.count)
     }
     
-    func bestCluster(clusters: [[Cluster]], count: Int) -> [Cluster] {
+    func bestCluster(clusters: [[PenaltyCluster]], count: Int) -> [PenaltyCluster] {
         var distances = clusters.map { candidate in
             candidate.reduce(0.0, { $0 + $1.totalDistance })
         }
         let diffDistance = (0..<(distances.count) - 1).map { i -> Double in
             return distances[i] - distances[i + 1]
         }
-        let decreaseAverage = diffDistance.reduce(0.0, {$0 + $1}) / Double(diffDistance.count)
+        let decreaseAverage = diffDistance.reduce(0.0, {$0 + $1}) / Double(diffDistance.count) / 2
         var minDistance = Double.greatestFiniteMagnitude
         var minIdx = 0
         
         for i in 0..<distances.count {
-            distances[i] -= decreaseAverage * Double(i+1)
-            if distances[i] > 0 && distances[i] < minDistance {
+            distances[i] += decreaseAverage * Double(i+1)
+            if distances[i] < minDistance {
                 minDistance = distances[i]
                 minIdx = i
             }
@@ -91,42 +95,42 @@ final class PaneltyKmeans: Clusterable {
         return clusters[minIdx]
     }
     
-    func clustering(places: [Place], k: Int) -> [Cluster] {
+    func clustering(places: [Place], k: Int) -> [PenaltyCluster] {
         var centroids = initialCentroid(k: k, places: places)
         let iterationCount = 3
         centroids = distributeToCentroid(places: places, centroids: centroids)
 
         for _ in 0..<iterationCount {
-            var newCentroids = centroids.map { Centroid(lat: $0.latitude, lng: $0.longitude, places: [])}
+            var newCentroids = centroids.map { PenaltyCluster(lat: $0.latitude, lng: $0.longitude, places: [])}
             newCentroids = distributeToCentroid(places: places, centroids: newCentroids)
             centroids = newCentroids
         }
         
-        return centroids.map { Cluster(latitude: $0.latitude, longitude: $0.longitude, places: $0.places)}
+        return centroids.map { PenaltyCluster(lat: $0.latitude, lng: $0.longitude, places: $0.places)}
     }
     
-    func initialCentroid(k: Int, places: [Place]) -> [Centroid] {
+    func initialCentroid(k: Int, places: [Place]) -> [PenaltyCluster] {
         let initailRandomCentroid = (0..<k).map { _ -> Place in
             let idx = Int.random(in: 0..<places.count)
             return places[idx]
         }
-        var centerOfCentroid = Centroid(places: initailRandomCentroid)
+        var centerOfCentroid = PenaltyCluster(places: initailRandomCentroid)
         
         for place in places {
             let newCandidateCentroid = centerOfCentroid.farthestPlaces(from: place) + [place]
-            let newCenterOfCentroid = Centroid(places: newCandidateCentroid)
+            let newCenterOfCentroid = PenaltyCluster(places: newCandidateCentroid)
             if newCenterOfCentroid.sumDistanceInCentroid() > centerOfCentroid.sumDistanceInCentroid() {
                 centerOfCentroid = newCenterOfCentroid
             }
         }
         
-        let centroidToCluster = centerOfCentroid.places.map { Centroid(places: [$0]) }
+        let centroidToCluster = centerOfCentroid.places.map { PenaltyCluster(places: [$0]) }
         centroidToCluster.forEach { $0.clearPlaces() }
         
         return centroidToCluster
     }
     
-    func distributeToCentroid(places: [Place], centroids: [Centroid]) -> [Centroid] {
+    func distributeToCentroid(places: [Place], centroids: [PenaltyCluster]) -> [PenaltyCluster] {
         let distributedCentroid = centroids
         
         places.forEach { place in
