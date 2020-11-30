@@ -57,39 +57,55 @@ class Centroid: Equatable {
 final class Kmeans: Clusterable {
     
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
-        // 최대 평균 거리 중심 구하기
-        // 3 은 임의의 k 개수
-//        let jsonPlaces = places.map { JsonPlace(place: $0) }
+        var candidateCluster: [[Cluster]] = []
+        let maximumK = places.count < 40 ? places.count : 40
         
-        for k in 1..<41 {
+        for k in 1..<maximumK {
             let clusters = clustering(places: places, k: k)
-            let totalDistance = clusters.reduce(0, { $0 + $1.totalDistance })
-            print(totalDistance)
+            candidateCluster.append(clusters)
         }
-        return clustering(places: places, k: 12)
+        
+        return bestCluster(clusters: candidateCluster)
+    }
+    
+    func bestCluster(clusters: [[Cluster]]) -> [Cluster] {
+        var distances = clusters.map { candidate in
+            candidate.reduce(0.0, { $0 + $1.totalDistance })
+        }
+
+        let diffDistance = (0..<(distances.count) - 1).map { i -> Double in
+            return distances[i] - distances[i + 1]
+        }
+
+        let decreaseAverage = diffDistance.reduce(0.0, {$0 + $1}) / Double(diffDistance.count)
+
+        var minDistance = Double.greatestFiniteMagnitude
+        var minIdx = 0
+        for i in 0..<distances.count {
+            distances[i] -= decreaseAverage * Double(i)
+            if distances[i] > 0 && distances[i] < minDistance {
+                minDistance = distances[i]
+                minIdx = i
+            }
+        }
+        return clusters[minIdx]
     }
     
     func clustering(places: [Place], k: Int) -> [Cluster] {
         var centroids = initialCentroid(k: k, places: places)
+        let iterationCount = 3
         centroids = distributeToCentroid(places: places, centroids: centroids)
-        
-        var isMoreIteration = true
-        while isMoreIteration {
-            isMoreIteration = false
+
+        for _ in 0..<iterationCount {
             var newCentroids = centroids.map { Centroid(lat: $0.latitude, lng: $0.longitude, places: [])}
             newCentroids = distributeToCentroid(places: places, centroids: newCentroids)
-            for (old, new) in zip(centroids, newCentroids) where old != new {
-                isMoreIteration = true
-                centroids = newCentroids
-                break
-            }
+            centroids = newCentroids
         }
         
         return centroids.map { Cluster(latitude: $0.latitude, longitude: $0.longitude, places: $0.places)}
     }
     
     func initialCentroid(k: Int, places: [Place]) -> [Centroid] {
-        let k = places.count < k ? places.count : k
         let initailRandomCentroid = (0..<k).map { _ -> Place in
             let idx = Int.random(in: 0..<places.count)
             return places[idx]
