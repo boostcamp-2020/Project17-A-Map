@@ -40,6 +40,7 @@
 		E0AE54B3257138D600F799E1 /* Clustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5436256F50D900F799E1 /* Clustering.swift */; };
 		E0AE54B7257138E900F799E1 /* CoordinateBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5441256F859B00F799E1 /* CoordinateBounds.swift */; };
 		E0BCC6C625638972005AD87F /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BCC6C525638972005AD87F /* Environment.swift */; };
+		E0EFA218257496F100995B0C /* PlaceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558CE256611DF006D9D66 /* PlaceProvider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -213,8 +214,8 @@
 			isa = PBXGroup;
 			children = (
 				E0059FBE2563726B00CE6BD7 /* NaverMapATests.swift */,
-				E0059FC02563726B00CE6BD7 /* Info.plist */,
 				E0AE549B2571311A00F799E1 /* RemainKMeansTest.swift */,
+				E0059FC02563726B00CE6BD7 /* Info.plist */,
 			);
 			path = NaverMapATests;
 			sourceTree = "<group>";
@@ -542,6 +543,7 @@
 				E0AE54B7257138E900F799E1 /* CoordinateBounds.swift in Sources */,
 				E0AE54A3257133D900F799E1 /* RemainKmeans.swift in Sources */,
 				E0AE54B3257138D600F799E1 /* Clustering.swift in Sources */,
+				E0EFA218257496F100995B0C /* PlaceProvider.swift in Sources */,
 				E0AE54A7257133F500F799E1 /* Place.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
