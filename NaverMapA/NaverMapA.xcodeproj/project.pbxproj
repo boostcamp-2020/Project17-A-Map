@@ -31,9 +31,9 @@
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
 		E0AE5437256F50D900F799E1 /* Clustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5436256F50D900F799E1 /* Clustering.swift */; };
 		E0AE5442256F859B00F799E1 /* CoordinateBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5441256F859B00F799E1 /* CoordinateBounds.swift */; };
-		E0AE5492257128A700F799E1 /* Kmeans.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5491257128A700F799E1 /* Kmeans.swift */; };
+		E0AE5492257128A700F799E1 /* paneltyKmeans.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5491257128A700F799E1 /* paneltyKmeans.swift */; };
 		E0AE549C2571311A00F799E1 /* RemainKMeansTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE549B2571311A00F799E1 /* RemainKMeansTest.swift */; };
-		E0AE54A3257133D900F799E1 /* Kmeans.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5491257128A700F799E1 /* Kmeans.swift */; };
+		E0AE54A3257133D900F799E1 /* paneltyKmeans.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5491257128A700F799E1 /* paneltyKmeans.swift */; };
 		E0AE54A7257133F500F799E1 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558D9256615CF006D9D66 /* Place.swift */; };
 		E0AE54AB2571347000F799E1 /* JsonPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558C925660D79006D9D66 /* JsonPlace.swift */; };
 		E0AE54AF257138C300F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
@@ -96,7 +96,7 @@
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
 		E0AE5436256F50D900F799E1 /* Clustering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clustering.swift; sourceTree = "<group>"; };
 		E0AE5441256F859B00F799E1 /* CoordinateBounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateBounds.swift; sourceTree = "<group>"; };
-		E0AE5491257128A700F799E1 /* Kmeans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Kmeans.swift; sourceTree = "<group>"; };
+		E0AE5491257128A700F799E1 /* paneltyKmeans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = paneltyKmeans.swift; sourceTree = "<group>"; };
 		E0AE549B2571311A00F799E1 /* RemainKMeansTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemainKMeansTest.swift; sourceTree = "<group>"; };
 		E0BCC6C525638972005AD87F /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		EBA4CDE9A7CC6FCBCDA4598B /* Pods-NaverMapATests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapATests.release.xcconfig"; path = "Target Support Files/Pods-NaverMapATests/Pods-NaverMapATests.release.xcconfig"; sourceTree = "<group>"; };
@@ -165,7 +165,7 @@
 				E0AE5436256F50D900F799E1 /* Clustering.swift */,
 				8898E854256D914C00CFE5B4 /* ScaleBasedClustering.swift */,
 				E0AE5441256F859B00F799E1 /* CoordinateBounds.swift */,
-				E0AE5491257128A700F799E1 /* Kmeans.swift */,
+				E0AE5491257128A700F799E1 /* paneltyKmeans.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -517,7 +517,7 @@
 				E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */,
 				E0059FA92563726900CE6BD7 /* MainViewController.swift in Sources */,
 				E0AE5437256F50D900F799E1 /* Clustering.swift in Sources */,
-				E0AE5492257128A700F799E1 /* Kmeans.swift in Sources */,
+				E0AE5492257128A700F799E1 /* paneltyKmeans.swift in Sources */,
 				8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */,
 				E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */,
 				C8D647D8256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift in Sources */,
@@ -541,7 +541,7 @@
 				E0AE54AF257138C300F799E1 /* Cluster.swift in Sources */,
 				E0059FBF2563726B00CE6BD7 /* NaverMapATests.swift in Sources */,
 				E0AE54B7257138E900F799E1 /* CoordinateBounds.swift in Sources */,
-				E0AE54A3257133D900F799E1 /* Kmeans.swift in Sources */,
+				E0AE54A3257133D900F799E1 /* paneltyKmeans.swift in Sources */,
 				E0AE54B3257138D600F799E1 /* Clustering.swift in Sources */,
 				E0EFA218257496F100995B0C /* PlaceProvider.swift in Sources */,
 				E0AE54A7257133F500F799E1 /* Place.swift in Sources */,

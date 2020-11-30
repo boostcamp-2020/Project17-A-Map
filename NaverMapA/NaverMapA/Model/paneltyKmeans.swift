@@ -57,18 +57,19 @@ class Centroid: Equatable {
 final class Kmeans: Clusterable {
     
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
+        guard places.count != 0 else { return [] }
         var candidateCluster: [[Cluster]] = []
-        let maximumK = places.count < 40 ? places.count : 40
+        let maximumK = determinateMaxK(count: places.count, bounds: bounds)
         
         for k in 1..<maximumK {
             let clusters = clustering(places: places, k: k)
             candidateCluster.append(clusters)
         }
         
-        return bestCluster(clusters: candidateCluster)
+        return bestCluster(clusters: candidateCluster, count: places.count)
     }
     
-    func bestCluster(clusters: [[Cluster]]) -> [Cluster] {
+    func bestCluster(clusters: [[Cluster]], count: Int) -> [Cluster] {
         var distances = clusters.map { candidate in
             candidate.reduce(0.0, { $0 + $1.totalDistance })
         }
@@ -80,12 +81,13 @@ final class Kmeans: Clusterable {
         var minIdx = 0
         
         for i in 0..<distances.count {
-            distances[i] -= decreaseAverage * Double(i)
+            distances[i] -= decreaseAverage * Double(i+1)
             if distances[i] > 0 && distances[i] < minDistance {
                 minDistance = distances[i]
                 minIdx = i
             }
         }
+        
         return clusters[minIdx]
     }
     
@@ -135,5 +137,22 @@ final class Kmeans: Clusterable {
         }
 
         return distributedCentroid
+    }
+    
+    func determinateMaxK(count: Int, bounds: CoordinateBounds) -> Int {
+        guard count > 30 else { return 30 }
+        let mapScale = sqrt(pow(bounds.northEastLat - bounds.southWestLat, 2) + pow(bounds.northEastLng - bounds.southWestLng, 2))
+        switch mapScale {
+        case let x where x > 1:
+            return 2
+        case let x where x > 0.1:
+            return 6
+        case let x where x > 0.01:
+            return 10
+        case let x where x > 0.001:
+            return 20
+        default:
+            return 30
+        }
     }
 }
