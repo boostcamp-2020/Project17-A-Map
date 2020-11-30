@@ -54,7 +54,7 @@ class Centroid: Equatable {
     }
 }
 
-final class Kmeans: Clusterable {
+final class PaneltyKmeans: Clusterable {
     
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
         guard places.count != 0 else { return [] }
