@@ -14,7 +14,16 @@ class MainViewController: UIViewController {
     var mapView: NMFMapView!
     var viewModel: MainViewModel?
     var clusterMarkers = [NMFMarker]()
-    var zoomLevel = 18
+    var beforeClusterMarkers = [NMFMarker]()
+    var clusterMarkersCount = 0
+    var zoomLevel: Double = 18 {
+        didSet(oldValue) {
+            if oldValue != mapView.zoomLevel && clusterMarkersCount != clusterMarkers.count {
+                clusterMarkersCount = clusterMarkers.count
+                markerAnimation()
+            }
+        }
+    }
     private lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
         provider.fetchedResultsController.delegate = self
@@ -44,11 +53,10 @@ class MainViewController: UIViewController {
             viewModel.markers.bind({ _ in
                 // rendering
                 DispatchQueue.main.async {
-                    print(self.clusterMarkers.count)
-                    self.markerAnimation(clusterArray: viewModel.markers.value)
                     for clusterMarker in self.clusterMarkers {
                         clusterMarker.mapView = nil
                     }
+                    self.beforeClusterMarkers = self.clusterMarkers
                     self.clusterMarkers.removeAll()
                     for cluster in viewModel.markers.value {
                         let lat = cluster.latitude
@@ -65,6 +73,7 @@ class MainViewController: UIViewController {
                         marker.mapView = self.mapView
                         self.clusterMarkers.append(marker)
                     }
+                    self.zoomLevel = self.mapView.zoomLevel
                 }
             })
         }
@@ -97,29 +106,26 @@ class MainViewController: UIViewController {
         }
     }
     
-    private func markerAnimation(clusterArray: [Cluster]) {
-        clusterMarkers.forEach { marker in
+    private func markerAnimation() {
+        beforeClusterMarkers.forEach { beforeMarker in
             var endPoint = CGPoint()
             var minDistance: Double = Double.greatestFiniteMagnitude
-            clusterArray.forEach { cluster in
-                let distance = sqrt(pow(marker.position.lat - cluster.latitude, 2) + pow(marker.position.lng - cluster.longitude, 2))
+            clusterMarkers.forEach { clusterMarker in
+                let distance = sqrt(pow(beforeMarker.position.lat - clusterMarker.position.lat, 2) + pow(beforeMarker.position.lng - clusterMarker.position.lng, 2))
                 if distance < minDistance {
                     minDistance = distance
-                    endPoint = mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longitude))
+                    endPoint = mapView.projection.point(from: NMGLatLng(lat: clusterMarker.position.lat, lng: clusterMarker.position.lng))
                 }
             }
-            print("distance : \(endPoint)")
-            var startPoint = mapView.projection.point(from: NMGLatLng(lat: marker.position.lat, lng: marker.position.lng))
-            let markerView = self.view(with: NMFMarker())
-            //startPoint.x -= (markerView.frame.width / 2)
-            startPoint.y -= markerView.frame.height
+            let startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeMarker.position.lat, lng: beforeMarker.position.lng))
+            let markerView = self.view(with: beforeMarker)
             markerView.frame.origin = startPoint
             mapView.addSubview(markerView)
             let markerViewLayer = markerView.layer
             DispatchQueue.global().async {
                 CATransaction.begin()
                 let markerAnimation = CABasicAnimation(keyPath: #keyPath(CALayer.position))
-                markerAnimation.duration = 1
+                markerAnimation.duration = 0.3
                 markerAnimation.fromValue = startPoint
                 markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y - (markerView.frame.height / 2))
                 CATransaction.setCompletionBlock({
@@ -140,7 +146,6 @@ extension MainViewController: NSFetchedResultsControllerDelegate {
 extension MainViewController: NMFMapViewCameraDelegate {
     
     func mapViewCameraIdle(_ mapView: NMFMapView) {
-        //print("zoomlevel: \(Int(mapView.zoomLevel))")
         let coordBounds = mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
         DispatchQueue.global().async {
             let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,

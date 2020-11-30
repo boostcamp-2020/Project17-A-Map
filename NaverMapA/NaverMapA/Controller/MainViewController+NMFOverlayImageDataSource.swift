@@ -13,7 +13,7 @@ extension MainViewController: NMFOverlayImageDataSource {
     func view(with overlay: NMFOverlay) -> UIView {
         let markerOverlay = overlay as? NMFMarker
         let markerView = UIImageView(frame: CGRect(x: 0, y: 0, width: markerOverlay?.iconImage.imageWidth ?? 0, height: markerOverlay?.iconImage.imageHeight ?? 0))
-        markerView.image = markerOverlay?.iconImage.image
+        markerView.image = markerOverlay?.iconImage.image.withTintColor(markerOverlay?.iconTintColor ?? .green)
         return markerView
     }
 }
