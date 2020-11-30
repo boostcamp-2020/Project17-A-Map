@@ -20,6 +20,7 @@ class MainViewController: UIViewController {
         provider.fetchedResultsController.delegate = self
         return provider
     }()
+    var pullUpVC: DetailPullUpViewController?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +31,7 @@ class MainViewController: UIViewController {
         if dataProvider.objectCount == 0 {
             dataProvider.insert(completionHandler: handleBatchOperationCompletion)
         }
+        showPullUpVC()
     }
     
     func setupMapView() {
@@ -118,6 +120,18 @@ class MainViewController: UIViewController {
             }
         }
     }
+    
+    private func showPullUpVC() {
+        guard let pullUpVC: DetailPullUpViewController = storyboard?.instantiateViewController(identifier: DetailPullUpViewController.identifier) as? DetailPullUpViewController else { return }
+        self.addChild(pullUpVC)
+        let height = view.frame.height * 0.9
+        let width = view.frame.width
+        pullUpVC.view.frame = CGRect(x: 0, y: view.frame.maxY, width: width, height: height)
+        self.view.addSubview(pullUpVC.view)
+        pullUpVC.didMove(toParent: self)
+        self.pullUpVC = pullUpVC
+    }
+    
 }
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
