@@ -35,21 +35,21 @@ class MainViewController: UIViewController {
     func setupMapView() {
         mapView = NMFMapView(frame: view.frame)
         mapView.addCameraDelegate(delegate: self)
-        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5655271, lng: 126.9904267), zoom: 18)))
+        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5656471, lng: 126.9908467), zoom: 18)))
         view.addSubview(mapView)
     }
     
     func bindViewModel() {
         if let viewModel = viewModel {
-            viewModel.markers.bind({ _ in
+            viewModel.markers.bind({ clusters in
                 // rendering
                 DispatchQueue.main.async {
                     for clusterMarker in self.clusterMarkers {
                         clusterMarker.mapView = nil
                     }
                     self.clusterMarkers.removeAll()
-                    self.markerAnimation(clusterArray: viewModel.markers.value)
-                    for cluster in viewModel.markers.value {
+                    self.markerAnimation(clusterArray: clusters)
+                    for cluster in clusters {
                         let lat = cluster.latitude
                         let lng = cluster.longitude
                         let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
