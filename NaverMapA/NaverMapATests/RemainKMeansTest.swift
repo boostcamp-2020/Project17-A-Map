@@ -10,16 +10,38 @@ import CoreData
 
 class RemainKMeansTest: XCTestCase {
 
-    func testExample() {
+    var context: NSManagedObjectContext!
+    var places: [Place] = []
+    
+    override func setUpWithError() throws {
+        context = PlaceProvider.shared.mainContext
         
-        let places = (1..<4).map {
-            return JsonPlace(id: "", name: "", longitude: 0, latitude: Double($0), imageUrl: nil, category: "")
+        places = (1..<4).map { i -> Place in
+            let json = JsonPlace(id: "", name: "", longitude: 0, latitude: Double(i), imageUrl: nil, category: "")
+            let place = Place(context: context)
+            place.configure(json: json)
+            return place
         }
-        let newPlace = JsonPlace(id: "", name: "", longitude: 0, latitude: 0, imageUrl: "", category: "")
+    }
+    
+    func test_centroid_of_farthestPlace() {
+    
+        let newPlace = Place(context: context)
+        newPlace.configure(json: JsonPlace(id: "", name: "", longitude: 0, latitude: 0, imageUrl: "", category: ""))
 
-        let center = PointLngLat(places: places)
+        let center = Centroid(places: places)
         let ret = center.farthestPlaces(from: newPlace)
-        print(ret[0].latitude)
+        
         XCTAssertEqual(ret[0].latitude, 2)
+    }
+    
+    func test_centroid_of_CenterLngLat() {
+        
+        let newPlace = Place(context: context)
+        newPlace.configure(json: JsonPlace(id: "", name: "", longitude: 0, latitude: 2, imageUrl: "", category: ""))
+        let center = Centroid(places: places)
+        center.append(jsonPlace: newPlace)
+        XCTAssertEqual(center.latitude, 2)
+        
     }
 }
