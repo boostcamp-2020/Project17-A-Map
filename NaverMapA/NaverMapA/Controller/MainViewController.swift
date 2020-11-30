@@ -35,7 +35,7 @@ class MainViewController: UIViewController {
     func setupMapView() {
         mapView = NMFMapView(frame: view.frame)
         mapView.addCameraDelegate(delegate: self)
-        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5655271, lng: 126.9904267), zoom: 18)))
+        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5655271, lng: 126.9904267), zoom: 21)))
         view.addSubview(mapView)
     }
     
@@ -117,6 +117,10 @@ class MainViewController: UIViewController {
                 //markerAnimation.finishAnimation(at: .current)
             }
         }
+    }
+    
+    private func moveCamera(to marker: NMFMarker) {
+        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(marker.position, zoom: 21)))
     }
 }
 
