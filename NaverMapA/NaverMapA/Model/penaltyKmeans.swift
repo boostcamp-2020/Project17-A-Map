@@ -144,19 +144,21 @@ final class PenaltyKmeans: Clusterable {
     }
     
     func determinateMaxK(count: Int, bounds: CoordinateBounds) -> Int {
-        guard count > 30 else { return 30 }
+        guard count > 40 else { return 40 }
         let mapScale = sqrt(pow(bounds.northEastLat - bounds.southWestLat, 2) + pow(bounds.northEastLng - bounds.southWestLng, 2))
         switch mapScale {
+        case let x where x > 10:
+            return 1
         case let x where x > 1:
             return 2
         case let x where x > 0.1:
-            return 6
-        case let x where x > 0.01:
             return 10
-        case let x where x > 0.001:
+        case let x where x > 0.01:
             return 20
-        default:
+        case let x where x > 0.001:
             return 30
+        default:
+            return 40
         }
     }
 }
