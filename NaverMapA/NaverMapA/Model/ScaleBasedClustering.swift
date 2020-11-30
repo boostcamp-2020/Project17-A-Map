@@ -12,9 +12,9 @@ class ScaleBasedClustering: Clusterable {
         if places.count == 0 {
             return []
         }
-        var clusterArray = [Cluster]()
+        var clusterArray = [BasicCluster]()
         for place in places {
-            clusterArray.append(Cluster(latitude: place.latitude, longitude: place.longitude, places: [place]))
+            clusterArray.append(BasicCluster(latitude: place.latitude, longitude: place.longitude, places: [place]))
         }
         var isUpdate = true
         while isUpdate != false {
