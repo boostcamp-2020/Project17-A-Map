@@ -99,7 +99,7 @@ class MainViewController: UIViewController {
     private func markerAnimation(clusterArray: [Cluster]) {
         //화면에 존재하던 마커들만이 아닌, 군집에 속한 마커들이 모두 애니메이션이 된다. Cluster 구조를 개선할 필요가 있음.
         clusterArray.forEach { cluster in
-            let endPoint = mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longitude))
+            var endPoint = mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longitude))
             cluster.places.forEach { place in
                 var startPoint = self.mapView.projection.point(from: NMGLatLng(lat: place.latitude, lng: place.longitude))
                 let markerView = self.view(with: NMFMarker())
@@ -107,14 +107,19 @@ class MainViewController: UIViewController {
                 startPoint.y -= markerView.frame.height
                 markerView.frame.origin = startPoint
                 self.mapView.addSubview(markerView)
-                let markerAnimation = UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 1, delay: 0, options: .curveLinear, animations: {
-                    markerView.frame.origin = CGPoint(x: endPoint.x - (markerView.frame.width / 2), y: endPoint.y - markerView.frame.height)
-                }, completion: { _ in
-                    markerView.removeFromSuperview()
-                })
-                markerAnimation.startAnimation()
-                //markerAnimation.stopAnimation(false)
-                //markerAnimation.finishAnimation(at: .current)
+                let markerLayer = markerView.layer
+                DispatchQueue.global().async {
+                    CATransaction.begin()
+                    let markerAnimation = CABasicAnimation(keyPath: #keyPath(CALayer.position))
+                    markerAnimation.duration = 1
+                    markerAnimation.fromValue = startPoint
+                    markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y - (markerLayer.frame.height / 2))
+                    CATransaction.setCompletionBlock({
+                        markerView.removeFromSuperview()
+                    })
+                    markerLayer.add(markerAnimation, forKey: #keyPath(CALayer.position))
+                    CATransaction.commit()
+                }
             }
         }
     }
