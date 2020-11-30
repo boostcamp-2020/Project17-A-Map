@@ -21,9 +21,16 @@ class MainViewController: UIViewController {
         return provider
     }()
     
+    private lazy var handler = { (overlay: NMFOverlay?) -> Bool in
+        if let marker = overlay as? NMFMarker {
+            self.moveCamera(to: marker)
+        }
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-//        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        //        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         viewModel = MainViewModel(algorithm: KMeansClustering())
         bindViewModel()
         setupMapView()
@@ -35,7 +42,7 @@ class MainViewController: UIViewController {
     func setupMapView() {
         mapView = NMFMapView(frame: view.frame)
         mapView.addCameraDelegate(delegate: self)
-        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5655271, lng: 126.9904267), zoom: 21)))
+        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5655271, lng: 126.9904267), zoom: 18)))
         view.addSubview(mapView)
     }
     
@@ -62,6 +69,7 @@ class MainViewController: UIViewController {
                         marker.captionText = "\(cluster.places.count)"
                         marker.zIndex = 1
                         marker.mapView = self.mapView
+                        marker.touchHandler = self.handler
                         self.clusterMarkers.append(marker)
                     }
                 }
@@ -120,7 +128,7 @@ class MainViewController: UIViewController {
     }
     
     private func moveCamera(to marker: NMFMarker) {
-        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(marker.position, zoom: marker.captionMaxZoom)))
+        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(marker.position, zoom: 21)))
     }
 }
 
