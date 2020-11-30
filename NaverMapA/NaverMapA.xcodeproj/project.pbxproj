@@ -29,18 +29,19 @@
 		E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5424256F4AA700F799E1 /* MainViewModel.swift */; };
 		E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE542C256F4BC800F799E1 /* Dynamic.swift */; };
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
-		E0AE5437256F50D900F799E1 /* Clustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5436256F50D900F799E1 /* Clustering.swift */; };
+		E0AE5437256F50D900F799E1 /* Clusterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5436256F50D900F799E1 /* Clusterable.swift */; };
 		E0AE5442256F859B00F799E1 /* CoordinateBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5441256F859B00F799E1 /* CoordinateBounds.swift */; };
 		E0AE5492257128A700F799E1 /* penaltyKmeans.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5491257128A700F799E1 /* penaltyKmeans.swift */; };
 		E0AE549C2571311A00F799E1 /* RemainKMeansTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE549B2571311A00F799E1 /* RemainKMeansTest.swift */; };
 		E0AE54A3257133D900F799E1 /* penaltyKmeans.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5491257128A700F799E1 /* penaltyKmeans.swift */; };
 		E0AE54A7257133F500F799E1 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558D9256615CF006D9D66 /* Place.swift */; };
 		E0AE54AB2571347000F799E1 /* JsonPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558C925660D79006D9D66 /* JsonPlace.swift */; };
-		E0AE54AF257138C300F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
-		E0AE54B3257138D600F799E1 /* Clustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5436256F50D900F799E1 /* Clustering.swift */; };
+		E0AE54B3257138D600F799E1 /* Clusterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5436256F50D900F799E1 /* Clusterable.swift */; };
 		E0AE54B7257138E900F799E1 /* CoordinateBounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5441256F859B00F799E1 /* CoordinateBounds.swift */; };
 		E0BCC6C625638972005AD87F /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BCC6C525638972005AD87F /* Environment.swift */; };
 		E0EFA218257496F100995B0C /* PlaceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558CE256611DF006D9D66 /* PlaceProvider.swift */; };
+		E0EFA23D25754F0D00995B0C /* PenaltyCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFA23C25754F0D00995B0C /* PenaltyCluster.swift */; };
+		E0EFA24B25754F2D00995B0C /* BasicCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFA24A25754F2D00995B0C /* BasicCluster.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,7 +75,7 @@
 		D430320D2570663200BCEB54 /* KMeansClustering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KMeansClustering.swift; sourceTree = "<group>"; };
 		D44558C925660D79006D9D66 /* JsonPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JsonPlace.swift; sourceTree = "<group>"; };
 		D44558CE256611DF006D9D66 /* PlaceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceProvider.swift; sourceTree = "<group>"; };
-		D44558D9256615CF006D9D66 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = SOURCE_ROOT; };
+		D44558D9256615CF006D9D66 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Place.swift; path = NaverMapA/Model/Place/Place.swift; sourceTree = SOURCE_ROOT; };
 		D44558E425661638006D9D66 /* NaverMapA.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NaverMapA.xcdatamodel; sourceTree = "<group>"; };
 		E0059FA12563726900CE6BD7 /* NaverMapA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaverMapA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0059FA42563726900CE6BD7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -94,11 +95,13 @@
 		E0AE5424256F4AA700F799E1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0AE542C256F4BC800F799E1 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
-		E0AE5436256F50D900F799E1 /* Clustering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clustering.swift; sourceTree = "<group>"; };
+		E0AE5436256F50D900F799E1 /* Clusterable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Clusterable.swift; sourceTree = "<group>"; };
 		E0AE5441256F859B00F799E1 /* CoordinateBounds.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinateBounds.swift; sourceTree = "<group>"; };
 		E0AE5491257128A700F799E1 /* penaltyKmeans.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = penaltyKmeans.swift; sourceTree = "<group>"; };
 		E0AE549B2571311A00F799E1 /* RemainKMeansTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemainKMeansTest.swift; sourceTree = "<group>"; };
 		E0BCC6C525638972005AD87F /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		E0EFA23C25754F0D00995B0C /* PenaltyCluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PenaltyCluster.swift; sourceTree = "<group>"; };
+		E0EFA24A25754F2D00995B0C /* BasicCluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicCluster.swift; sourceTree = "<group>"; };
 		EBA4CDE9A7CC6FCBCDA4598B /* Pods-NaverMapATests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapATests.release.xcconfig"; path = "Target Support Files/Pods-NaverMapATests/Pods-NaverMapATests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -156,16 +159,9 @@
 		D429CFDF2565828B00B1EECA /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				D44558D9256615CF006D9D66 /* Place.swift */,
-				D44558E325661638006D9D66 /* NaverMapA.xcdatamodeld */,
-				D44558C925660D79006D9D66 /* JsonPlace.swift */,
-				D44558CE256611DF006D9D66 /* PlaceProvider.swift */,
-				D430320D2570663200BCEB54 /* KMeansClustering.swift */,
-				E0AE5431256F4F0200F799E1 /* Cluster.swift */,
-				E0AE5436256F50D900F799E1 /* Clustering.swift */,
-				8898E854256D914C00CFE5B4 /* ScaleBasedClustering.swift */,
-				E0AE5441256F859B00F799E1 /* CoordinateBounds.swift */,
-				E0AE5491257128A700F799E1 /* penaltyKmeans.swift */,
+				E0EFA25325754F6200995B0C /* Algorithm */,
+				E0EFA25225754F4000995B0C /* Place */,
+				E0EFA23B25754EFD00995B0C /* Cluster */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -253,6 +249,39 @@
 				E0BCC6C525638972005AD87F /* Environment.swift */,
 			);
 			path = Util;
+			sourceTree = "<group>";
+		};
+		E0EFA23B25754EFD00995B0C /* Cluster */ = {
+			isa = PBXGroup;
+			children = (
+				E0AE5431256F4F0200F799E1 /* Cluster.swift */,
+				E0EFA24A25754F2D00995B0C /* BasicCluster.swift */,
+				E0EFA23C25754F0D00995B0C /* PenaltyCluster.swift */,
+			);
+			path = Cluster;
+			sourceTree = "<group>";
+		};
+		E0EFA25225754F4000995B0C /* Place */ = {
+			isa = PBXGroup;
+			children = (
+				E0AE5441256F859B00F799E1 /* CoordinateBounds.swift */,
+				D44558D9256615CF006D9D66 /* Place.swift */,
+				D44558E325661638006D9D66 /* NaverMapA.xcdatamodeld */,
+				D44558C925660D79006D9D66 /* JsonPlace.swift */,
+				D44558CE256611DF006D9D66 /* PlaceProvider.swift */,
+			);
+			path = Place;
+			sourceTree = "<group>";
+		};
+		E0EFA25325754F6200995B0C /* Algorithm */ = {
+			isa = PBXGroup;
+			children = (
+				E0AE5436256F50D900F799E1 /* Clusterable.swift */,
+				8898E854256D914C00CFE5B4 /* ScaleBasedClustering.swift */,
+				E0AE5491257128A700F799E1 /* penaltyKmeans.swift */,
+				D430320D2570663200BCEB54 /* KMeansClustering.swift */,
+			);
+			path = Algorithm;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -516,8 +545,10 @@
 				D430320E2570663200BCEB54 /* KMeansClustering.swift in Sources */,
 				E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */,
 				E0059FA92563726900CE6BD7 /* MainViewController.swift in Sources */,
-				E0AE5437256F50D900F799E1 /* Clustering.swift in Sources */,
+				E0EFA23D25754F0D00995B0C /* PenaltyCluster.swift in Sources */,
+				E0AE5437256F50D900F799E1 /* Clusterable.swift in Sources */,
 				E0AE5492257128A700F799E1 /* penaltyKmeans.swift in Sources */,
+				E0EFA24B25754F2D00995B0C /* BasicCluster.swift in Sources */,
 				8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */,
 				E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */,
 				C8D647D8256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift in Sources */,
@@ -538,11 +569,10 @@
 			files = (
 				E0AE549C2571311A00F799E1 /* RemainKMeansTest.swift in Sources */,
 				E0AE54AB2571347000F799E1 /* JsonPlace.swift in Sources */,
-				E0AE54AF257138C300F799E1 /* Cluster.swift in Sources */,
 				E0059FBF2563726B00CE6BD7 /* NaverMapATests.swift in Sources */,
 				E0AE54B7257138E900F799E1 /* CoordinateBounds.swift in Sources */,
 				E0AE54A3257133D900F799E1 /* penaltyKmeans.swift in Sources */,
-				E0AE54B3257138D600F799E1 /* Clustering.swift in Sources */,
+				E0AE54B3257138D600F799E1 /* Clusterable.swift in Sources */,
 				E0EFA218257496F100995B0C /* PlaceProvider.swift in Sources */,
 				E0AE54A7257133F500F799E1 /* Place.swift in Sources */,
 			);

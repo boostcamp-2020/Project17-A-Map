@@ -1,17 +1,11 @@
 //
-//  Cluster.swift
+//  BasicCluster.swift
 //  NaverMapA
 //
-//  Created by 채훈기 on 2020/11/26.
+//  Created by 채훈기 on 2020/12/01.
 //
 
 import Foundation
-
-protocol Cluster {
-    var latitude: Double { get set }
-    var longitude: Double { get set }
-    var places: [Place] { get set }
-}
 
 struct BasicCluster: Cluster {
     var latitude: Double = 0
