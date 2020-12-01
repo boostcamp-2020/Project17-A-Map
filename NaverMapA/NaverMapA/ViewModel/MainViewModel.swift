@@ -19,6 +19,12 @@ class MainViewModel {
     func updatePlaces(places: [Place], bounds: CoordinateBounds) {
         DispatchQueue.global().async {
             self.markers.value = self.clusteringAlgorithm.execute(places: places, bounds: bounds)
+            for index in 0..<self.markers.value.count {
+                self.markers.value[index].placesDictionary.removeAll()
+                self.markers.value[index].places.forEach { place in
+                    self.markers.value[index].placesDictionary.updateValue(1, forKey: Point(latitude: place.latitude, longitude: place.longitude))
+                }
+            }
         }
     }
 }
