@@ -29,7 +29,7 @@ class RemainKMeansTest: XCTestCase {
         let newPlace = Place(context: context)
         newPlace.configure(json: JsonPlace(id: "", name: "", longitude: 0, latitude: 0, imageUrl: "", category: ""))
 
-        let center = Centroid(places: places)
+        let center = PenaltyCluster(places: places)
         let ret = center.farthestPlaces(from: newPlace)
         
         XCTAssertEqual(ret[0].latitude, 2)
@@ -39,7 +39,7 @@ class RemainKMeansTest: XCTestCase {
         
         let newPlace = Place(context: context)
         newPlace.configure(json: JsonPlace(id: "", name: "", longitude: 0, latitude: 2, imageUrl: "", category: ""))
-        let center = Centroid(places: places)
+        let center = PenaltyCluster(places: places)
         center.append(jsonPlace: newPlace)
         XCTAssertEqual(center.latitude, 2)
         

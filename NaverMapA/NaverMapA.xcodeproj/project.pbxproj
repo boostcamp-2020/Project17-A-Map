@@ -42,6 +42,8 @@
 		E0EFA218257496F100995B0C /* PlaceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558CE256611DF006D9D66 /* PlaceProvider.swift */; };
 		E0EFA23D25754F0D00995B0C /* PenaltyCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFA23C25754F0D00995B0C /* PenaltyCluster.swift */; };
 		E0EFA24B25754F2D00995B0C /* BasicCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFA24A25754F2D00995B0C /* BasicCluster.swift */; };
+		E0EFA26025762CAC00995B0C /* PenaltyCluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EFA23C25754F0D00995B0C /* PenaltyCluster.swift */; };
+		E0EFA26425762CC600995B0C /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -571,6 +573,8 @@
 				E0AE54AB2571347000F799E1 /* JsonPlace.swift in Sources */,
 				E0059FBF2563726B00CE6BD7 /* NaverMapATests.swift in Sources */,
 				E0AE54B7257138E900F799E1 /* CoordinateBounds.swift in Sources */,
+				E0EFA26425762CC600995B0C /* Cluster.swift in Sources */,
+				E0EFA26025762CAC00995B0C /* PenaltyCluster.swift in Sources */,
 				E0AE54A3257133D900F799E1 /* penaltyKmeans.swift in Sources */,
 				E0AE54B3257138D600F799E1 /* Clusterable.swift in Sources */,
 				E0EFA218257496F100995B0C /* PlaceProvider.swift in Sources */,
