@@ -16,11 +16,9 @@ class MainViewController: UIViewController {
     var clusterMarkers = [NMFMarker]()
     var beforeClusterMarkers = [NMFMarker]()
     var beforeClusters = [Cluster]()
-    var clusterMarkersCount = 0
     var prevZoomLevel: Double = 18 {
         didSet(oldValue) {
-            if oldValue != mapView.zoomLevel && clusterMarkersCount != clusterMarkers.count {
-                clusterMarkersCount = clusterMarkers.count
+            if oldValue != mapView.zoomLevel {
                 markerAnimation()
             }
         }
@@ -33,8 +31,8 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
-        viewModel = MainViewModel(algorithm: KMeansClustering())
+        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+//        viewModel = MainViewModel(algorithm: KMeansClustering())
         bindViewModel()
         setupMapView()
         if dataProvider.objectCount == 0 {
@@ -78,6 +76,7 @@ class MainViewController: UIViewController {
             })
         }
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let _ = NMFAuthManager.shared().clientId else {
@@ -107,38 +106,41 @@ class MainViewController: UIViewController {
     }
     
     private func markerAnimation() {
-        
-        /*
-        beforeClusterMarkers.forEach { beforeMarker in
-            var endPoint = CGPoint()
-            var minDistance: Double = Double.greatestFiniteMagnitude
-            clusterMarkers.forEach { clusterMarker in
-                let distance = sqrt(pow(beforeMarker.position.lat - clusterMarker.position.lat, 2) + pow(beforeMarker.position.lng - clusterMarker.position.lng, 2))
-                if distance < minDistance {
-                    minDistance = distance
-                    endPoint = mapView.projection.point(from: NMGLatLng(lat: clusterMarker.position.lat, lng: clusterMarker.position.lng))
+        for (a, beforeCluster) in beforeClusters.enumerated() {
+            for beforePlace in beforeCluster.places {
+                guard let currentClusters = viewModel?.markers.value else { return }
+                for (c, currentCluster) in currentClusters.enumerated() {
+                    if currentCluster.placesDictionary[Point(latitude: beforePlace.latitude, longitude: beforePlace.longitude)] == nil {
+                        continue
+                    }
+                    let startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeClusterMarkers[a].position.lat, lng: beforeClusterMarkers[a].position.lng))
+                    let endPoint = mapView.projection.point(from: NMGLatLng(lat: clusterMarkers[c].position.lat, lng: clusterMarkers[c].position.lng))
+                    startMarkerAnimation(startPoint: startPoint, endPoint: endPoint, markerOverlay: beforeClusterMarkers[a])
+                    break
                 }
             }
-            let startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeMarker.position.lat, lng: beforeMarker.position.lng))
-            let markerView = self.view(with: beforeMarker)
-            markerView.frame.origin = CGPoint(x: -100, y: -100)
-            mapView.addSubview(markerView)
-            let markerViewLayer = markerView.layer
-            DispatchQueue.global().async {
-                CATransaction.begin()
-                let markerAnimation = CABasicAnimation(keyPath: "position")
-                markerAnimation.duration = 0.4
-                markerAnimation.fromValue = startPoint
-                markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y - (markerView.frame.height / 2))
-                CATransaction.setCompletionBlock({
-                    markerView.removeFromSuperview()
-                })
-                markerViewLayer.add(markerAnimation, forKey: "position")
-                CATransaction.commit()
-            }
         }
-        */
     }
+    
+    private func startMarkerAnimation(startPoint: CGPoint, endPoint: CGPoint, markerOverlay: NMFMarker) {
+        let markerView = self.view(with: markerOverlay)
+        markerView.frame.origin = CGPoint(x: -100, y: -100)
+        mapView.addSubview(markerView)
+        let markerViewLayer = markerView.layer
+        DispatchQueue.global().async {
+            CATransaction.begin()
+            let markerAnimation = CABasicAnimation(keyPath: "position")
+            markerAnimation.duration = 0.4
+            markerAnimation.fromValue = CGPoint(x: startPoint.x, y: startPoint.y - (markerView.frame.height/2))
+            markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y - (markerView.frame.height/2))
+            CATransaction.setCompletionBlock({
+                markerView.removeFromSuperview()
+            })
+            markerViewLayer.add(markerAnimation, forKey: "position")
+            CATransaction.commit()
+        }
+    }
+    
 }
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
