@@ -59,11 +59,11 @@ final class PenaltyKmeans: Clusterable {
     }
     
     func initialCentroid(k: Int, places: [Place]) -> [PenaltyCluster] {
-        let initailRandomCentroid = (0..<k).map { _ -> Place in
+        let initialRandomCentroid = (0..<k).map { _ -> Place in
             let idx = Int.random(in: 0..<places.count)
             return places[idx]
         }
-        var centerOfCentroid = PenaltyCluster(places: initailRandomCentroid)
+        var centerOfCentroid = PenaltyCluster(places: initialRandomCentroid)
         
         for place in places {
             let newCandidateCentroid = centerOfCentroid.farthestPlaces(from: place) + [place]
