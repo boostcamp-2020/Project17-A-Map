@@ -31,8 +31,8 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
-//        viewModel = MainViewModel(algorithm: KMeansClustering())
+//        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        viewModel = MainViewModel(algorithm: KMeansClustering())
         bindViewModel()
         setupMapView()
         if dataProvider.objectCount == 0 {
@@ -127,12 +127,13 @@ class MainViewController: UIViewController {
         markerView.frame.origin = CGPoint(x: -100, y: -100)
         mapView.addSubview(markerView)
         let markerViewLayer = markerView.layer
+        markerViewLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         DispatchQueue.global().async {
             CATransaction.begin()
             let markerAnimation = CABasicAnimation(keyPath: "position")
             markerAnimation.duration = 0.4
-            markerAnimation.fromValue = CGPoint(x: startPoint.x, y: startPoint.y - (markerView.frame.height/2))
-            markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y - (markerView.frame.height/2))
+            markerAnimation.fromValue = CGPoint(x: startPoint.x, y: startPoint.y)
+            markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y)
             CATransaction.setCompletionBlock({
                 markerView.removeFromSuperview()
             })
