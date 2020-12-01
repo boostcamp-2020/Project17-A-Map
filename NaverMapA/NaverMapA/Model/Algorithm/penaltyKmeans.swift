@@ -54,8 +54,9 @@ final class PenaltyKmeans: Clusterable {
             newCentroids = distributeToCentroid(places: places, centroids: newCentroids)
             centroids = newCentroids
         }
-        
-        return centroids.map { PenaltyCluster(lat: $0.latitude, lng: $0.longitude, places: $0.places)}
+        return centroids
+            .map { PenaltyCluster(lat: $0.latitude, lng: $0.longitude, places: $0.places)}
+            .filter { $0.places.count > 0 }
     }
     
     func initialCentroid(k: Int, places: [Place]) -> [PenaltyCluster] {
