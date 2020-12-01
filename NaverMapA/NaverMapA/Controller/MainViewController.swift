@@ -15,6 +15,7 @@ class MainViewController: UIViewController {
     var viewModel: MainViewModel?
     var clusterMarkers = [NMFMarker]()
     var beforeClusterMarkers = [NMFMarker]()
+    var beforeClusters = [Cluster]()
     var clusterMarkersCount = 0
     var prevZoomLevel: Double = 18 {
         didSet(oldValue) {
@@ -56,7 +57,6 @@ class MainViewController: UIViewController {
                     for clusterMarker in self.clusterMarkers {
                         clusterMarker.mapView = nil
                     }
-                    self.beforeClusterMarkers = self.clusterMarkers
                     self.clusterMarkers.removeAll()
                     for cluster in viewModel.markers.value {
                         let lat = cluster.latitude
@@ -107,6 +107,8 @@ class MainViewController: UIViewController {
     }
     
     private func markerAnimation() {
+        
+        /*
         beforeClusterMarkers.forEach { beforeMarker in
             var endPoint = CGPoint()
             var minDistance: Double = Double.greatestFiniteMagnitude
@@ -135,6 +137,7 @@ class MainViewController: UIViewController {
                 CATransaction.commit()
             }
         }
+        */
     }
 }
 

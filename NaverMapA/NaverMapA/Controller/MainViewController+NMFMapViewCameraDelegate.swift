@@ -19,7 +19,11 @@ extension MainViewController: NMFMapViewCameraDelegate {
                                           northEastLat: coordBounds.northEastLat)
             
             let places = self.dataProvider.fetch(bounds: bounds)
-            self.viewModel?.updatePlaces(places: places, bounds: bounds)
+            guard let viewModel = self.viewModel else { return }
+            //이전 마커를 저장
+            self.beforeClusterMarkers = self.clusterMarkers
+            self.beforeClusters = viewModel.markers.value
+            viewModel.updatePlaces(places: places, bounds: bounds)
         }
     }
 }
