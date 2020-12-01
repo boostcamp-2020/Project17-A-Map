@@ -14,6 +14,7 @@ class MainViewController: UIViewController {
     var mapView: NMFMapView!
     var viewModel: MainViewModel?
     var clusterMarkers = [NMFMarker]()
+    var clusterObjects = [Cluster]()
     var markersAnimation: [UIViewPropertyAnimator] = [] // 추후 애니메이션을 제어하기 위한 배열
     private lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
@@ -21,9 +22,21 @@ class MainViewController: UIViewController {
         return provider
     }()
     
+    private lazy var handler = { (overlay: NMFOverlay?) -> Bool in
+        if let marker = overlay as? NMFMarker {
+            for cluster in self.clusterObjects {
+                if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng {
+                    self.moveCamera(to: cluster)
+                    break
+                }
+            }
+        }
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-//        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        //        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         viewModel = MainViewModel(algorithm: KMeansClustering())
         bindViewModel()
         setupMapView()
@@ -48,8 +61,9 @@ class MainViewController: UIViewController {
                         clusterMarker.mapView = nil
                     }
                     self.clusterMarkers.removeAll()
-                    self.markerAnimation(clusterArray: clusters)
-                    for cluster in clusters {
+                    self.clusterObjects.removeAll()
+                    self.markerAnimation(clusterArray: viewModel.markers.value)
+                    for cluster in viewModel.markers.value {
                         let lat = cluster.latitude
                         let lng = cluster.longitude
                         let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
@@ -62,7 +76,9 @@ class MainViewController: UIViewController {
                         marker.captionText = "\(cluster.places.count)"
                         marker.zIndex = 1
                         marker.mapView = self.mapView
+                        marker.touchHandler = self.handler
                         self.clusterMarkers.append(marker)
+                        self.clusterObjects.append(cluster)
                     }
                 }
             })
@@ -118,6 +134,28 @@ class MainViewController: UIViewController {
             }
         }
     }
+    
+    private func moveCamera(to cluster: Cluster) {
+        var minLatitude = Double.greatestFiniteMagnitude
+        var maxLatitude = Double.leastNormalMagnitude
+        var minLongitude = Double.greatestFiniteMagnitude
+        var maxLongitude = Double.leastNormalMagnitude
+        for place in cluster.places {
+            if minLatitude > place.latitude {
+                minLatitude = place.latitude
+            }
+            if maxLatitude < place.latitude {
+                maxLatitude = place.latitude
+            }
+            if minLongitude > place.longitude {
+                minLongitude = place.longitude
+            }
+            if maxLongitude < place.longitude {
+                maxLongitude = place.longitude
+            }
+        }
+        mapView.moveCamera(NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50))
+    }
 }
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
@@ -126,7 +164,6 @@ extension MainViewController: NSFetchedResultsControllerDelegate {
 }
 
 extension MainViewController: NMFMapViewCameraDelegate {
-    
     func mapViewCameraIdle(_ mapView: NMFMapView) {
         let coordBounds = mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
         DispatchQueue.global().async {
@@ -134,7 +171,6 @@ extension MainViewController: NMFMapViewCameraDelegate {
                                           northEastLng: coordBounds.northEastLng,
                                           southWestLat: coordBounds.southWestLat,
                                           northEastLat: coordBounds.northEastLat)
-            
             let places = self.dataProvider.fetch(bounds: bounds)
             self.viewModel?.updatePlaces(places: places, bounds: bounds)
         }
