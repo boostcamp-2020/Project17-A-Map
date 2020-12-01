@@ -45,8 +45,8 @@ class PenaltyCluster: Cluster, Equatable {
         return Array(distances.sorted { $0.0 < $1.0 }.map { $0.1 }.dropFirst())
     }
     
-    func distanceTo(_ jsonPlace: Place) -> Double {
-        return sqrt(pow(latitude - jsonPlace.latitude, 2) + pow(longitude - jsonPlace.longitude, 2))
+    func distanceTo(_ place: Place) -> Double {
+        return sqrt(pow(latitude - place.latitude, 2) + pow(longitude - place.longitude, 2))
     }
     
     var totalDistance: Double {

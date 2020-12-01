@@ -33,7 +33,7 @@ struct BasicCluster: Cluster {
         places.reduce(0.0, {$0 + $1.distanceTo(self)})
     }
     
-    func distanceTo(_ cluster: BasicCluster) -> Double {
+    func distanceTo(_ cluster: Cluster) -> Double {
         return sqrt(pow(latitude - cluster.latitude, 2) + pow(longitude - cluster.longitude, 2))
     }
     

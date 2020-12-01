@@ -41,18 +41,6 @@ extension JsonPlace: Decodable {
         self.imageUrl = place.imageUrl
         self.category = place.category
     }
-
-    func distanceTo(_ jsonPlace: JsonPlace) -> Double {
-        return sqrt(pow(latitude - jsonPlace.latitude, 2) + pow(longitude - jsonPlace.longitude, 2))
-    }
-    
-    func distanceTo(_ place: Place) -> Double {
-        return sqrt(pow(latitude - place.latitude, 2) + pow(longitude - place.longitude, 2))
-    }
-    
-    func distanceTo(lat: Double, lng: Double) -> Double {
-        return sqrt(pow(latitude - lat, 2) + pow(longitude - lng, 2))
-    }
     
     static func centroid(of jsonPlaces: [JsonPlace]) -> JsonPlace {
         let sum: (longitude: Double, latitude: Double) = jsonPlaces.reduce(
