@@ -10,7 +10,7 @@ import Foundation
 final class KMeansClustering: Clusterable {
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
         let EXECUTE_TIMES = 3
-        var centroids: [Cluster] = []
+        var centroids: [BasicCluster] = []
         let ks = (0..<5).map { _ in elbow(of: places.shuffled()) }
         let bestK = ks.max()
         let k = bestK ?? ks[0]
@@ -26,10 +26,10 @@ final class KMeansClustering: Clusterable {
         return centroids
     }
     
-    private func optimalCentroids(k: Int, places: [Place]) -> [Cluster] {
+    private func optimalCentroids(k: Int, places: [Place]) -> [BasicCluster] {
         let K_COUNT = k
-        var centroids = [Cluster](repeating: Cluster(), count: K_COUNT)
-        var optimals = Cluster()
+        var centroids = [BasicCluster](repeating: BasicCluster(), count: K_COUNT)
+        var optimals = BasicCluster()
         (0..<K_COUNT).forEach { optimals.places.append(places[$0]) }
         for i in (0..<places.count) {
             var minDistance = Double.greatestFiniteMagnitude
@@ -53,11 +53,11 @@ final class KMeansClustering: Clusterable {
         }
         return centroids
     }
-    private func clustering(k: Int, places: [Place]) -> [Cluster] {
+    private func clustering(k: Int, places: [Place]) -> [BasicCluster] {
         let K_COUNT = k
         guard places.count > K_COUNT else {
-            let centroids: [Cluster] = places.map {
-                var centroid = Cluster()
+            let centroids: [BasicCluster] = places.map {
+                var centroid = BasicCluster()
                 centroid.places.append($0)
                 return centroid
             }

@@ -32,6 +32,7 @@ extension JsonPlace: Decodable {
         self.imageUrl = try container.decode(String?.self, forKey: .imageUrl)
         self.category = try container.decode(String.self, forKey: .category)
     }
+    
     init(place: Place) {
         self.name = place.name
         self.id = place.id
