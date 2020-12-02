@@ -22,7 +22,7 @@ class MainViewController: UIViewController {
         return provider
     }()
     
-    private lazy var handler = { (overlay: NMFOverlay?) -> Bool in
+    lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
             for cluster in self.clusterObjects {
                 if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng {
@@ -92,7 +92,7 @@ class MainViewController: UIViewController {
             viewModel.markers.bind({ afterClusters in
                 DispatchQueue.main.async {
                     self.deleteBeforeMarkers()
-                    self.configureNewMarkers(afterClusters: afterClusters)
+                    self.markerAppearAnimation(clusters: afterClusters)
                 }
             })
         }

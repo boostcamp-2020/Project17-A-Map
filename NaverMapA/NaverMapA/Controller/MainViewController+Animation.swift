@@ -48,4 +48,39 @@ extension MainViewController {
             CATransaction.commit()
         }
     }
+    
+    func markerAppearAnimation(clusters: [Cluster]) {
+        clusters.forEach { cluster in
+            let point = mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longitude))
+            let markerColor = (cluster.places.count > 1) ? UIColor.red : UIColor.green
+            startMarkerAppearAnimation(point: point, markerColor: markerColor, clusters: clusters)
+        }
+    }
+    
+    private func startMarkerAppearAnimation(point: CGPoint, markerColor: UIColor, clusters: [Cluster]) {
+        let marker = NMFMarker()
+        marker.iconTintColor = markerColor
+        let markerView = self.view(with: marker)
+        mapView.addSubview(markerView)
+        let markerViewLayer = markerView.layer
+        markerViewLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
+        DispatchQueue.global().async {
+            CATransaction.begin()
+            let positionAnimation = CABasicAnimation(keyPath: "position")
+            positionAnimation.fromValue = CGPoint(x: point.x, y: 0)
+            positionAnimation.toValue = CGPoint(x: point.x, y: point.y)
+            positionAnimation.duration = 0.5
+            let opacityAnimation = CABasicAnimation(keyPath: "opacity")
+            opacityAnimation.fromValue = 0
+            opacityAnimation.toValue = 1
+            opacityAnimation.duration = 0.5
+            CATransaction.setCompletionBlock({
+                markerView.removeFromSuperview()
+                self.configureNewMarkers(afterClusters: clusters)
+            })
+            markerViewLayer.add(positionAnimation, forKey: "position")
+            markerViewLayer.add(opacityAnimation, forKey: "opacity")
+            CATransaction.commit()
+        }
+    }
 }
