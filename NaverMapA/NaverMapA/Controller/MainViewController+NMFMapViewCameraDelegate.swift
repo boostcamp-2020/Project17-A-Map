@@ -20,10 +20,8 @@ extension MainViewController: NMFMapViewCameraDelegate {
             
             let places = self.dataProvider.fetch(bounds: bounds)
             guard let viewModel = self.viewModel else { return }
-            //이전 마커를 저장
-            self.beforeClusterMarkers = self.clusterMarkers
-            self.beforeClusters = viewModel.markers.value
             if self.prevZoomLevel != mapView.zoomLevel { // 애니메이션
+                self.prevZoomLevel = mapView.zoomLevel
                 viewModel.updatePlacesAndAnimation(places: places, bounds: bounds)
             } else {
                 viewModel.updatePlaces(places: places, bounds: bounds)

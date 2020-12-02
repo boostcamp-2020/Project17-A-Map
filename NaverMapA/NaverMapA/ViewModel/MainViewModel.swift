@@ -25,14 +25,14 @@ class MainViewModel {
     
     func updatePlacesAndAnimation(places: [Place], bounds: CoordinateBounds) {
         DispatchQueue.global().async {
-            var temp = self.clusteringAlgorithm.execute(places: places, bounds: bounds)
-            for index in 0..<temp.count {
-                temp[index].placesDictionary.removeAll()
-                temp[index].places.forEach { place in
-                    temp[index].placesDictionary.updateValue(1, forKey: Point(latitude: place.latitude, longitude: place.longitude))
+            var newClusters = self.clusteringAlgorithm.execute(places: places, bounds: bounds)
+            for index in 0..<newClusters.count {
+                newClusters[index].placesDictionary.removeAll()
+                newClusters[index].places.forEach { place in
+                    newClusters[index].placesDictionary.updateValue(1, forKey: Point(latitude: place.latitude, longitude: place.longitude))
                 }
             }
-            self.animationMarkers.value = (self.markers.value, temp)
+            self.animationMarkers.value = (self.markers.value, newClusters)
         }
     }
 }

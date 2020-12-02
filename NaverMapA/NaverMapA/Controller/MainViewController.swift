@@ -15,8 +15,6 @@ class MainViewController: UIViewController {
     var viewModel: MainViewModel?
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
-    var beforeClusterMarkers = [NMFMarker]()
-    var beforeClusters = [Cluster]()
     var prevZoomLevel: Double = 18
     lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
@@ -54,43 +52,47 @@ class MainViewController: UIViewController {
         view.addSubview(mapView)
     }
     
+    func deleteBeforeMarkers() {
+        for clusterMarker in self.clusterMarkers {
+            clusterMarker.mapView = nil
+        }
+        self.clusterMarkers.removeAll()
+        self.clusterObjects.removeAll()
+    }
+    
+    func configureNewMarkers(afterClusters: [Cluster]) {
+        for cluster in afterClusters {
+            let lat = cluster.latitude
+            let lng = cluster.longitude
+            let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
+            marker.iconImage = NMF_MARKER_IMAGE_BLACK
+            if cluster.places.count == 1 {
+                marker.iconTintColor = .green
+            } else {
+                marker.iconTintColor = .red
+            }
+            marker.captionText = "\(cluster.places.count)"
+            marker.zIndex = 1
+            marker.mapView = self.mapView
+            marker.touchHandler = self.handler
+            self.clusterMarkers.append(marker)
+            self.clusterObjects.append(cluster)
+        }
+    }
+    
     func bindViewModel() {
         if let viewModel = viewModel {
             viewModel.animationMarkers.bind({ (beforeClusters, afterClusters) in
                 DispatchQueue.main.async {
-                    
-                    //기존 마커 지우기
-                    // 애니메이션
-                    // 마커 이동
+                    self.deleteBeforeMarkers()
+                    self.markerAnimation(beforeClusters: beforeClusters, afterClusters: afterClusters)
                 }
             })
             
-            viewModel.markers.bind({ _ in
-                // rendering
+            viewModel.markers.bind({ afterClusters in
                 DispatchQueue.main.async {
-                    for clusterMarker in self.clusterMarkers {
-                        clusterMarker.mapView = nil
-                    }
-                    self.clusterMarkers.removeAll()
-                    self.clusterObjects.removeAll()
-                    for cluster in viewModel.markers.value {
-                        let lat = cluster.latitude
-                        let lng = cluster.longitude
-                        let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
-                        marker.iconImage = NMF_MARKER_IMAGE_BLACK
-                        if cluster.places.count == 1 {
-                            marker.iconTintColor = .green
-                        } else {
-                            marker.iconTintColor = .red
-                        }
-                        marker.captionText = "\(cluster.places.count)"
-                        marker.zIndex = 1
-                        marker.mapView = self.mapView
-                        marker.touchHandler = self.handler
-                        self.clusterMarkers.append(marker)
-                        self.clusterObjects.append(cluster)
-                    }
-                    self.prevZoomLevel = self.mapView.zoomLevel
+                    self.deleteBeforeMarkers()
+                    self.configureNewMarkers(afterClusters: afterClusters)
                 }
             })
         }
@@ -124,17 +126,17 @@ class MainViewController: UIViewController {
         }
     }
     
-    private func markerAnimation() {
-        for (a, beforeCluster) in beforeClusters.enumerated() {
-            for beforePlace in beforeCluster.places {
-                guard let currentClusters = viewModel?.markers.value else { return }
-                for (c, currentCluster) in currentClusters.enumerated() {
-                    if currentCluster.placesDictionary[Point(latitude: beforePlace.latitude, longitude: beforePlace.longitude)] == nil {
+    private func markerAnimation(beforeClusters: [Cluster], afterClusters: [Cluster]) {
+        beforeClusters.forEach { beforeCluster in
+            afterClusters.forEach { afterCluster in
+                for beforePlace in beforeCluster.places {
+                    if afterCluster.placesDictionary[Point(latitude: beforePlace.latitude, longitude: beforePlace.longitude)] == nil {
                         continue
                     }
-                    let startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeClusterMarkers[a].position.lat, lng: beforeClusterMarkers[a].position.lng))
-                    let endPoint = mapView.projection.point(from: NMGLatLng(lat: clusterMarkers[c].position.lat, lng: clusterMarkers[c].position.lng))
-                    startMarkerAnimation(startPoint: startPoint, endPoint: endPoint, markerOverlay: beforeClusterMarkers[a])
+                    let startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeCluster.latitude, lng: beforeCluster.longitude))
+                    let endPoint = mapView.projection.point(from: NMGLatLng(lat: afterCluster.latitude, lng: afterCluster.longitude))
+                    let markerColor = (beforeClusters.count > 1) ? UIColor.red : UIColor.green
+                    startMarkerAnimation(startPoint: startPoint, endPoint: endPoint, markerColor: markerColor, afterClusters: afterClusters)
                     break
                 }
             }
@@ -163,8 +165,10 @@ class MainViewController: UIViewController {
         mapView.moveCamera(NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50))
     }
     
-    private func startMarkerAnimation(startPoint: CGPoint, endPoint: CGPoint, markerOverlay: NMFMarker) {
-        let markerView = self.view(with: markerOverlay)
+    private func startMarkerAnimation(startPoint: CGPoint, endPoint: CGPoint, markerColor: UIColor, afterClusters: [Cluster]) {
+        let marker = NMFMarker()
+        marker.iconTintColor = markerColor
+        let markerView = self.view(with: marker)
         markerView.frame.origin = CGPoint(x: -100, y: -100)
         mapView.addSubview(markerView)
         let markerViewLayer = markerView.layer
@@ -172,11 +176,12 @@ class MainViewController: UIViewController {
         DispatchQueue.global().async {
             CATransaction.begin()
             let markerAnimation = CABasicAnimation(keyPath: "position")
-            markerAnimation.duration = 0.4
+            markerAnimation.duration = 0.3
             markerAnimation.fromValue = CGPoint(x: startPoint.x, y: startPoint.y)
             markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y)
             CATransaction.setCompletionBlock({
                 markerView.removeFromSuperview()
+                self.configureNewMarkers(afterClusters: afterClusters)
             })
             markerViewLayer.add(markerAnimation, forKey: "position")
             CATransaction.commit()
@@ -189,4 +194,3 @@ extension MainViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
     }
 }
-
