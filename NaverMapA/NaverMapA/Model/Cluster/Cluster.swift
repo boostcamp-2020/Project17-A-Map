@@ -11,4 +11,5 @@ protocol Cluster {
     var latitude: Double { get set }
     var longitude: Double { get set }
     var places: [Place] { get set }
+    var placesDictionary: [Point: Int] { get set }
 }

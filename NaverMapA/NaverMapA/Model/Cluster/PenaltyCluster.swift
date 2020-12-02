@@ -12,7 +12,8 @@ class PenaltyCluster: Cluster, Equatable {
     var latitude: Double
     var longitude: Double
     var places: [Place]
-    
+    var placesDictionary: [Point: Int] = [:]
+
     init(places: [Place]) {
         self.places = places
         latitude = places.reduce(0, { $0 + $1.latitude }) / Double(places.count)

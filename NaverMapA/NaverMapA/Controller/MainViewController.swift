@@ -15,8 +15,8 @@ class MainViewController: UIViewController {
     var viewModel: MainViewModel?
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
-    var markersAnimation: [UIViewPropertyAnimator] = [] // 추후 애니메이션을 제어하기 위한 배열
-    private lazy var dataProvider: PlaceProvider = {
+    var prevZoomLevel: Double = 18
+    lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
         provider.fetchedResultsController.delegate = self
         return provider
@@ -36,8 +36,8 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
-        viewModel = MainViewModel(algorithm: KMeansClustering())
+        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        //viewModel = MainViewModel(algorithm: KMeansClustering())
         bindViewModel()
         setupMapView()
         if dataProvider.objectCount == 0 {
@@ -52,38 +52,52 @@ class MainViewController: UIViewController {
         view.addSubview(mapView)
     }
     
+    func deleteBeforeMarkers() {
+        for clusterMarker in self.clusterMarkers {
+            clusterMarker.mapView = nil
+        }
+        self.clusterMarkers.removeAll()
+        self.clusterObjects.removeAll()
+    }
+    
+    func configureNewMarkers(afterClusters: [Cluster]) {
+        for cluster in afterClusters {
+            let lat = cluster.latitude
+            let lng = cluster.longitude
+            let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
+            marker.iconImage = NMF_MARKER_IMAGE_BLACK
+            if cluster.places.count == 1 {
+                marker.iconTintColor = .green
+            } else {
+                marker.iconTintColor = .red
+            }
+            marker.captionText = "\(cluster.places.count)"
+            marker.zIndex = 1
+            marker.mapView = self.mapView
+            marker.touchHandler = self.handler
+            self.clusterMarkers.append(marker)
+            self.clusterObjects.append(cluster)
+        }
+    }
+    
     func bindViewModel() {
         if let viewModel = viewModel {
-            viewModel.markers.bind({ clusters in
-                // rendering
+            viewModel.animationMarkers.bind({ (beforeClusters, afterClusters) in
                 DispatchQueue.main.async {
-                    for clusterMarker in self.clusterMarkers {
-                        clusterMarker.mapView = nil
-                    }
-                    self.clusterMarkers.removeAll()
-                    self.clusterObjects.removeAll()
-                    self.markerAnimation(clusterArray: viewModel.markers.value)
-                    for cluster in viewModel.markers.value {
-                        let lat = cluster.latitude
-                        let lng = cluster.longitude
-                        let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
-                        marker.iconImage = NMF_MARKER_IMAGE_BLACK
-                        if cluster.places.count == 1 {
-                            marker.iconTintColor = .green
-                        } else {
-                            marker.iconTintColor = .red
-                        }
-                        marker.captionText = "\(cluster.places.count)"
-                        marker.zIndex = 1
-                        marker.mapView = self.mapView
-                        marker.touchHandler = self.handler
-                        self.clusterMarkers.append(marker)
-                        self.clusterObjects.append(cluster)
-                    }
+                    self.deleteBeforeMarkers()
+                    self.markerAnimation(beforeClusters: beforeClusters, afterClusters: afterClusters)
+                }
+            })
+            
+            viewModel.markers.bind({ afterClusters in
+                DispatchQueue.main.async {
+                    self.deleteBeforeMarkers()
+                    self.configureNewMarkers(afterClusters: afterClusters)
                 }
             })
         }
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let _ = NMFAuthManager.shared().clientId else {
@@ -112,29 +126,6 @@ class MainViewController: UIViewController {
         }
     }
     
-    private func markerAnimation(clusterArray: [Cluster]) {
-        //화면에 존재하던 마커들만이 아닌, 군집에 속한 마커들이 모두 애니메이션이 된다. Cluster 구조를 개선할 필요가 있음.
-        clusterArray.forEach { cluster in
-            let endPoint = mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longitude))
-            cluster.places.forEach { place in
-                var startPoint = self.mapView.projection.point(from: NMGLatLng(lat: place.latitude, lng: place.longitude))
-                let markerView = self.view(with: NMFMarker())
-                startPoint.x -= (markerView.frame.width / 2)
-                startPoint.y -= markerView.frame.height
-                markerView.frame.origin = startPoint
-                self.mapView.addSubview(markerView)
-                let markerAnimation = UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 1, delay: 0, options: .curveLinear, animations: {
-                    markerView.frame.origin = CGPoint(x: endPoint.x - (markerView.frame.width / 2), y: endPoint.y - markerView.frame.height)
-                }, completion: { _ in
-                    markerView.removeFromSuperview()
-                })
-                markerAnimation.startAnimation()
-                //markerAnimation.stopAnimation(false)
-                //markerAnimation.finishAnimation(at: .current)
-            }
-        }
-    }
-    
     private func moveCamera(to cluster: Cluster) {
         var minLatitude = Double.greatestFiniteMagnitude
         var maxLatitude = Double.leastNormalMagnitude
@@ -160,19 +151,5 @@ class MainViewController: UIViewController {
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    }
-}
-
-extension MainViewController: NMFMapViewCameraDelegate {
-    func mapViewCameraIdle(_ mapView: NMFMapView) {
-        let coordBounds = mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
-        DispatchQueue.global().async {
-            let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
-                                          northEastLng: coordBounds.northEastLng,
-                                          southWestLat: coordBounds.southWestLat,
-                                          northEastLat: coordBounds.northEastLat)
-            let places = self.dataProvider.fetch(bounds: bounds)
-            self.viewModel?.updatePlaces(places: places, bounds: bounds)
-        }
     }
 }

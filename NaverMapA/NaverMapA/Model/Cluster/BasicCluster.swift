@@ -19,6 +19,7 @@ struct BasicCluster: Cluster {
             }
         }
     }
+    var placesDictionary: [Point: Int] = [:]
     
     mutating func remove(_ place: Place) {
         if let index = places.firstIndex(of: place) {
@@ -49,4 +50,9 @@ extension BasicCluster: Comparable {
         let rPow = pow(right.latitude, 2) + pow(right.longitude, 2)
         return lPow<rPow
     }
+}
+
+struct Point: Hashable {
+    var latitude: Double
+    var longitude: Double
 }
