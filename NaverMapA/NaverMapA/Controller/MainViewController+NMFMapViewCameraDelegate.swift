@@ -17,7 +17,7 @@ extension MainViewController: NMFMapViewCameraDelegate {
                                           northEastLng: coordBounds.northEastLng,
                                           southWestLat: coordBounds.southWestLat,
                                           northEastLat: coordBounds.northEastLat)
-            
+
             let places = self.dataProvider.fetch(bounds: bounds)
             guard let viewModel = self.viewModel else { return }
             if self.prevZoomLevel != mapView.zoomLevel { // 애니메이션
