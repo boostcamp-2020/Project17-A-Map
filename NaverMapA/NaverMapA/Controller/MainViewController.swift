@@ -17,13 +17,7 @@ class MainViewController: UIViewController {
     var clusterObjects = [Cluster]()
     var beforeClusterMarkers = [NMFMarker]()
     var beforeClusters = [Cluster]()
-    var prevZoomLevel: Double = 18 {
-        didSet(oldValue) {
-            if oldValue != mapView.zoomLevel {
-                markerAnimation()
-            }
-        }
-    }
+    var prevZoomLevel: Double = 18
     lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
         provider.fetchedResultsController.delegate = self
@@ -44,7 +38,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        //viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         viewModel = MainViewModel(algorithm: KMeansClustering())
         bindViewModel()
         setupMapView()
@@ -62,6 +56,15 @@ class MainViewController: UIViewController {
     
     func bindViewModel() {
         if let viewModel = viewModel {
+            viewModel.animationMarkers.bind({ (beforeClusters, afterClusters) in
+                DispatchQueue.main.async {
+                    
+                    //기존 마커 지우기
+                    // 애니메이션
+                    // 마커 이동
+                }
+            })
+            
             viewModel.markers.bind({ _ in
                 // rendering
                 DispatchQueue.main.async {

@@ -23,7 +23,11 @@ extension MainViewController: NMFMapViewCameraDelegate {
             //이전 마커를 저장
             self.beforeClusterMarkers = self.clusterMarkers
             self.beforeClusters = viewModel.markers.value
-            viewModel.updatePlaces(places: places, bounds: bounds)
+            if self.prevZoomLevel != mapView.zoomLevel { // 애니메이션
+                viewModel.updatePlacesAndAnimation(places: places, bounds: bounds)
+            } else {
+                viewModel.updatePlaces(places: places, bounds: bounds)
+            }
         }
     }
 }
