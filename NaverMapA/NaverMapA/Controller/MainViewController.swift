@@ -15,6 +15,7 @@ class MainViewController: UIViewController {
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
     var prevZoomLevel: Double = 18
+    let markerFactory = MarkerFactory()
     lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
         provider.fetchedResultsController.delegate = self
@@ -35,8 +36,9 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        //viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         //viewModel = MainViewModel(algorithm: KMeansClustering())
+        viewModel = MainViewModel(algorithm: PenaltyKmeans())
         bindViewModel()
         setupMapView()
         if dataProvider.objectCount == 0 {
@@ -71,11 +73,11 @@ class MainViewController: UIViewController {
             let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
             marker.iconImage = NMF_MARKER_IMAGE_BLACK
             if cluster.places.count == 1 {
-                marker.iconTintColor = .green
+                marker.iconTintColor = .systemGreen
             } else {
-                marker.iconTintColor = .red
+                marker.iconTintColor = .systemRed
             }
-            marker.captionText = "\(cluster.places.count)"
+            marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: naverMapView.mapView, placeCount: cluster.places.count)
             marker.zIndex = 1
             marker.mapView = self.naverMapView.mapView
             marker.touchHandler = self.handler
@@ -155,5 +157,14 @@ class MainViewController: UIViewController {
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    }
+}
+
+extension UIView {
+    func getImage() -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: bounds)
+        return renderer.image { rendererContext in
+            layer.render(in: rendererContext.cgContext)
+        }
     }
 }
