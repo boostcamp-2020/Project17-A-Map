@@ -16,8 +16,8 @@ extension MainViewController {
                     if afterCluster.placesDictionary[Point(latitude: beforePlace.latitude, longitude: beforePlace.longitude)] == nil {
                         continue
                     }
-                    let startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeCluster.latitude, lng: beforeCluster.longitude))
-                    let endPoint = mapView.projection.point(from: NMGLatLng(lat: afterCluster.latitude, lng: afterCluster.longitude))
+                    let startPoint = naverMapView.mapView.projection.point(from: NMGLatLng(lat: beforeCluster.latitude, lng: beforeCluster.longitude))
+                    let endPoint = naverMapView.mapView.projection.point(from: NMGLatLng(lat: afterCluster.latitude, lng: afterCluster.longitude))
                     let markerColor = (beforeClusters.count > 1) ? UIColor.red : UIColor.green
                     startMarkerAnimation(startPoint: startPoint, endPoint: endPoint, markerColor: markerColor, afterClusters: afterClusters)
                     break
@@ -31,7 +31,7 @@ extension MainViewController {
         marker.iconTintColor = markerColor
         let markerView = self.view(with: marker)
         markerView.frame.origin = CGPoint(x: -100, y: -100)
-        mapView.addSubview(markerView)
+        naverMapView.mapView.addSubview(markerView)
         let markerViewLayer = markerView.layer
         markerViewLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         DispatchQueue.global().async {
@@ -45,6 +45,37 @@ extension MainViewController {
                 self.configureNewMarkers(afterClusters: afterClusters)
             })
             markerViewLayer.add(markerAnimation, forKey: "position")
+            CATransaction.commit()
+        }
+    }
+    
+    func markerAppearAnimation(clusters: [Cluster]) {
+        clusters.forEach { cluster in
+            let point = naverMapView.mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longitude))
+            let markerColor = (cluster.places.count > 1) ? UIColor.red : UIColor.green
+            startMarkerAppearAnimation(point: point, markerColor: markerColor, clusters: clusters)
+        }
+    }
+    
+    private func startMarkerAppearAnimation(point: CGPoint, markerColor: UIColor, clusters: [Cluster]) {
+        let marker = NMFMarker()
+        marker.iconTintColor = markerColor
+        let markerView = self.view(with: marker)
+        naverMapView.mapView.addSubview(markerView)
+        let markerViewLayer = markerView.layer
+        markerViewLayer.position = point
+        markerViewLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
+        DispatchQueue.global().async {
+            CATransaction.begin()
+            let scaleUpAnimation = CABasicAnimation(keyPath: "transform.scale")
+            scaleUpAnimation.fromValue = 0
+            scaleUpAnimation.toValue = 1
+            scaleUpAnimation.duration = 0.5
+            CATransaction.setCompletionBlock({
+                markerView.removeFromSuperview()
+                self.configureNewMarkers(afterClusters: clusters)
+            })
+            markerViewLayer.add(scaleUpAnimation, forKey: "transform.scale")
             CATransaction.commit()
         }
     }
