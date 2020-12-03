@@ -16,6 +16,7 @@
 		D44558CF256611DF006D9D66 /* PlaceProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558CE256611DF006D9D66 /* PlaceProvider.swift */; };
 		D44558DB256615CF006D9D66 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558D9256615CF006D9D66 /* Place.swift */; };
 		D44558E525661638006D9D66 /* NaverMapA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D44558E325661638006D9D66 /* NaverMapA.xcdatamodeld */; };
+		D44B6FCA25783BD700E912BB /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44B6FC925783BD700E912BB /* DetailViewModel.swift */; };
 		D499BFCC2575C40700EF369E /* DetailCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFCA2575C40700EF369E /* DetailCollectionViewListCell.swift */; };
 		D499BFCD2575C40700EF369E /* DetailCollectionViewListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */; };
 		D499BFD32575C41400EF369E /* DetailCollectionViewDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */; };
@@ -72,6 +73,7 @@
 		D44558CE256611DF006D9D66 /* PlaceProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaceProvider.swift; sourceTree = "<group>"; };
 		D44558D9256615CF006D9D66 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Place.swift; sourceTree = SOURCE_ROOT; };
 		D44558E425661638006D9D66 /* NaverMapA.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NaverMapA.xcdatamodel; sourceTree = "<group>"; };
+		D44B6FC925783BD700E912BB /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
 		D499BFCA2575C40700EF369E /* DetailCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewListCell.swift; sourceTree = "<group>"; };
 		D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailCollectionViewListCell.xib; sourceTree = "<group>"; };
 		D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewDetailCell.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 			children = (
 				E0AE5419256F48D800F799E1 /* Controller */,
 				E0AE5418256F48CE00F799E1 /* ViewModel */,
+				D4C2F82F257573F900F784CE /* View */,
 				D429CFDF2565828B00B1EECA /* Model */,
 				E0AE541A256F48F100F799E1 /* Util */,
 				E0059FA42563726900CE6BD7 /* AppDelegate.swift */,
@@ -242,6 +245,7 @@
 			children = (
 				E0AE5424256F4AA700F799E1 /* MainViewModel.swift */,
 				E0AE542C256F4BC800F799E1 /* Dynamic.swift */,
+				D44B6FC925783BD700E912BB /* DetailViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -538,6 +542,7 @@
 				E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */,
 				E0AE5442256F859B00F799E1 /* CoordinateBounds.swift in Sources */,
 				D44558DB256615CF006D9D66 /* Place.swift in Sources */,
+				D44B6FCA25783BD700E912BB /* DetailViewModel.swift in Sources */,
 				D44558CF256611DF006D9D66 /* PlaceProvider.swift in Sources */,
 				E0BCC6C625638972005AD87F /* Environment.swift in Sources */,
 				E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */,
