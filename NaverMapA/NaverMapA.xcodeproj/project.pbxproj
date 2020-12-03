@@ -18,6 +18,8 @@
 		D44558E525661638006D9D66 /* NaverMapA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D44558E325661638006D9D66 /* NaverMapA.xcdatamodeld */; };
 		D499BFCC2575C40700EF369E /* DetailCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFCA2575C40700EF369E /* DetailCollectionViewListCell.swift */; };
 		D499BFCD2575C40700EF369E /* DetailCollectionViewListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */; };
+		D499BFD32575C41400EF369E /* DetailCollectionViewDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */; };
+		D499BFD42575C41400EF369E /* DetailCollectionViewDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */; };
 		D4C2F82B2575193D00F784CE /* DetailPullUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */; };
 		D506A0E6CC326EDBF1BE4462 /* Pods_NaverMapA_NaverMapAUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE572E6A770EBAC94B87E86 /* Pods_NaverMapA_NaverMapAUITests.framework */; };
 		E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FA42563726900CE6BD7 /* AppDelegate.swift */; };
@@ -72,6 +74,8 @@
 		D44558E425661638006D9D66 /* NaverMapA.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NaverMapA.xcdatamodel; sourceTree = "<group>"; };
 		D499BFCA2575C40700EF369E /* DetailCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewListCell.swift; sourceTree = "<group>"; };
 		D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailCollectionViewListCell.xib; sourceTree = "<group>"; };
+		D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewDetailCell.swift; sourceTree = "<group>"; };
+		D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailCollectionViewDetailCell.xib; sourceTree = "<group>"; };
 		D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPullUpViewController.swift; sourceTree = "<group>"; };
 		E0059FA12563726900CE6BD7 /* NaverMapA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaverMapA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0059FA42563726900CE6BD7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -164,8 +168,17 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		D4C2F82F257573F900F784CE /* View */ = {
+			isa = PBXGroup;
+			children = (
 				D499BFCA2575C40700EF369E /* DetailCollectionViewListCell.swift */,
 				D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */,
+				D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */,
+				D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		E0059F982563726900CE6BD7 = {
 			isa = PBXGroup;
 			children = (
@@ -521,6 +534,7 @@
 				C8D647D8256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift in Sources */,
 				D44558E525661638006D9D66 /* NaverMapA.xcdatamodeld in Sources */,
 				E0059FA72563726900CE6BD7 /* SceneDelegate.swift in Sources */,
+				D499BFD32575C41400EF369E /* DetailCollectionViewDetailCell.swift in Sources */,
 				E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */,
 				E0AE5442256F859B00F799E1 /* CoordinateBounds.swift in Sources */,
 				D44558DB256615CF006D9D66 /* Place.swift in Sources */,
