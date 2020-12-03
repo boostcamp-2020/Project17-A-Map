@@ -77,7 +77,7 @@ class MainViewController: UIViewController {
             } else {
                 marker.iconTintColor = .systemRed
             }
-            marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: mapView, placeCount: cluster.places.count)
+            marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: naverMapView.mapView, placeCount: cluster.places.count)
             marker.zIndex = 1
             marker.mapView = self.naverMapView.mapView
             marker.touchHandler = self.handler
