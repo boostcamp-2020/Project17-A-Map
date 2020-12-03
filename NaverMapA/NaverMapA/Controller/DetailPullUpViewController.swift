@@ -197,4 +197,23 @@ extension DetailPullUpViewController: UICollectionViewDelegate {
         }
     }
     
+
+// MARK: GestureRecognizerDelegate
+/**
+ CollectionView의 스크롤 PanGesture와 PullUpVC Custom PanGesture 동시 인식 처리
+ */
+
+extension DetailPullUpViewController: UIGestureRecognizerDelegate {
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard otherGestureRecognizer == collectionView.panGestureRecognizer else {
+            return false
+        }
+        return true
+    }
+    
 }
