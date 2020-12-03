@@ -24,7 +24,7 @@ class MarkerFactory {
         markerImageView.addSubview(label)
         setLayout(label: label, markerImageView: markerImageView)
         mapView.addSubview(markerImageView)
-        let image = markerImageView.asImage()
+        let image = markerImageView.getImage()
         let markerImage = NMFOverlayImage(image: image)
         markerImageView.removeFromSuperview()
         return markerImage

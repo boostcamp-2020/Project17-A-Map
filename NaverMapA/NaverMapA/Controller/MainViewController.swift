@@ -161,7 +161,7 @@ extension MainViewController: NSFetchedResultsControllerDelegate {
 }
 
 extension UIView {
-    func asImage() -> UIImage {
+    func getImage() -> UIImage {
         let renderer = UIGraphicsImageRenderer(bounds: bounds)
         return renderer.image { rendererContext in
             layer.render(in: rendererContext.cgContext)
