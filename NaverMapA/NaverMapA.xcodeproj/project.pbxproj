@@ -11,6 +11,7 @@
 		8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8898E854256D914C00CFE5B4 /* ScaleBasedClustering.swift */; };
 		997FE8701C4893C3A09145F8 /* Pods_NaverMapATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87992EA48C88244E5F3BD1C3 /* Pods_NaverMapATests.framework */; };
 		D41830D6257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41830D5257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift */; };
+		C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C816202625789C8A00DF61C4 /* MarkerFactory.swift */; };
 		C8CE03A42577925B006659D6 /* MainViewController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE03A32577925B006659D6 /* MainViewController+Animation.swift */; };
 		C8D647D8256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D647D7256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift */; };
 		C8E6A8902575D65600E2451F /* MainViewController+NMFMapViewCameraDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E6A88F2575D65600E2451F /* MainViewController+NMFMapViewCameraDelegate.swift */; };
@@ -84,6 +85,7 @@
 		C216106B7FE5408B63595379 /* Pods-NaverMapATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapATests.debug.xcconfig"; path = "Target Support Files/Pods-NaverMapATests/Pods-NaverMapATests.debug.xcconfig"; sourceTree = "<group>"; };
 		C6BD3042AD95BA3CF13B5BF8 /* Pods-NaverMapA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapA.debug.xcconfig"; path = "Target Support Files/Pods-NaverMapA/Pods-NaverMapA.debug.xcconfig"; sourceTree = "<group>"; };
 		D41830D5257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+PullUpViewDelegate.swift"; sourceTree = "<group>"; };
+		C816202625789C8A00DF61C4 /* MarkerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerFactory.swift; sourceTree = "<group>"; };
 		C8CE03A32577925B006659D6 /* MainViewController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+Animation.swift"; sourceTree = "<group>"; };
 		C8D647D7256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+NMFOverlayImageDataSource.swift"; sourceTree = "<group>"; };
 		C8E6A88F2575D65600E2451F /* MainViewController+NMFMapViewCameraDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+NMFMapViewCameraDelegate.swift"; sourceTree = "<group>"; };
@@ -178,9 +180,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C816202525789C6F00DF61C4 /* Marker */ = {
+			isa = PBXGroup;
+			children = (
+				C816202625789C8A00DF61C4 /* MarkerFactory.swift */,
+			);
+			path = Marker;
+			sourceTree = "<group>";
+		};
 		D429CFDF2565828B00B1EECA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				C816202525789C6F00DF61C4 /* Marker */,
 				E0EFA25325754F6200995B0C /* Algorithm */,
 				E0EFA25225754F4000995B0C /* Place */,
 				E0EFA23B25754EFD00995B0C /* Cluster */,
@@ -589,6 +600,7 @@
 				E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */,
 				E0059FA92563726900CE6BD7 /* MainViewController.swift in Sources */,
 				E0EFA23D25754F0D00995B0C /* PenaltyCluster.swift in Sources */,
+				C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */,
 				E0AE5437256F50D900F799E1 /* Clusterable.swift in Sources */,
 				E0AE5492257128A700F799E1 /* penaltyKmeans.swift in Sources */,
 				E0EFA24B25754F2D00995B0C /* BasicCluster.swift in Sources */,

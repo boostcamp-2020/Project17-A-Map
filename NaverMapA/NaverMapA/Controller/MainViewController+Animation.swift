@@ -37,7 +37,7 @@ extension MainViewController {
         DispatchQueue.global().async {
             CATransaction.begin()
             let markerAnimation = CABasicAnimation(keyPath: "position")
-            markerAnimation.duration = 0.3
+            markerAnimation.duration = 0.4
             markerAnimation.fromValue = CGPoint(x: startPoint.x, y: startPoint.y)
             markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y)
             CATransaction.setCompletionBlock({
