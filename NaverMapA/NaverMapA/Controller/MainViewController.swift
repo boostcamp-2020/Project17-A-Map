@@ -37,9 +37,9 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        //viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         //viewModel = MainViewModel(algorithm: KMeansClustering())
-        //viewModel = MainViewModel(algorithm: PenaltyKmeans())
+        viewModel = MainViewModel(algorithm: PenaltyKmeans())
         bindViewModel()
         setupMapView()
         if dataProvider.objectCount == 0 {
@@ -67,11 +67,11 @@ class MainViewController: UIViewController {
             let lat = cluster.latitude
             let lng = cluster.longitude
             let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
-            marker.iconImage = NMF_MARKER_IMAGE_PINK
+            marker.iconImage = NMF_MARKER_IMAGE_BLACK
             if cluster.places.count == 1 {
-                marker.iconTintColor = .green
+                marker.iconTintColor = .systemGreen
             } else {
-                marker.iconTintColor = .red
+                marker.iconTintColor = .systemRed
             }
             marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: mapView, placeCount: cluster.places.count)
             marker.zIndex = 1
