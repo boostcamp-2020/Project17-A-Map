@@ -67,20 +67,15 @@ extension MainViewController {
         markerViewLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         DispatchQueue.global().async {
             CATransaction.begin()
-            let scaleUpXAnimation = CABasicAnimation(keyPath: "transform.scale.x")
+            let scaleUpXAnimation = CABasicAnimation(keyPath: "transform.scale")
             scaleUpXAnimation.fromValue = 0
             scaleUpXAnimation.toValue = 1
             scaleUpXAnimation.duration = 0.5
-            let scaleUpYAnimation = CABasicAnimation(keyPath: "transform.scale.y")
-            scaleUpYAnimation.fromValue = 0
-            scaleUpYAnimation.toValue = 1
-            scaleUpYAnimation.duration = 0.5
             CATransaction.setCompletionBlock({
                 markerView.removeFromSuperview()
                 self.configureNewMarkers(afterClusters: clusters)
             })
-            markerViewLayer.add(scaleUpXAnimation, forKey: "transform.scale.x")
-            markerViewLayer.add(scaleUpYAnimation, forKey: "transform.scale.y")
+            markerViewLayer.add(scaleUpXAnimation, forKey: "transform.scale")
             CATransaction.commit()
         }
     }
