@@ -186,3 +186,15 @@ class DetailPullUpViewController: UIViewController {
     }
     
 }
+
+// MARK: CollectionViewDelegate
+extension DetailPullUpViewController: UICollectionViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y <= 0 {
+            scrollView.contentOffset.y = 0
+            scrollView.isScrollEnabled = false
+        }
+    }
+    
+}
