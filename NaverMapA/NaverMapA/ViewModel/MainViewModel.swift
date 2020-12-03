@@ -12,6 +12,7 @@ class MainViewModel {
     var markers: Dynamic<[Cluster]> = Dynamic([])
     var animationMarkers: Dynamic<([Cluster], [Cluster])> = Dynamic(([], []))
     var clusteringAlgorithm: Clusterable
+    var beforeMarkers: [Cluster] = []
     
     init(algorithm: Clusterable) {
         clusteringAlgorithm = algorithm
@@ -32,7 +33,8 @@ class MainViewModel {
                     newClusters[index].placesDictionary.updateValue(1, forKey: Point(latitude: place.latitude, longitude: place.longitude))
                 }
             }
-            self.animationMarkers.value = (self.markers.value, newClusters)
+            self.animationMarkers.value = (self.beforeMarkers, newClusters)
+            self.beforeMarkers = newClusters
         }
     }
 }
