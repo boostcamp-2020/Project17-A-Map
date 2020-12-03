@@ -9,6 +9,7 @@ import UIKit
 
 protocol PullUpViewDelegate: class {
     func dismissPullUpVC()
+    func move(toLat: Double, lng: Double)
 }
 
 class DetailPullUpViewController: UIViewController {
@@ -188,6 +189,10 @@ class DetailPullUpViewController: UIViewController {
 }
 
 // MARK: CollectionViewDelegate
+/**
+ 스크롤 이벤트, 셀 터치 이벤트 처리
+ */
+
 extension DetailPullUpViewController: UICollectionViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -197,6 +202,16 @@ extension DetailPullUpViewController: UICollectionViewDelegate {
         }
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let place = cluster?.places[indexPath.item] else { return }
+        delegate?.move(toLat: place.latitude, lng: place.longitude)
+        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+            guard let self = self else { return }
+            self.moveView(state: .half)
+        })
+    }
+    
+}
 
 // MARK: GestureRecognizerDelegate
 /**
