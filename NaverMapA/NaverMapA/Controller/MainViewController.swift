@@ -156,7 +156,10 @@ class MainViewController: UIViewController {
                 maxLongitude = place.longitude
             }
         }
-        mapView.moveCamera(NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50))
+        let camUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50)
+        camUpdate.animation = .fly
+        camUpdate.animationDuration = 1
+        mapView.moveCamera(camUpdate)
     }
     
     private func showPullUpVC(with cluster: Cluster) {
