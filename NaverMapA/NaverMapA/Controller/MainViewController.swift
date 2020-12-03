@@ -11,6 +11,9 @@ import CoreData
 
 class MainViewController: UIViewController {
     var naverMapView: NMFNaverMapView!
+    var mapView: NMFMapView {
+        return naverMapView.mapView
+    }
     var viewModel: MainViewModel?
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
@@ -21,12 +24,14 @@ class MainViewController: UIViewController {
         provider.fetchedResultsController.delegate = self
         return provider
     }()
+    var pullUpVC: DetailPullUpViewController?
     
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
             for cluster in self.clusterObjects {
                 if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng {
                     self.moveCamera(to: cluster)
+                    self.showPullUpVC(with: cluster)
                     break
                 }
             }
@@ -79,7 +84,7 @@ class MainViewController: UIViewController {
             }
             marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: naverMapView.mapView, placeCount: cluster.places.count)
             marker.zIndex = 1
-            marker.mapView = self.naverMapView.mapView
+            marker.mapView = self.mapView
             marker.touchHandler = self.handler
             self.clusterMarkers.append(marker)
             self.clusterObjects.append(cluster)
@@ -151,8 +156,29 @@ class MainViewController: UIViewController {
                 maxLongitude = place.longitude
             }
         }
-        naverMapView.mapView.moveCamera(NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50))
+        let camUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50)
+        camUpdate.animation = .fly
+        camUpdate.animationDuration = 1
+        mapView.moveCamera(camUpdate)
     }
+    
+    private func showPullUpVC(with cluster: Cluster) {
+        guard self.pullUpVC == nil else {
+            pullUpVC?.cluster = cluster
+            return
+        }
+        guard let pullUpVC: DetailPullUpViewController = storyboard?.instantiateViewController(identifier: DetailPullUpViewController.identifier) as? DetailPullUpViewController else { return }
+        self.addChild(pullUpVC)
+        let height = view.frame.height * 0.9
+        let width = view.frame.width
+        pullUpVC.view.frame = CGRect(x: 0, y: view.frame.maxY, width: width, height: height)
+        self.view.addSubview(pullUpVC.view)
+        pullUpVC.didMove(toParent: self)
+        self.pullUpVC = pullUpVC
+        self.pullUpVC?.cluster = cluster
+        self.pullUpVC?.delegate = self
+    }
+    
 }
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
