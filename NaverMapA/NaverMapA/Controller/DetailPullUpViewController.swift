@@ -10,7 +10,7 @@ import UIKit
 class DetailPullUpViewController: UIViewController {
     
     static let identifier: String = String(describing: DetailPullUpViewController.self)
-    
+
     private enum State {
         case full
         case half
@@ -28,31 +28,42 @@ class DetailPullUpViewController: UIViewController {
     }
     
     private var shortViewPosition: CGFloat {
-        UIScreen.main.bounds.height - 120
+        UIScreen.main.bounds.height - 100
     }
     
+    var cluster: Cluster? {
+        didSet {
+            bindDataSource()
+        }
+    }
+    
+    private lazy var dataSource = DetailCollectionViewDataSource()
+    
     // MARK: - Views
+    
+    @IBOutlet private weak var collectionView: UICollectionView!
+    @IBOutlet private weak var titleLabel: UILabel!
     
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configure()
-        addTopShortLine()
-        let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGesture))
-        view.addGestureRecognizer(gesture)
+        setUpVC()
+        setUpShortLine()
+        setUpGesture()
+        setUpCollectionView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        UIView.animate(withDuration: 0.6, animations: { [weak self] in
+        UIView.animate(withDuration: 0.5, animations: { [weak self] in
             guard let self = self else { return }
-            self.view.frame = CGRect(x: 0, y: self.shortViewPosition, width: self.view.frame.width, height: self.view.frame.height)
+            self.moveView(state: .short)
         })
     }
     
     // MARK: - Initialize
     
-    private func configure() {
+    private func setUpVC() {
         view.backgroundColor = .systemGray6
         view.layer.cornerRadius = 10
         view.layer.shadowPath = UIBezierPath(rect: view.bounds).cgPath
@@ -62,7 +73,7 @@ class DetailPullUpViewController: UIViewController {
         view.layer.shadowRadius = 5
     }
     
-    private func addTopShortLine() {
+    private func setUpShortLine() {
         let lineWidth: CGFloat = 4
         let lineView = UIView()
         lineView.layer.cornerRadius = lineWidth / 2
@@ -77,9 +88,27 @@ class DetailPullUpViewController: UIViewController {
         ])
     }
     
+    private func setUpGesture() {
+        let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGesture))
+        gesture.delegate = self
+        view.addGestureRecognizer(gesture)
+    }
+    
+    private func setUpCollectionView() {
+        collectionView.delegate = self
+        collectionView.dataSource = dataSource
+        collectionView.register(UINib(nibName: DetailCollectionViewListCell.identifier, bundle: .main), forCellWithReuseIdentifier: DetailCollectionViewListCell.identifier)
+        collectionView.register(UINib(nibName: DetailCollectionViewDetailCell.identifier, bundle: .main), forCellWithReuseIdentifier: DetailCollectionViewDetailCell.identifier)
+    }
+    
     // MARK: - Methods
     
     private func moveView(state: State) {
+        if state == .full {
+            collectionView.isScrollEnabled = true
+        } else {
+            collectionView.isScrollEnabled = false
+        }
         let yPosition = viewPosition(for: state)
         view.frame = CGRect(x: 0, y: yPosition, width: view.frame.width, height: view.frame.height)
     }
@@ -87,7 +116,11 @@ class DetailPullUpViewController: UIViewController {
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
         let transition = recognizer.translation(in: view)
         let minY = view.frame.minY
-        guard (minY + transition.y >= fullViewPosition) && (minY + transition.y <= shortViewPosition) else { return }
+        guard minY + transition.y <= shortViewPosition else { return }
+        guard minY + transition.y >= fullViewPosition else {
+            moveView(state: .full)
+            return
+        }
         view.frame = CGRect(x: 0, y: minY + transition.y, width: view.frame.width, height: view.frame.height)
         recognizer.setTranslation(CGPoint.zero, in: view)
     }
@@ -101,6 +134,20 @@ class DetailPullUpViewController: UIViewController {
         case .short:
             return shortViewPosition
         }
+    }
+    
+    private func bindDataSource() {
+        guard let cluster = cluster else { return }
+        let placeCount = cluster.places.count
+        if placeCount == 1 {
+            titleLabel.text = cluster.places[0].name
+        } else if placeCount > 1 {
+            titleLabel.text = "\(cluster.places.count)개의 장소"
+        }
+        dataSource.setUpViewModels(cluster: cluster, completion: {
+            self.collectionView.reloadData()
+            self.collectionView.layoutIfNeeded()
+        })
     }
     
     // MARK: PanGesture
