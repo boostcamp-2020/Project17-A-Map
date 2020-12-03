@@ -6,15 +6,16 @@
 //
 
 import Foundation
+
 class ScaleBasedClustering: Clusterable {
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
         let mapScale = sqrt(pow(bounds.northEastLat - bounds.southWestLat, 2) + pow(bounds.northEastLng - bounds.southWestLng, 2)) / 12
         if places.count == 0 {
             return []
         }
-        var clusterArray = [Cluster]()
+        var clusterArray = [BasicCluster]()
         for place in places {
-            clusterArray.append(Cluster(latitude: place.latitude, longitude: place.longitude, places: [place]))
+            clusterArray.append(BasicCluster(latitude: place.latitude, longitude: place.longitude, places: [place]))
         }
         var isUpdate = true
         while isUpdate != false {

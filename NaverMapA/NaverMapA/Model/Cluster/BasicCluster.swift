@@ -1,13 +1,13 @@
 //
-//  Cluster.swift
+//  BasicCluster.swift
 //  NaverMapA
 //
-//  Created by 채훈기 on 2020/11/26.
+//  Created by 채훈기 on 2020/12/01.
 //
 
 import Foundation
 
-struct Cluster {
+struct BasicCluster: Cluster {
     var latitude: Double = 0
     var longitude: Double = 0
     var places: [Place] = [Place]() {
@@ -19,6 +19,7 @@ struct Cluster {
             }
         }
     }
+    var placesDictionary: [Point: Int] = [:]
     
     mutating func remove(_ place: Place) {
         if let index = places.firstIndex(of: place) {
@@ -43,10 +44,15 @@ struct Cluster {
     
 }
 
-extension Cluster: Comparable {
-    static func < (left: Cluster, right: Cluster) -> Bool {
+extension BasicCluster: Comparable {
+    static func < (left: BasicCluster, right: BasicCluster) -> Bool {
         let lPow = pow(left.latitude, 2) + pow(left.longitude, 2)
         let rPow = pow(right.latitude, 2) + pow(right.longitude, 2)
         return lPow<rPow
     }
+}
+
+struct Point: Hashable {
+    var latitude: Double
+    var longitude: Double
 }
