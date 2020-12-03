@@ -31,7 +31,6 @@ class MainViewController: UIViewController {
         if dataProvider.objectCount == 0 {
             dataProvider.insert(completionHandler: handleBatchOperationCompletion)
         }
-        showPullUpVC()
     }
     
     func setupMapView() {
@@ -39,6 +38,7 @@ class MainViewController: UIViewController {
         mapView.addCameraDelegate(delegate: self)
         mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5655271, lng: 126.9904267), zoom: 18)))
         view.addSubview(mapView)
+        mapView.touchDelegate = self
     }
     
     func bindViewModel() {
@@ -121,7 +121,11 @@ class MainViewController: UIViewController {
         }
     }
     
-    private func showPullUpVC() {
+    private func showPullUpVC(with cluster: Cluster) {
+        guard self.pullUpVC == nil else {
+            pullUpVC?.cluster = cluster
+            return
+        }
         guard let pullUpVC: DetailPullUpViewController = storyboard?.instantiateViewController(identifier: DetailPullUpViewController.identifier) as? DetailPullUpViewController else { return }
         self.addChild(pullUpVC)
         let height = view.frame.height * 0.9
@@ -130,6 +134,8 @@ class MainViewController: UIViewController {
         self.view.addSubview(pullUpVC.view)
         pullUpVC.didMove(toParent: self)
         self.pullUpVC = pullUpVC
+        self.pullUpVC?.cluster = cluster
+        self.pullUpVC?.delegate = self
     }
     
 }
@@ -152,5 +158,12 @@ extension MainViewController: NMFMapViewCameraDelegate {
             let places = self.dataProvider.fetch(bounds: bounds)
             self.viewModel?.updatePlaces(places: places, bounds: bounds)
         }
+    }
+}
+
+extension MainViewController: NMFMapViewTouchDelegate {
+    func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
+        guard let cluster = viewModel?.markers.value.randomElement() else { return }
+        showPullUpVC(with: cluster)
     }
 }

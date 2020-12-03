@@ -7,6 +7,10 @@
 
 import UIKit
 
+protocol PullUpViewDelegate: class {
+    func dismissPullUpVC()
+}
+
 class DetailPullUpViewController: UIViewController {
     
     static let identifier: String = String(describing: DetailPullUpViewController.self)
@@ -38,6 +42,8 @@ class DetailPullUpViewController: UIViewController {
     }
     
     private lazy var dataSource = DetailCollectionViewDataSource()
+    
+    weak var delegate: PullUpViewDelegate?
     
     // MARK: - Views
     
@@ -167,6 +173,12 @@ class DetailPullUpViewController: UIViewController {
                 self.moveView(state: .short)
             }
         })
+    }
+
+    // MARK: IBActions
+    
+    @IBAction private func touchedCloseButton(_ sender: Any) {
+        delegate?.dismissPullUpVC()
     }
     
 }
