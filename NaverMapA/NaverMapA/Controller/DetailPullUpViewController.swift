@@ -105,6 +105,10 @@ class DetailPullUpViewController: UIViewController {
         collectionView.dataSource = dataSource
         collectionView.register(UINib(nibName: DetailCollectionViewListCell.identifier, bundle: .main), forCellWithReuseIdentifier: DetailCollectionViewListCell.identifier)
         collectionView.register(UINib(nibName: DetailCollectionViewDetailCell.identifier, bundle: .main), forCellWithReuseIdentifier: DetailCollectionViewDetailCell.identifier)
+        collectionView.layoutIfNeeded()
+        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        let insets = (collectionView.contentInset.left + collectionView.contentInset.right)
+        layout?.estimatedItemSize = CGSize(width: collectionView.bounds.width - insets, height: 100)
     }
     
     // MARK: - Methods
