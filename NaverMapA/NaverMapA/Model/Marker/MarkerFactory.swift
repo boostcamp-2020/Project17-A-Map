@@ -39,4 +39,3 @@ class MarkerFactory {
         label.bottomAnchor.constraint(equalTo: markerImageView.bottomAnchor, constant: -18).isActive = true
     }
 }
-

@@ -205,6 +205,14 @@ extension DetailPullUpViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let place = cluster?.places[indexPath.item] else { return }
         delegate?.move(toLat: place.latitude, lng: place.longitude)
+        if cluster?.places.count != 1 {
+            let newCluster: BasicCluster = {
+                var cluster = BasicCluster()
+                cluster.places.append(place)
+                return cluster
+            }()
+            self.cluster = newCluster
+        }
         UIView.animate(withDuration: 0.5, animations: { [weak self] in
             guard let self = self else { return }
             self.moveView(state: .half)

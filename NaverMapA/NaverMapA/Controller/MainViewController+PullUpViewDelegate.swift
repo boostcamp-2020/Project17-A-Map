@@ -10,7 +10,7 @@ import NMapsMap
 extension MainViewController: PullUpViewDelegate {
     
     func move(toLat lat: Double, lng: Double) {
-        let camUpdate = NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: lat, lng: lng), zoom: 20))
+        let camUpdate = NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: lat - 0.00001, lng: lng), zoom: 20))
         camUpdate.animation = .fly
         camUpdate.animationDuration = 2
         mapView.moveCamera(camUpdate)
