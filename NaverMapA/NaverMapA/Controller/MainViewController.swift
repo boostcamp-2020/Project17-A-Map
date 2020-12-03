@@ -10,8 +10,7 @@ import NMapsMap
 import CoreData
 
 class MainViewController: UIViewController {
-    
-    var mapView: NMFMapView!
+    var naverMapView: NMFNaverMapView!
     var viewModel: MainViewModel?
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
@@ -22,7 +21,7 @@ class MainViewController: UIViewController {
         return provider
     }()
     
-    private lazy var handler = { (overlay: NMFOverlay?) -> Bool in
+    lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
             for cluster in self.clusterObjects {
                 if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng {
@@ -46,10 +45,15 @@ class MainViewController: UIViewController {
     }
     
     func setupMapView() {
-        mapView = NMFMapView(frame: view.frame)
-        mapView.addCameraDelegate(delegate: self)
-        mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5656471, lng: 126.9908467), zoom: 18)))
-        view.addSubview(mapView)
+        naverMapView = NMFNaverMapView(frame: view.frame)
+        naverMapView.showZoomControls = true
+        naverMapView.showCompass = false
+        naverMapView.showLocationButton = false
+        naverMapView.showScaleBar = false
+        naverMapView.showIndoorLevelPicker = true
+        naverMapView.mapView.addCameraDelegate(delegate: self)
+        naverMapView.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5656471, lng: 126.9908467), zoom: 18)))
+        view.addSubview(naverMapView)
     }
     
     func deleteBeforeMarkers() {
@@ -73,7 +77,7 @@ class MainViewController: UIViewController {
             }
             marker.captionText = "\(cluster.places.count)"
             marker.zIndex = 1
-            marker.mapView = self.mapView
+            marker.mapView = self.naverMapView.mapView
             marker.touchHandler = self.handler
             self.clusterMarkers.append(marker)
             self.clusterObjects.append(cluster)
@@ -92,7 +96,7 @@ class MainViewController: UIViewController {
             viewModel.markers.bind({ afterClusters in
                 DispatchQueue.main.async {
                     self.deleteBeforeMarkers()
-                    self.configureNewMarkers(afterClusters: afterClusters)
+                    self.markerAppearAnimation(clusters: afterClusters)
                 }
             })
         }
@@ -145,7 +149,7 @@ class MainViewController: UIViewController {
                 maxLongitude = place.longitude
             }
         }
-        mapView.moveCamera(NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50))
+        naverMapView.mapView.moveCamera(NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50))
     }
 }
 
