@@ -11,6 +11,9 @@ import CoreData
 
 class MainViewController: UIViewController {
     var naverMapView: NMFNaverMapView!
+    var mapView: NMFMapView {
+        return naverMapView.mapView
+    }
     var viewModel: MainViewModel?
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
@@ -27,6 +30,7 @@ class MainViewController: UIViewController {
             for cluster in self.clusterObjects {
                 if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng {
                     self.moveCamera(to: cluster)
+                    self.showPullUpVC(with: cluster)
                     break
                 }
             }
@@ -78,7 +82,7 @@ class MainViewController: UIViewController {
             }
             marker.captionText = "\(cluster.places.count)"
             marker.zIndex = 1
-            marker.mapView = self.naverMapView.mapView
+            marker.mapView = self.mapView
             marker.touchHandler = self.handler
             self.clusterMarkers.append(marker)
             self.clusterObjects.append(cluster)
@@ -150,7 +154,7 @@ class MainViewController: UIViewController {
                 maxLongitude = place.longitude
             }
         }
-        naverMapView.mapView.moveCamera(NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50))
+        mapView.moveCamera(NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50))
     }
     
     private func showPullUpVC(with cluster: Cluster) {
@@ -174,12 +178,5 @@ class MainViewController: UIViewController {
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    }
-}
-
-extension MainViewController: NMFMapViewTouchDelegate {
-    func mapView(_ mapView: NMFMapView, didTapMap latlng: NMGLatLng, point: CGPoint) {
-        guard let cluster = viewModel?.markers.value.randomElement() else { return }
-        showPullUpVC(with: cluster)
     }
 }
