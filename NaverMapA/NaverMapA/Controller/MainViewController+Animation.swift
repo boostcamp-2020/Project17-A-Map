@@ -63,23 +63,24 @@ extension MainViewController {
         let markerView = self.view(with: marker)
         naverMapView.mapView.addSubview(markerView)
         let markerViewLayer = markerView.layer
+        markerViewLayer.position = point
         markerViewLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         DispatchQueue.global().async {
             CATransaction.begin()
-            let positionAnimation = CABasicAnimation(keyPath: "position")
-            positionAnimation.fromValue = CGPoint(x: point.x, y: 0)
-            positionAnimation.toValue = CGPoint(x: point.x, y: point.y)
-            positionAnimation.duration = 0.5
-            let opacityAnimation = CABasicAnimation(keyPath: "opacity")
-            opacityAnimation.fromValue = 0
-            opacityAnimation.toValue = 1
-            opacityAnimation.duration = 0.5
+            let scaleUpXAnimation = CABasicAnimation(keyPath: "transform.scale.x")
+            scaleUpXAnimation.fromValue = 0
+            scaleUpXAnimation.toValue = 1
+            scaleUpXAnimation.duration = 0.5
+            let scaleUpYAnimation = CABasicAnimation(keyPath: "transform.scale.y")
+            scaleUpYAnimation.fromValue = 0
+            scaleUpYAnimation.toValue = 1
+            scaleUpYAnimation.duration = 0.5
             CATransaction.setCompletionBlock({
                 markerView.removeFromSuperview()
                 self.configureNewMarkers(afterClusters: clusters)
             })
-            markerViewLayer.add(positionAnimation, forKey: "position")
-            markerViewLayer.add(opacityAnimation, forKey: "opacity")
+            markerViewLayer.add(scaleUpXAnimation, forKey: "transform.scale.x")
+            markerViewLayer.add(scaleUpYAnimation, forKey: "transform.scale.y")
             CATransaction.commit()
         }
     }
