@@ -21,6 +21,7 @@
 		D499BFCD2575C40700EF369E /* DetailCollectionViewListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */; };
 		D499BFD32575C41400EF369E /* DetailCollectionViewDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */; };
 		D499BFD42575C41400EF369E /* DetailCollectionViewDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */; };
+		D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */; };
 		D4C2F82B2575193D00F784CE /* DetailPullUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */; };
 		D506A0E6CC326EDBF1BE4462 /* Pods_NaverMapA_NaverMapAUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE572E6A770EBAC94B87E86 /* Pods_NaverMapA_NaverMapAUITests.framework */; };
 		E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FA42563726900CE6BD7 /* AppDelegate.swift */; };
@@ -78,6 +79,7 @@
 		D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailCollectionViewListCell.xib; sourceTree = "<group>"; };
 		D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewDetailCell.swift; sourceTree = "<group>"; };
 		D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailCollectionViewDetailCell.xib; sourceTree = "<group>"; };
+		D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPullUpViewController.swift; sourceTree = "<group>"; };
 		E0059FA12563726900CE6BD7 /* NaverMapA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaverMapA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0059FA42563726900CE6BD7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				E0AE5436256F50D900F799E1 /* Clustering.swift */,
 				8898E854256D914C00CFE5B4 /* ScaleBasedClustering.swift */,
 				E0AE5441256F859B00F799E1 /* CoordinateBounds.swift */,
+				D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -533,6 +536,7 @@
 				E0059FA92563726900CE6BD7 /* MainViewController.swift in Sources */,
 				E0AE5437256F50D900F799E1 /* Clustering.swift in Sources */,
 				8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */,
+				D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */,
 				E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */,
 				D499BFCC2575C40700EF369E /* DetailCollectionViewListCell.swift in Sources */,
 				C8D647D8256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift in Sources */,
