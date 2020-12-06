@@ -25,6 +25,7 @@ class MainViewController: UIViewController {
         return provider
     }()
     var pullUpVC: DetailPullUpViewController?
+    @IBOutlet weak var settingButton: UIButton!
     
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
@@ -49,6 +50,10 @@ class MainViewController: UIViewController {
         if dataProvider.objectCount == 0 {
             dataProvider.insert(completionHandler: handleBatchOperationCompletion)
         }
+        self.navigationController?.isNavigationBarHidden = true
+        self.view.bringSubviewToFront(settingButton)
+        settingButton.layer.cornerRadius = settingButton.bounds.size.width / 2.0
+        settingButton.clipsToBounds = true
     }
     
     func setupMapView() {
