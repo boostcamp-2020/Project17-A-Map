@@ -52,6 +52,9 @@ class MainViewController: UIViewController {
         }
         settingButton.layer.cornerRadius = settingButton.bounds.size.width / 2.0
         settingButton.clipsToBounds = true
+        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        backBarButtonItem.tintColor = .black
+        self.navigationItem.backBarButtonItem = backBarButtonItem
     }
     
     func setupMapView() {
