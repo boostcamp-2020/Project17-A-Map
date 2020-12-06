@@ -50,8 +50,6 @@ class MainViewController: UIViewController {
         if dataProvider.objectCount == 0 {
             dataProvider.insert(completionHandler: handleBatchOperationCompletion)
         }
-        self.navigationController?.isNavigationBarHidden = true
-        self.view.bringSubviewToFront(settingButton)
         settingButton.layer.cornerRadius = settingButton.bounds.size.width / 2.0
         settingButton.clipsToBounds = true
     }
@@ -123,8 +121,13 @@ class MainViewController: UIViewController {
             showAlert(title: "에러", message: "ClientID가 없습니다.", preferredStyle: UIAlertController.Style.alert, action: okAction)
             return
         }
+        self.navigationController?.isNavigationBarHidden = true
+        self.view.bringSubviewToFront(settingButton)
     }
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = false
+    }
     // MARK: - Methods
     
     private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, action: UIAlertAction) {
