@@ -42,8 +42,8 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         //viewModel = MainViewModel(algorithm: ScaleBasedClustering())
-        //viewModel = MainViewModel(algorithm: KMeansClustering())
-        viewModel = MainViewModel(algorithm: PenaltyKmeans())
+        viewModel = MainViewModel(algorithm: KMeansClustering())
+        //viewModel = MainViewModel(algorithm: PenaltyKmeans())
         bindViewModel()
         setupMapView()
         if dataProvider.objectCount == 0 {

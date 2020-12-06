@@ -6,9 +6,33 @@
 //
 
 import Foundation
-/*
-final class KMeansClustering: Clusterable {
+
+final class KMeansClustering: Operation, Clusterable {
+    var places: [Place] = []
+    
+    var bounds: CoordinateBounds = CoordinateBounds(southWestLng: 0, northEastLng: 0, southWestLat: 0, northEastLat: 0)
+    
+    var clusters: [Cluster] = []
+    
+    func run() {
+        clusters = execute(places: places, bounds: bounds)
+    }
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = KMeansClustering()
+        return copy
+    }
+    
+    override func main() {
+        if isCancelled {
+            return
+        }
+        run()
+    }
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
+        if isCancelled {
+            return []
+        }
         let EXECUTE_TIMES = 3
         var centroids: [BasicCluster] = []
         let ks = (0..<5).map { _ in elbow(of: places.shuffled()) }
@@ -16,6 +40,9 @@ final class KMeansClustering: Clusterable {
         let k = bestK ?? ks[0]
         var minTotalDistance = Double.greatestFiniteMagnitude
         (0..<EXECUTE_TIMES).forEach { _ in
+            if isCancelled {
+                return
+            }
             let temp = clustering(k: k, places: places.shuffled())
             let totalDistance = temp.reduce(0.0, {$0 + $1.totalDistance})
             if totalDistance < minTotalDistance {
@@ -23,18 +50,30 @@ final class KMeansClustering: Clusterable {
                 centroids = temp
             }
         }
+        if isCancelled {
+            return []
+        }
         return centroids
     }
     
     private func optimalCentroids(k: Int, places: [Place]) -> [BasicCluster] {
+        if isCancelled {
+            return []
+        }
         let K_COUNT = k
         var centroids = [BasicCluster](repeating: BasicCluster(), count: K_COUNT)
         var optimals = BasicCluster()
         (0..<K_COUNT).forEach { optimals.places.append(places[$0]) }
         for i in (0..<places.count) {
+            if isCancelled {
+                return []
+            }
             var minDistance = Double.greatestFiniteMagnitude
             var indexOfNearest = 0
             for j in (0..<optimals.places.count) {
+                if isCancelled {
+                    return []
+                }
                 let distance = places[i].distanceTo(optimals.places[j])
                 if distance < minDistance {
                     minDistance = distance
@@ -51,11 +90,20 @@ final class KMeansClustering: Clusterable {
         (0..<K_COUNT).forEach {
             centroids[$0].places.append(optimals.places[$0])
         }
+        if isCancelled {
+            return []
+        }
         return centroids
     }
     private func clustering(k: Int, places: [Place]) -> [BasicCluster] {
+        if isCancelled {
+            return []
+        }
         let K_COUNT = k
         guard places.count > K_COUNT else {
+            if isCancelled {
+                return []
+            }
             let centroids: [BasicCluster] = places.map {
                 var centroid = BasicCluster()
                 centroid.places.append($0)
@@ -67,6 +115,9 @@ final class KMeansClustering: Clusterable {
         var indexes = [Int](repeating: -1, count: places.count)
         var flag: Bool
         repeat {
+            if isCancelled {
+                return []
+            }
             flag = false
             for i in (0..<places.count) {
                 var minDistance = Double.greatestFiniteMagnitude
@@ -94,14 +145,23 @@ final class KMeansClustering: Clusterable {
     }
 
     private func elbow(of places: [Place]) -> Int {
+        if isCancelled {
+            return 0
+        }
         var distances: [Double] = []
         let maxK = places.count > 10 ? 10 : places.count
         if maxK <= 3 { return maxK }
         (1...maxK).forEach { K_COUNT in
+            if isCancelled {
+                return
+            }
             var centroids = optimalCentroids(k: K_COUNT, places: places)
             var indexes = [Int](repeating: -1, count: places.count)
             var flag: Bool
             repeat {
+                if isCancelled {
+                    return
+                }
                 flag = false
                 for i in (0..<places.count) {
                     var minDistance = Double.greatestFiniteMagnitude
@@ -128,6 +188,9 @@ final class KMeansClustering: Clusterable {
             let totalDistance = centroids.reduce(0.0, {$0 + $1.totalDistance})
             distances.append(totalDistance)
         }
+        if isCancelled {
+            return 0
+        }
         var thetas: [(theta: Double, index: Int)] = []
         for i in (1..<(maxK-1)) { // 1~8 (양끝 0, 9 빼고)
             let diff1 = distances[i-1] - distances[i]
@@ -143,4 +206,3 @@ final class KMeansClustering: Clusterable {
             (thetas[0].index + 1) : (thetas[1].index + 1)
     }
 }
-*/
