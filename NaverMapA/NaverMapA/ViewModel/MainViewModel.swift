@@ -17,11 +17,10 @@ class MainViewModel {
     init(algorithm: Clusterable) {
         clusteringAlgorithm = algorithm
     }
-    
     func updatePlaces(places: [Place], bounds: CoordinateBounds) {
         queue.cancelAllOperations()
         let clusteringAlgorithm = self.clusteringAlgorithm.copy()
-        guard let cluster = clusteringAlgorithm as? PenaltyKmeans else {
+        guard let cluster = clusteringAlgorithm as? Clusterable else {
             return
         }
         cluster.places = places
