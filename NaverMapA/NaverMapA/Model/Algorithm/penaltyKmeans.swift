@@ -7,22 +7,45 @@
 
 import Foundation
 
-final class PenaltyKmeans: Clusterable {
-    
+final class PenaltyKmeans: Operation, Clusterable {
+    var places: [Place] = []
+    var bounds: CoordinateBounds = CoordinateBounds(southWestLng: 0, northEastLng: 0, southWestLat: 0, northEastLat: 0)
+    var clusters: [Cluster] = []
+    override func main() {
+        if isCancelled {
+            return
+        }
+        run()
+    }
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = PenaltyKmeans()
+        return copy
+    }
+    func run() {
+        clusters = execute(places: places, bounds: bounds)
+    }
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
+        if isCancelled {
+            return []
+        }
         guard places.count != 0 else { return [] }
         var candidateCluster: [[PenaltyCluster]] = []
         let maximumK = determinateMaxK(count: places.count, bounds: bounds)
         
         for k in 1..<maximumK {
+            if isCancelled {
+                return []
+            }
             let clusters = clustering(places: places, k: k)
             candidateCluster.append(clusters)
         }
-        
         return bestCluster(clusters: candidateCluster, count: places.count)
     }
     
     func bestCluster(clusters: [[PenaltyCluster]], count: Int) -> [PenaltyCluster] {
+        if isCancelled {
+            return []
+        }
         var distances = clusters.map { candidate in
             candidate.reduce(0.0, { $0 + $1.totalDistance })
         }
@@ -40,16 +63,21 @@ final class PenaltyKmeans: Clusterable {
                 minIdx = i
             }
         }
-        
         return clusters[minIdx]
     }
     
     func clustering(places: [Place], k: Int) -> [PenaltyCluster] {
+        if isCancelled {
+            return []
+        }
         var centroids = initialCentroid(k: k, places: places)
         let iterationCount = 3
         centroids = distributeToCentroid(places: places, centroids: centroids)
 
         for _ in 0..<iterationCount {
+            if isCancelled {
+                return []
+            }
             var newCentroids = centroids.map { PenaltyCluster(lat: $0.latitude, lng: $0.longitude, places: [])}
             newCentroids = distributeToCentroid(places: places, centroids: newCentroids)
             centroids = newCentroids
@@ -67,6 +95,9 @@ final class PenaltyKmeans: Clusterable {
         var centerOfCentroid = PenaltyCluster(places: initialRandomCentroid)
         
         for place in places {
+            if isCancelled {
+                return []
+            }
             let newCandidateCentroid = centerOfCentroid.farthestPlaces(from: place) + [place]
             let newCenterOfCentroid = PenaltyCluster(places: newCandidateCentroid)
             if newCenterOfCentroid.sumDistanceInCentroid() > centerOfCentroid.sumDistanceInCentroid() {
@@ -81,6 +112,9 @@ final class PenaltyKmeans: Clusterable {
     }
     
     func distributeToCentroid(places: [Place], centroids: [PenaltyCluster]) -> [PenaltyCluster] {
+        if isCancelled {
+            return []
+        }
         let distributedCentroid = centroids
         
         places.forEach { place in

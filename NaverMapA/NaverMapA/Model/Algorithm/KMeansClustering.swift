@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+/*
 final class KMeansClustering: Clusterable {
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
         let EXECUTE_TIMES = 3
@@ -143,3 +143,4 @@ final class KMeansClustering: Clusterable {
             (thetas[0].index + 1) : (thetas[1].index + 1)
     }
 }
+*/
