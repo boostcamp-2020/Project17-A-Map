@@ -8,19 +8,21 @@
 import Foundation
 
 final class PenaltyKmeans: Operation, Clusterable {
+    
     var places: [Place] = []
     var bounds: CoordinateBounds = CoordinateBounds(southWestLng: 0, northEastLng: 0, southWestLat: 0, northEastLat: 0)
     var clusters: [Cluster] = []
-    func copy(with zone: NSZone? = nil) -> Any {
-        let copy = PenaltyKmeans()
-        return copy
-    }
 
     override func main() {
         if isCancelled {
             return
         }
         clusters = execute(places: places, bounds: bounds)
+    }
+    
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = PenaltyKmeans()
+        return copy
     }
     
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
@@ -34,7 +36,7 @@ final class PenaltyKmeans: Operation, Clusterable {
         return bestCluster(clusters: candidateCluster, count: places.count)
     }
     
-    func bestCluster(clusters: [[PenaltyCluster]], count: Int) -> [PenaltyCluster] {
+    private func bestCluster(clusters: [[PenaltyCluster]], count: Int) -> [PenaltyCluster] {
         guard clusters.count != 0 else { return [] }
         var distances = clusters.map { candidate in
             candidate.reduce(0.0, { $0 + $1.totalDistance })
@@ -56,7 +58,7 @@ final class PenaltyKmeans: Operation, Clusterable {
         return isCancelled ? [] : clusters[minIdx]
     }
     
-    func clustering(places: [Place], k: Int) -> [PenaltyCluster] {
+    private func clustering(places: [Place], k: Int) -> [PenaltyCluster] {
         var centroids = initialCentroid(k: k, places: places)
         let iterationCount = 5
         centroids = distributeToCentroid(places: places, centroids: centroids)
@@ -71,7 +73,7 @@ final class PenaltyKmeans: Operation, Clusterable {
             .filter { $0.places.count > 0 }
     }
     
-    func initialCentroid(k: Int, places: [Place]) -> [PenaltyCluster] {
+    private func initialCentroid(k: Int, places: [Place]) -> [PenaltyCluster] {
         let initialRandomCentroid = (0..<k).map { _ -> Place in
             let idx = Int.random(in: 0..<places.count)
             return places[idx]
@@ -92,7 +94,7 @@ final class PenaltyKmeans: Operation, Clusterable {
         return centroidToCluster
     }
     
-    func distributeToCentroid(places: [Place], centroids: [PenaltyCluster]) -> [PenaltyCluster] {
+    private func distributeToCentroid(places: [Place], centroids: [PenaltyCluster]) -> [PenaltyCluster] {
         let distributedCentroid = centroids
         
         for place in places where !isCancelled {
@@ -104,7 +106,7 @@ final class PenaltyKmeans: Operation, Clusterable {
         return distributedCentroid
     }
     
-    func determinateMaxK(count: Int) -> Int {
+    private func determinateMaxK(count: Int) -> Int {
         let MAXOPERATION: Double = 250000
         let a: Double = 5
         let b: Double = 1
