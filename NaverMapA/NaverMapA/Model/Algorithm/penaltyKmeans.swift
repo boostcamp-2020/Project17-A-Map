@@ -66,7 +66,11 @@ final class PenaltyKmeans: Operation, Clusterable {
         for _ in 0..<iterationCount {
             var newCentroids = centroids.map { PenaltyCluster(lat: $0.latitude, lng: $0.longitude, places: [])}
             newCentroids = distributeToCentroid(places: places, centroids: newCentroids)
-            centroids = newCentroids
+            centroids = newCentroids.map {
+                PenaltyCluster(lat: $0.averageLatitude,
+                               lng: $0.averageLongitude,
+                               places: $0.places )
+            }
         }
         return centroids
             .map { PenaltyCluster(lat: $0.latitude, lng: $0.longitude, places: $0.places)}
