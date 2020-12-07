@@ -71,24 +71,22 @@ class MainViewController: UIViewController {
         self.clusterObjects.removeAll()
     }
     
-    func configureNewMarkers(afterClusters: [Cluster]) {
-        for cluster in afterClusters {
-            let lat = cluster.latitude
-            let lng = cluster.longitude
-            let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
-            marker.iconImage = NMF_MARKER_IMAGE_BLACK
-            if cluster.places.count == 1 {
-                marker.iconTintColor = .systemGreen
-            } else {
-                marker.iconTintColor = .systemRed
-            }
-            marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: naverMapView.mapView, placeCount: cluster.places.count)
-            marker.zIndex = 1
-            marker.mapView = self.mapView
-            marker.touchHandler = self.handler
-            self.clusterMarkers.append(marker)
-            self.clusterObjects.append(cluster)
+    func configureNewMarker(afterCluster: Cluster) {
+        let lat = afterCluster.latitude
+        let lng = afterCluster.longitude
+        let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
+        marker.iconImage = NMF_MARKER_IMAGE_BLACK
+        if afterCluster.places.count == 1 {
+            marker.iconTintColor = .systemGreen
+        } else {
+            marker.iconTintColor = .systemRed
         }
+        marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: naverMapView.mapView, placeCount: afterCluster.places.count)
+        marker.zIndex = 1
+        marker.mapView = self.mapView
+        marker.touchHandler = self.handler
+        self.clusterMarkers.append(marker)
+        self.clusterObjects.append(afterCluster)
     }
     
     func bindViewModel() {

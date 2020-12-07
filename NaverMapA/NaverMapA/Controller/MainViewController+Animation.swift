@@ -19,14 +19,18 @@ extension MainViewController {
                     let startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeCluster.latitude, lng: beforeCluster.longitude))
                     let endPoint = mapView.projection.point(from: NMGLatLng(lat: afterCluster.latitude, lng: afterCluster.longitude))
                     let markerColor = (beforeClusters.count > 1) ? UIColor.red : UIColor.green
-                    startMarkerAnimation(startPoint: startPoint, endPoint: endPoint, markerColor: markerColor, afterClusters: afterClusters)
+                    startMarkerAnimation(startPoint: startPoint, endPoint: endPoint, markerColor: markerColor, afterCluster: afterCluster)
                     break
                 }
             }
         }
     }
     
-    private func startMarkerAnimation(startPoint: CGPoint, endPoint: CGPoint, markerColor: UIColor, afterClusters: [Cluster]) {
+    private func startMarkerAnimation(startPoint: CGPoint, endPoint: CGPoint, markerColor: UIColor, afterCluster: Cluster) {
+        if startPoint == endPoint { // 같은 위치이면 애니메이션 x
+            self.configureNewMarker(afterCluster: afterCluster)
+            return
+        }
         let marker = NMFMarker()
         marker.iconTintColor = markerColor
         let markerView = self.view(with: marker)
@@ -42,7 +46,7 @@ extension MainViewController {
             markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y)
             CATransaction.setCompletionBlock({
                 markerView.removeFromSuperview()
-                self.configureNewMarkers(afterClusters: afterClusters)
+                self.configureNewMarker(afterCluster: afterCluster)
             })
             markerViewLayer.add(markerAnimation, forKey: "position")
             CATransaction.commit()
@@ -53,11 +57,11 @@ extension MainViewController {
         clusters.forEach { cluster in
             let point = mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longitude))
             let markerColor = (cluster.places.count > 1) ? UIColor.red : UIColor.green
-            startMarkerAppearAnimation(point: point, markerColor: markerColor, clusters: clusters)
+            startMarkerAppearAnimation(point: point, markerColor: markerColor, cluster: cluster)
         }
     }
     
-    private func startMarkerAppearAnimation(point: CGPoint, markerColor: UIColor, clusters: [Cluster]) {
+    private func startMarkerAppearAnimation(point: CGPoint, markerColor: UIColor, cluster: Cluster) {
         let marker = NMFMarker()
         marker.iconTintColor = markerColor
         let markerView = self.view(with: marker)
@@ -73,7 +77,7 @@ extension MainViewController {
             scaleUpAnimation.duration = 0.5
             CATransaction.setCompletionBlock({
                 markerView.removeFromSuperview()
-                self.configureNewMarkers(afterClusters: clusters)
+                self.configureNewMarker(afterCluster: cluster)
             })
             markerViewLayer.add(scaleUpAnimation, forKey: "transform.scale")
             CATransaction.commit()
