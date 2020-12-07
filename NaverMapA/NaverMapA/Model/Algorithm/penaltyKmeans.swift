@@ -107,7 +107,7 @@ final class PenaltyKmeans: Operation, Clusterable {
     }
     
     private func determinateMaxK(count: Int) -> Int {
-        let MAXOPERATION: Double = 250000
+        let MAXOPERATION: Double = 125000
         let a: Double = 5
         let b: Double = 1
         let c: Double = MAXOPERATION / Double(count)
