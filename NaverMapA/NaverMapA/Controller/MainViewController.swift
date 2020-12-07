@@ -96,8 +96,12 @@ class MainViewController: UIViewController {
                     self.deleteBeforeMarkers()
                     self.markerAnimation(beforeClusters: beforeClusters, afterClusters: afterClusters)
                     let na = NaverMapRepository()
-                    na.get(item: afterClusters[0].places[0]){ (result) in
-                       
+                    na.get(item: afterClusters[0].places[0]) { (result) in
+                        do {
+                            print(String(na.getAddress(address: try result.get())!))
+                        } catch {
+                            print(error)
+                        }
                     }
                 }
             })
@@ -107,8 +111,12 @@ class MainViewController: UIViewController {
                     self.deleteBeforeMarkers()
                     self.markerAppearAnimation(clusters: afterClusters)
                     let na = NaverMapRepository()
-                    na.get(item: afterClusters[0].places[0]){ (result) in
-                       
+                    na.get(item: afterClusters[0].places[0]) { (result) in
+                        do {
+                            print(String(na.getAddress(address: try result.get())!))
+                        } catch {
+                            print(error)
+                        }
                     }
                 }
             })

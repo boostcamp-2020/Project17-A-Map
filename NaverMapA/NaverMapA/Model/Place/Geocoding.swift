@@ -24,7 +24,7 @@ struct GeocodingResult: Codable {
 // MARK: - Code
 struct Code: Codable {
     let id, type, mappingID: String?
-
+    
     enum CodingKeys: String, CodingKey {
         case id, type
         case mappingID = "mappingId"
