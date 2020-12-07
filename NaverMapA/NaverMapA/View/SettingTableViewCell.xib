@@ -23,16 +23,11 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevron.forward" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="otD-vq-6aF">
-                        <rect key="frame" x="297.66666666666669" y="13.999999999999998" width="12.333333333333314" height="16.333333333333329"/>
-                    </imageView>
                 </subviews>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="otD-vq-6aF" firstAttribute="centerY" secondItem="njF-e1-oar" secondAttribute="centerY" id="UGY-sh-4KU"/>
-                <constraint firstItem="njF-e1-oar" firstAttribute="trailing" secondItem="otD-vq-6aF" secondAttribute="trailing" constant="10" id="bsz-Rv-ahm"/>
                 <constraint firstItem="nXC-JX-tff" firstAttribute="centerY" secondItem="njF-e1-oar" secondAttribute="centerY" id="fKf-YK-Gwb"/>
                 <constraint firstItem="nXC-JX-tff" firstAttribute="leading" secondItem="njF-e1-oar" secondAttribute="leading" constant="10" id="lD2-2d-uRo"/>
             </constraints>
@@ -43,7 +38,6 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="chevron.forward" catalog="system" width="96" height="128"/>
         <systemColor name="secondarySystemBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

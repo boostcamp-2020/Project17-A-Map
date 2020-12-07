@@ -42,9 +42,6 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        viewModel = MainViewModel(algorithm: ScaleBasedClustering())
-        //viewModel = MainViewModel(algorithm: KMeansClustering())
-        //viewModel = MainViewModel(algorithm: PenaltyKmeans())
         bindViewModel()
         setupMapView()
         if dataProvider.objectCount == 0 {
@@ -126,6 +123,16 @@ class MainViewController: UIViewController {
         }
         self.navigationController?.isNavigationBarHidden = true
         self.view.bringSubviewToFront(settingButton)
+        switch UserDefaults.standard.value(forKey: Setting.State.Algorithm.rawValue) as? Int ?? 0 {
+        case 0:
+            viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        case 1:
+            viewModel = MainViewModel(algorithm: KMeansClustering())
+        case 2:
+            viewModel = MainViewModel(algorithm: PenaltyKmeans())
+        default:
+            viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        }
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
