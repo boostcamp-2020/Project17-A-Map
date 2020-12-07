@@ -7,18 +7,30 @@
 
 import Foundation
 
-final class PenaltyKmeans: Clusterable {
+final class PenaltyKmeans: Operation, Clusterable {
+    var places: [Place] = []
+    var bounds: CoordinateBounds = CoordinateBounds(southWestLng: 0, northEastLng: 0, southWestLat: 0, northEastLat: 0)
+    var clusters: [Cluster] = []
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = PenaltyKmeans()
+        return copy
+    }
+
+    override func main() {
+        if isCancelled {
+            return
+        }
+        clusters = execute(places: places, bounds: bounds)
+    }
     
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
         guard places.count != 0 else { return [] }
         var candidateCluster: [[PenaltyCluster]] = []
         let maximumK = determinateMaxK(count: places.count, bounds: bounds)
-        
-        for k in 1..<maximumK {
+        for k in 1..<maximumK where !isCancelled {
             let clusters = clustering(places: places, k: k)
             candidateCluster.append(clusters)
         }
-        
         return bestCluster(clusters: candidateCluster, count: places.count)
     }
     
@@ -40,8 +52,7 @@ final class PenaltyKmeans: Clusterable {
                 minIdx = i
             }
         }
-        
-        return clusters[minIdx]
+        return isCancelled ? [] : clusters[minIdx]
     }
     
     func clustering(places: [Place], k: Int) -> [PenaltyCluster] {
@@ -83,7 +94,7 @@ final class PenaltyKmeans: Clusterable {
     func distributeToCentroid(places: [Place], centroids: [PenaltyCluster]) -> [PenaltyCluster] {
         let distributedCentroid = centroids
         
-        places.forEach { place in
+        for place in places where !isCancelled {
             let distances = distributedCentroid
                             .map { ($0.distanceTo(place), $0) }
                             .sorted { $0.0 < $1.0 }

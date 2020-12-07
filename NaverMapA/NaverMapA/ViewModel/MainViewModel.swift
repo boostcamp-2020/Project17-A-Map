@@ -13,20 +13,41 @@ class MainViewModel {
     var animationMarkers: Dynamic<([Cluster], [Cluster])> = Dynamic(([], []))
     var clusteringAlgorithm: Clusterable
     var beforeMarkers: [Cluster] = []
-    
+    let queue = OperationQueue()
     init(algorithm: Clusterable) {
         clusteringAlgorithm = algorithm
     }
-    
     func updatePlaces(places: [Place], bounds: CoordinateBounds) {
-        DispatchQueue.global().async {
-            self.markers.value = self.clusteringAlgorithm.execute(places: places, bounds: bounds)
+        queue.cancelAllOperations()
+        let clusteringAlgorithm = self.clusteringAlgorithm.copy()
+        guard let cluster = clusteringAlgorithm as? Clusterable else {
+            return
+        }
+        cluster.places = places
+        cluster.bounds = bounds
+        guard let operation = clusteringAlgorithm as? Operation else {
+            return
+        }
+        queue.addOperation(operation)
+        queue.addBarrierBlock {
+            self.markers.value = cluster.clusters
         }
     }
     
     func updatePlacesAndAnimation(places: [Place], bounds: CoordinateBounds) {
-        DispatchQueue.global().async {
-            var newClusters = self.clusteringAlgorithm.execute(places: places, bounds: bounds)
+        queue.cancelAllOperations()
+        let clusteringAlgorithm = self.clusteringAlgorithm.copy()
+        guard let cluster = clusteringAlgorithm as? Clusterable else {
+            return
+        }
+        cluster.places = places
+        cluster.bounds = bounds
+        guard let operation = clusteringAlgorithm as? Operation else {
+            return
+        }
+        queue.addOperation(operation)
+        queue.addBarrierBlock {
+            var newClusters = cluster.clusters
             for index in 0..<newClusters.count {
                 newClusters[index].placesDictionary.removeAll()
                 newClusters[index].places.forEach { place in
