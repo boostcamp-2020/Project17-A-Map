@@ -27,17 +27,16 @@ extension MainViewController {
     }
     
     private func startMarkerAnimation(startPoint: CGPoint, endPoint: CGPoint, markerColor: UIColor, afterCluster: Cluster) {
+        if startPoint == endPoint { // 같은 위치이면 애니메이션 x
+            self.configureNewMarker(afterCluster: afterCluster)
+            return
+        }
         let marker = NMFMarker()
         marker.iconTintColor = markerColor
         let markerView = self.view(with: marker)
         markerView.frame.origin = CGPoint(x: -100, y: -100)
         mapView.addSubview(markerView)
         let markerViewLayer = markerView.layer
-        if startPoint == endPoint { // 같은 위치이면 애니메이션 x
-            markerView.removeFromSuperview()
-            self.configureNewMarker(afterCluster: afterCluster)
-            return
-        }
         markerViewLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         DispatchQueue.global().async {
             CATransaction.begin()
