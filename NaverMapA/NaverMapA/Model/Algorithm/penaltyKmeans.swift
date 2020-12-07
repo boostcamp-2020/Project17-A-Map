@@ -26,7 +26,7 @@ final class PenaltyKmeans: Operation, Clusterable {
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
         guard places.count != 0 else { return [] }
         var candidateCluster: [[PenaltyCluster]] = []
-        let maximumK = determinateMaxK(count: places.count, bounds: bounds)
+        let maximumK = determinateMaxK(count: places.count)
         for k in 1..<maximumK where !isCancelled {
             let clusters = clustering(places: places, k: k)
             candidateCluster.append(clusters)
@@ -35,13 +35,14 @@ final class PenaltyKmeans: Operation, Clusterable {
     }
     
     func bestCluster(clusters: [[PenaltyCluster]], count: Int) -> [PenaltyCluster] {
+        guard clusters.count != 0 else { return [] }
         var distances = clusters.map { candidate in
             candidate.reduce(0.0, { $0 + $1.totalDistance })
         }
         let diffDistance = (0..<(distances.count) - 1).map { i -> Double in
             return distances[i] - distances[i + 1]
         }
-        let decreaseAverage = diffDistance.reduce(0.0, {$0 + $1}) / Double(diffDistance.count) / 2
+        let decreaseAverage = diffDistance.reduce(0.0, {$0 + $1}) / Double(diffDistance.count)
         var minDistance = Double.greatestFiniteMagnitude
         var minIdx = 0
         
@@ -57,7 +58,7 @@ final class PenaltyKmeans: Operation, Clusterable {
     
     func clustering(places: [Place], k: Int) -> [PenaltyCluster] {
         var centroids = initialCentroid(k: k, places: places)
-        let iterationCount = 3
+        let iterationCount = 5
         centroids = distributeToCentroid(places: places, centroids: centroids)
 
         for _ in 0..<iterationCount {
@@ -95,31 +96,30 @@ final class PenaltyKmeans: Operation, Clusterable {
         let distributedCentroid = centroids
         
         for place in places where !isCancelled {
-            let distances = distributedCentroid
-                            .map { ($0.distanceTo(place), $0) }
-                            .sorted { $0.0 < $1.0 }
-            distances[0].1.append(jsonPlace: place)
+            let nearCluster = distributedCentroid
+                .min { $0.distanceTo(place) < $1.distanceTo(place) }
+            nearCluster?.append(jsonPlace: place)
         }
-
+        
         return distributedCentroid
     }
     
-    func determinateMaxK(count: Int, bounds: CoordinateBounds) -> Int {
-        guard count > 40 else { return 40 }
-        let mapScale = sqrt(pow(bounds.northEastLat - bounds.southWestLat, 2) + pow(bounds.northEastLng - bounds.southWestLng, 2))
-        switch mapScale {
-        case let x where x > 10:
+    func determinateMaxK(count: Int) -> Int {
+        let MAXOPERATION: Double = 250000
+        let a: Double = 5
+        let b: Double = 1
+        let c: Double = MAXOPERATION / Double(count)
+        let root = Int((-b + sqrt(1 + 4 * a * c)) / Double(2 * a))
+        
+        switch (count, root) {
+        case (let x, let y) where x > y:
+            return y
+        case (let x, let y) where x <= y:
+            return x
+        case (_, let y) where y == 0:
             return 1
-        case let x where x > 1:
-            return 2
-        case let x where x > 0.1:
-            return 10
-        case let x where x > 0.01:
-            return 20
-        case let x where x > 0.001:
-            return 30
         default:
-            return 40
+            return 1
         }
     }
 }
