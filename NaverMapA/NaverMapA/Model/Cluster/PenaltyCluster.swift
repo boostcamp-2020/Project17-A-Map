@@ -32,11 +32,8 @@ class PenaltyCluster: Cluster, Equatable {
         self.places = places
     }
     
-    func append(jsonPlace: Place) {
-        let count = places.count
-        latitude = (Double(count)*latitude + jsonPlace.latitude) / Double(count + 1)
-        longitude = (Double(count)*longitude + jsonPlace.longitude) / Double(count + 1)
-        places.append(jsonPlace)
+    func append(place: Place) {
+        places.append(place)
     }
     
     func clearPlaces() {

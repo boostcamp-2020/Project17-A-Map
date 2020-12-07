@@ -33,10 +33,10 @@ final class PenaltyKmeans: Operation, Clusterable {
             let clusters = clustering(places: places, k: k)
             candidateCluster.append(clusters)
         }
-        return bestCluster(clusters: candidateCluster, count: places.count)
+        return bestCluster(clusters: candidateCluster)
     }
     
-    private func bestCluster(clusters: [[PenaltyCluster]], count: Int) -> [PenaltyCluster] {
+    private func bestCluster(clusters: [[PenaltyCluster]]) -> [PenaltyCluster] {
         guard clusters.count != 0 else { return [] }
         var distances = clusters.map { candidate in
             candidate.reduce(0.0, { $0 + $1.totalDistance })
@@ -104,7 +104,7 @@ final class PenaltyKmeans: Operation, Clusterable {
         for place in places where !isCancelled {
             let nearCluster = distributedCentroid
                 .min { $0.distanceTo(place) < $1.distanceTo(place) }
-            nearCluster?.append(jsonPlace: place)
+            nearCluster?.append(place: place)
         }
         
         return distributedCentroid
