@@ -42,7 +42,6 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        bindViewModel()
         setupMapView()
         if dataProvider.objectCount == 0 {
             dataProvider.insert(completionHandler: handleBatchOperationCompletion)
@@ -133,6 +132,7 @@ class MainViewController: UIViewController {
         default:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         }
+        bindViewModel()
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
