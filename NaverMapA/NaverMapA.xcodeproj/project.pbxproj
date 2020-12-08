@@ -42,6 +42,7 @@
 		E0059FBF2563726B00CE6BD7 /* NaverMapATests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FBE2563726B00CE6BD7 /* NaverMapATests.swift */; };
 		E0059FCA2563726C00CE6BD7 /* NaverMapAUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FC92563726C00CE6BD7 /* NaverMapAUITests.swift */; };
 		E0059FEA2563741500CE6BD7 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E0059FE92563741500CE6BD7 /* .swiftlint.yml */; };
+		E07AD780257F728700D07EAF /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD77F257F728700D07EAF /* UserInfo.swift */; };
 		E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5424256F4AA700F799E1 /* MainViewModel.swift */; };
 		E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE542C256F4BC800F799E1 /* Dynamic.swift */; };
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
@@ -126,6 +127,7 @@
 		E0059FC92563726C00CE6BD7 /* NaverMapAUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverMapAUITests.swift; sourceTree = "<group>"; };
 		E0059FCB2563726C00CE6BD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E0059FE92563741500CE6BD7 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		E07AD77F257F728700D07EAF /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		E0AE5424256F4AA700F799E1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0AE542C256F4BC800F799E1 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 		D429CFDF2565828B00B1EECA /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E07AD77E257F727400D07EAF /* PropertyWrapper */,
 				C816202525789C6F00DF61C4 /* Marker */,
 				E0EFA25325754F6200995B0C /* Algorithm */,
 				E0EFA25225754F4000995B0C /* Place */,
@@ -280,6 +283,14 @@
 				E0059FCB2563726C00CE6BD7 /* Info.plist */,
 			);
 			path = NaverMapAUITests;
+			sourceTree = "<group>";
+		};
+		E07AD77E257F727400D07EAF /* PropertyWrapper */ = {
+			isa = PBXGroup;
+			children = (
+				E07AD77F257F728700D07EAF /* UserInfo.swift */,
+			);
+			path = PropertyWrapper;
 			sourceTree = "<group>";
 		};
 		E0AE5418256F48CE00F799E1 /* ViewModel */ = {
@@ -641,6 +652,7 @@
 				D44558CF256611DF006D9D66 /* PlaceProvider.swift in Sources */,
 				E0BCC6C625638972005AD87F /* Environment.swift in Sources */,
 				E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */,
+				E07AD780257F728700D07EAF /* UserInfo.swift in Sources */,
 				D4C2F82B2575193D00F784CE /* DetailPullUpViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
