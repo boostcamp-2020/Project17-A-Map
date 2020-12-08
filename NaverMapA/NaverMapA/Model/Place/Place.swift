@@ -20,6 +20,15 @@ public class Place: NSManagedObject {
         imageUrl = json.imageUrl
         category = json.category
     }
+    
+    func configure(latitude: Double, longitude: Double) {
+        id = ""
+        name = ""
+        self.latitude = latitude
+        self.longitude = longitude
+        imageUrl = nil
+        category = ""
+    }
 }
 
 extension Place {

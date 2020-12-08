@@ -69,6 +69,19 @@ class PlaceProvider {
         }
     }
     
+    func insertPlace(latitide: Double, longitude: Double, completionHandler: @escaping (Error?) -> Void) {
+        DispatchQueue.global().async {
+            let taskContext = self.newTaskContext()
+            let object = Place(context: taskContext)
+            object.configure(latitude: latitide, longitude: longitude)
+            do {
+                try taskContext.save()
+            } catch {
+                completionHandler(PlaceError.saveError)
+            }
+        }
+    }
+    
     func fetch(bounds: CoordinateBounds) -> [Place] {
         let minLng = bounds.southWestLng
         let maxLng = bounds.northEastLng
