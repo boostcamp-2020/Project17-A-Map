@@ -43,6 +43,7 @@
 		E0059FCA2563726C00CE6BD7 /* NaverMapAUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FC92563726C00CE6BD7 /* NaverMapAUITests.swift */; };
 		E0059FEA2563741500CE6BD7 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E0059FE92563741500CE6BD7 /* .swiftlint.yml */; };
 		E07AD780257F728700D07EAF /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD77F257F728700D07EAF /* UserInfo.swift */; };
+		E07AD788257F7FD100D07EAF /* AtomicArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD787257F7FD100D07EAF /* AtomicArray.swift */; };
 		E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5424256F4AA700F799E1 /* MainViewModel.swift */; };
 		E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE542C256F4BC800F799E1 /* Dynamic.swift */; };
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
@@ -128,6 +129,7 @@
 		E0059FCB2563726C00CE6BD7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E0059FE92563741500CE6BD7 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		E07AD77F257F728700D07EAF /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
+		E07AD787257F7FD100D07EAF /* AtomicArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomicArray.swift; sourceTree = "<group>"; };
 		E0AE5424256F4AA700F799E1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0AE542C256F4BC800F799E1 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 			isa = PBXGroup;
 			children = (
 				E07AD77F257F728700D07EAF /* UserInfo.swift */,
+				E07AD787257F7FD100D07EAF /* AtomicArray.swift */,
 			);
 			path = PropertyWrapper;
 			sourceTree = "<group>";
@@ -625,6 +628,7 @@
 				D430320E2570663200BCEB54 /* KMeansClustering.swift in Sources */,
 				C8CE03A42577925B006659D6 /* MainViewController+Animation.swift in Sources */,
 				88937866257D3BC000A5B5C5 /* SettingTableViewController.swift in Sources */,
+				E07AD788257F7FD100D07EAF /* AtomicArray.swift in Sources */,
 				E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */,
 				E0059FA92563726900CE6BD7 /* MainViewController.swift in Sources */,
 				8893786C257D415400A5B5C5 /* SettingTableViewCell.swift in Sources */,

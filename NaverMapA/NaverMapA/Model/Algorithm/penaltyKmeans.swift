@@ -12,8 +12,10 @@ final class PenaltyKmeans: Operation, Clusterable {
     var places: [Place] = []
     var bounds: CoordinateBounds = CoordinateBounds(southWestLng: 0, northEastLng: 0, southWestLat: 0, northEastLat: 0)
     var clusters: [Cluster] = []
+    @AtomicArray<[PenaltyCluster]> var candidates
 
     override func main() {
+        candidates = []
         if isCancelled {
             return
         }
@@ -27,18 +29,13 @@ final class PenaltyKmeans: Operation, Clusterable {
     
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
         guard places.count != 0 else { return [] }
-        var candidateCluster: [[PenaltyCluster]] = []
         let maximumK = determinateMaxK(count: places.count)
         let clusterQueue = DispatchQueue(label: "cluster", attributes: .concurrent)
-        let candidateQueue = DispatchQueue(label: "candidate")
         let group = DispatchGroup()
-            
-        for k in 1..<maximumK where !isCancelled {
+        for k in 1...maximumK where !isCancelled {
             clusterQueue.async(group: group) {
                 let clusters = self.clustering(places: places, k: k)
-                candidateQueue.sync {
-                    candidateCluster.append(clusters)
-                }
+                self.candidates.append(clusters)
             }
         }
         
@@ -47,7 +44,8 @@ final class PenaltyKmeans: Operation, Clusterable {
         if isCancelled || result == .timedOut {
             return []
         }
-        return bestCluster(candidates: candidateCluster)
+        
+        return combineCluster(clusters: bestCluster(candidates: candidates), bounds: bounds)
     }
     
     private func bestCluster(candidates: [[PenaltyCluster]]) -> [PenaltyCluster] {
@@ -59,7 +57,7 @@ final class PenaltyKmeans: Operation, Clusterable {
         let diffDistance = (0..<(distances.count) - 1).map { i -> Double in
             return distances[i] - distances[i + 1]
         }
-        let decreaseAverage = diffDistance.reduce(0.0, {$0 + $1}) / Double(diffDistance.count)
+        let decreaseAverage = diffDistance.reduce(0.0, {$0 + $1}) / Double(diffDistance.count) / 3
         var minDistance = Double.greatestFiniteMagnitude
         var minIdx = 0
         
@@ -71,6 +69,38 @@ final class PenaltyKmeans: Operation, Clusterable {
             }
         }
         return isCancelled ? [] : candidates[minIdx]
+    }
+    
+    func combineCluster(clusters: [PenaltyCluster], bounds: CoordinateBounds ) -> [PenaltyCluster] {
+        let mapScale = sqrt(pow(bounds.northEastLat - bounds.southWestLat, 2) + pow(bounds.northEastLng - bounds.southWestLng, 2)) / 12
+        var tempCluster = clusters
+        var isFlag = true
+        
+        while isFlag {
+            var first: Int?
+            var second: Int?
+            for i in 0..<tempCluster.count where first == nil {
+                for j in (i+1)..<tempCluster.count where first == nil {
+                    if tempCluster[i].distanceTo(tempCluster[j]) <= mapScale {
+                        first = i
+                        second = j
+                        break
+                    }
+                }
+            }
+            if let i = first, let j = second {
+                let newCluster = PenaltyCluster(places: tempCluster[i].places + tempCluster[j].places)
+                tempCluster.remove(at: j)
+                tempCluster.remove(at: i)
+                tempCluster.append(newCluster)
+                
+            } else {
+                
+                isFlag = false
+                continue
+            }
+        }
+        return tempCluster
     }
     
     private func clustering(places: [Place], k: Int) -> [PenaltyCluster] {
