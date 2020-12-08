@@ -76,6 +76,7 @@ class PlaceProvider {
             object.configure(latitude: latitide, longitude: longitude)
             do {
                 try taskContext.save()
+                completionHandler(nil)
             } catch {
                 completionHandler(PlaceError.saveError)
             }

@@ -72,8 +72,12 @@ class MainViewController: UIViewController {
     func addMarker(latlng: NMGLatLng) {
         let alert = UIAlertController(title: "마커 추가", message: "마커를 추가하시겠습니까?", preferredStyle: .alert)
         let okButton = UIAlertAction(title: "확인", style: .default, handler: { _ in
-            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: { error in
-                print(error)
+            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: { t in
+                if t == nil {
+                    self.updateMapView()
+                } else {
+                    return
+                }
             })
         })
         let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
@@ -87,8 +91,12 @@ class MainViewController: UIViewController {
             if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng && cluster.places.count == 1 {
                 let alert = UIAlertController(title: "마커 삭제", message: "마커를 삭제하시겠습니까?", preferredStyle: .alert)
                 let okButton = UIAlertAction(title: "확인", style: .default, handler: { _ in
-                    self.dataProvider.delete(object: cluster.places[0], completionHandler: { error in
-                        print(error)
+                    self.dataProvider.delete(object: cluster.places[0], completionHandler: { t in
+                        if t == nil {
+                            self.updateMapView()
+                        } else {
+                            return
+                        }
                     })
                 })
                 let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
@@ -177,7 +185,7 @@ class MainViewController: UIViewController {
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         }
         bindViewModel()
-        naverMapView.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5656471, lng: 126.9908467), zoom: 18)))
+        updateMapView()
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
