@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 struct Setting {
     enum State: String, CaseIterable {
         case Algorithm = "알고리즘"
@@ -23,6 +24,7 @@ struct Setting {
 }
 
 class SettingTableViewController: UITableViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: SettingTableViewCell.identifier, bundle: .main), forCellReuseIdentifier: SettingTableViewCell.identifier)
@@ -33,6 +35,7 @@ class SettingTableViewController: UITableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return Setting.State.allCases.count
     }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
