@@ -11,6 +11,7 @@ public enum Environment {
 
     enum Keys {
         static let clientId = "CLIENT_ID"
+        static let clientSecret = "CLIENT_SECRET"
     }
     private static let infoDictionary: [String: Any]? = {
         guard let dict = Bundle.main.infoDictionary else {
@@ -23,5 +24,11 @@ public enum Environment {
             return nil
         }
         return id
+    }()
+    static let clientSecret: String? = {
+        guard let secret = Environment.infoDictionary?[Keys.clientSecret] as? String else {
+            return nil
+        }
+        return secret
     }()
 }

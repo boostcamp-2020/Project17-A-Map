@@ -12,6 +12,8 @@
 		8893786C257D415400A5B5C5 /* SettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8893786A257D415400A5B5C5 /* SettingTableViewCell.swift */; };
 		8893786D257D415400A5B5C5 /* SettingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8893786B257D415400A5B5C5 /* SettingTableViewCell.xib */; };
 		8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8898E854256D914C00CFE5B4 /* ScaleBasedClustering.swift */; };
+		88A679FD257E7317004CA6C7 /* NaverMapAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88A679FC257E7317004CA6C7 /* NaverMapAPI.swift */; };
+		88A67A02257E73AF004CA6C7 /* Geocoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88A67A01257E73AF004CA6C7 /* Geocoding.swift */; };
 		997FE8701C4893C3A09145F8 /* Pods_NaverMapATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87992EA48C88244E5F3BD1C3 /* Pods_NaverMapATests.framework */; };
 		C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C816202625789C8A00DF61C4 /* MarkerFactory.swift */; };
 		C8CE03A42577925B006659D6 /* MainViewController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE03A32577925B006659D6 /* MainViewController+Animation.swift */; };
@@ -86,6 +88,8 @@
 		8893786A257D415400A5B5C5 /* SettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewCell.swift; sourceTree = "<group>"; };
 		8893786B257D415400A5B5C5 /* SettingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingTableViewCell.xib; sourceTree = "<group>"; };
 		8898E854256D914C00CFE5B4 /* ScaleBasedClustering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleBasedClustering.swift; sourceTree = "<group>"; };
+		88A679FC257E7317004CA6C7 /* NaverMapAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverMapAPI.swift; sourceTree = "<group>"; };
+		88A67A01257E73AF004CA6C7 /* Geocoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geocoding.swift; sourceTree = "<group>"; };
 		96397F64EEFE1BC37729CE98 /* Pods-NaverMapA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapA.release.xcconfig"; path = "Target Support Files/Pods-NaverMapA/Pods-NaverMapA.release.xcconfig"; sourceTree = "<group>"; };
 		BEE572E6A770EBAC94B87E86 /* Pods_NaverMapA_NaverMapAUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NaverMapA_NaverMapAUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C216106B7FE5408B63595379 /* Pods-NaverMapATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapATests.debug.xcconfig"; path = "Target Support Files/Pods-NaverMapATests/Pods-NaverMapATests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -306,6 +310,7 @@
 		E0AE541A256F48F100F799E1 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				88A679FC257E7317004CA6C7 /* NaverMapAPI.swift */,
 				E0BCC6C525638972005AD87F /* Environment.swift */,
 			);
 			path = Util;
@@ -329,6 +334,7 @@
 				D44558E325661638006D9D66 /* NaverMapA.xcdatamodeld */,
 				D44558C925660D79006D9D66 /* JsonPlace.swift */,
 				D44558CE256611DF006D9D66 /* PlaceProvider.swift */,
+				88A67A01257E73AF004CA6C7 /* Geocoding.swift */,
 			);
 			path = Place;
 			sourceTree = "<group>";
@@ -618,6 +624,7 @@
 				E0EFA24B25754F2D00995B0C /* BasicCluster.swift in Sources */,
 				8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */,
 				D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */,
+				88A67A02257E73AF004CA6C7 /* Geocoding.swift in Sources */,
 				E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */,
 				D499BFCC2575C40700EF369E /* DetailCollectionViewListCell.swift in Sources */,
 				C8D647D8256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift in Sources */,
@@ -628,6 +635,7 @@
 				E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */,
 				E0AE5442256F859B00F799E1 /* CoordinateBounds.swift in Sources */,
 				C8E6A8902575D65600E2451F /* MainViewController+NMFMapViewCameraDelegate.swift in Sources */,
+				88A679FD257E7317004CA6C7 /* NaverMapAPI.swift in Sources */,
 				D44558DB256615CF006D9D66 /* Place.swift in Sources */,
 				D44B6FCA25783BD700E912BB /* DetailViewModel.swift in Sources */,
 				D44558CF256611DF006D9D66 /* PlaceProvider.swift in Sources */,
