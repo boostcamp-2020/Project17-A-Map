@@ -23,6 +23,7 @@ struct Setting {
 }
 
 class SettingTableViewController: UITableViewController {
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: SettingTableViewCell.identifier, bundle: .main), forCellReuseIdentifier: SettingTableViewCell.identifier)

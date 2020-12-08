@@ -26,8 +26,6 @@ class MainViewController: UIViewController {
         return provider
     }()
     var pullUpVC: DetailPullUpViewController?
-    @IBOutlet weak var settingButton: UIButton!
-    
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
             for cluster in self.clusterObjects {
@@ -40,6 +38,9 @@ class MainViewController: UIViewController {
         }
         return true
     }
+    @IBOutlet weak var settingButton: UIButton!
+    
+    // MARK: - ViewLifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,115 +53,8 @@ class MainViewController: UIViewController {
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         backBarButtonItem.tintColor = .black
         self.navigationItem.backBarButtonItem = backBarButtonItem
-        // gesture
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
         mapView.addGestureRecognizer(longPressGesture)
-    }
-    
-    @objc func longPressed(sender: UILongPressGestureRecognizer) {
-        if sender.state == UIGestureRecognizer.State.began {
-            let currentPoint: CGPoint = sender.location(in: mapView)
-            let latlng = mapView.projection.latlng(from: currentPoint)
-            guard let marker = mapView.pick(currentPoint) as? NMFMarker else {
-                addMarker(latlng: latlng)
-                return
-            }
-            deleteMarker(marker: marker)
-        }
-    }
-    
-    func addMarker(latlng: NMGLatLng) {
-        let alert = UIAlertController(title: "마커 추가", message: "마커를 추가하시겠습니까?", preferredStyle: .alert)
-        let okButton = UIAlertAction(title: "확인", style: .default, handler: { _ in
-            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: { t in
-                if t == nil {
-                    self.updateMapView()
-                } else {
-                    return
-                }
-            })
-        })
-        let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        alert.addAction(okButton)
-        alert.addAction(cancelButton)
-        present(alert, animated: false, completion: nil)
-    }
-    
-    func deleteMarker(marker: NMFMarker) {
-        clusterObjects.forEach { cluster in
-            if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng && cluster.places.count == 1 {
-                let alert = UIAlertController(title: "마커 삭제", message: "마커를 삭제하시겠습니까?", preferredStyle: .alert)
-                let okButton = UIAlertAction(title: "확인", style: .default, handler: { _ in
-                    self.dataProvider.delete(object: cluster.places[0], completionHandler: { t in
-                        if t == nil {
-                            self.updateMapView()
-                        } else {
-                            return
-                        }
-                    })
-                })
-                let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-                alert.addAction(okButton)
-                alert.addAction(cancelButton)
-                present(alert, animated: false, completion: nil)
-            }
-        }
-    }
-    
-    func setupMapView() {
-        naverMapView = NMFNaverMapView(frame: view.frame)
-        naverMapView.showZoomControls = true
-        naverMapView.showCompass = false
-        naverMapView.showLocationButton = false
-        naverMapView.showScaleBar = false
-        naverMapView.showIndoorLevelPicker = true
-        naverMapView.mapView.addCameraDelegate(delegate: self)
-        naverMapView.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5656471, lng: 126.9908467), zoom: 18)))
-        view.addSubview(naverMapView)
-    }
-    
-    func deleteBeforeMarkers() {
-        for clusterMarker in self.clusterMarkers {
-            clusterMarker.mapView = nil
-        }
-        self.clusterMarkers.removeAll()
-        self.clusterObjects.removeAll()
-    }
-    
-    func configureNewMarker(afterCluster: Cluster) {
-        let lat = afterCluster.latitude
-        let lng = afterCluster.longitude
-        let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
-        marker.iconImage = NMF_MARKER_IMAGE_BLACK
-        if afterCluster.places.count == 1 {
-            marker.iconTintColor = .systemGreen
-        } else {
-            marker.iconTintColor = .systemRed
-        }
-        marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: naverMapView.mapView, placeCount: afterCluster.places.count)
-        marker.zIndex = 1
-        marker.mapView = self.mapView
-        marker.touchHandler = self.handler
-        self.clusterMarkers.append(marker)
-        self.clusterObjects.append(afterCluster)
-    }
-    
-    func bindViewModel() {
-        if let viewModel = viewModel {
-            viewModel.animationMarkers.bind({ (beforeClusters, afterClusters) in
-                DispatchQueue.main.async {
-                    self.deleteBeforeMarkers()
-                    self.markerAnimation(beforeClusters: beforeClusters, afterClusters: afterClusters)
-                }
-            })
-            
-            viewModel.markers.bind({ afterClusters in
-                DispatchQueue.main.async {
-                    self.deleteBeforeMarkers()
-                    self.markerAppearAnimation(clusters: afterClusters)
-                }
-            })
-        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -187,11 +81,106 @@ class MainViewController: UIViewController {
         bindViewModel()
         updateMapView()
     }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.navigationController?.isNavigationBarHidden = false
     }
-    // MARK: - Methods
+    
+    // MARK: - Initailize
+    
+    private func setupMapView() {
+        naverMapView = NMFNaverMapView(frame: view.frame)
+        naverMapView.showZoomControls = true
+        naverMapView.showCompass = false
+        naverMapView.showLocationButton = false
+        naverMapView.showScaleBar = false
+        naverMapView.showIndoorLevelPicker = true
+        naverMapView.mapView.addCameraDelegate(delegate: self)
+        naverMapView.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5656471, lng: 126.9908467), zoom: 18)))
+        view.addSubview(naverMapView)
+    }
+    
+    // MARK: - Method
+    
+    private func addMarker(latlng: NMGLatLng) {
+        let alert = UIAlertController(title: "마커 추가", message: "마커를 추가하시겠습니까?", preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
+        })
+        let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alert.addAction(okButton)
+        alert.addAction(cancelButton)
+        present(alert, animated: false, completion: nil)
+    }
+    
+    private func deleteMarker(marker: NMFMarker) {
+        for cluster in clusterObjects {
+            if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng && cluster.places.count == 1 {
+                let alert = UIAlertController(title: "마커 삭제", message: "마커를 삭제하시겠습니까?", preferredStyle: .alert)
+                let okButton = UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    self.dataProvider.delete(object: cluster.places[0], completionHandler: self.coreDataUpdateHandler)
+                })
+                let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+                alert.addAction(okButton)
+                alert.addAction(cancelButton)
+                present(alert, animated: false, completion: nil)
+                break
+            }
+        }
+    }
+    
+    private func coreDataUpdateHandler(result: Error?) {
+        if result == nil {
+            updateMapView()
+        }
+    }
+    
+    private func deleteBeforeMarkers() {
+        for clusterMarker in self.clusterMarkers {
+            clusterMarker.mapView = nil
+        }
+        self.clusterMarkers.removeAll()
+        self.clusterObjects.removeAll()
+    }
+    
+    func configureNewMarker(afterCluster: Cluster) {
+        let lat = afterCluster.latitude
+        let lng = afterCluster.longitude
+        let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
+        marker.iconImage = NMF_MARKER_IMAGE_BLACK
+        if afterCluster.places.count == 1 {
+            marker.iconTintColor = .systemGreen
+        } else {
+            marker.iconTintColor = .systemRed
+        }
+        marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: naverMapView.mapView, placeCount: afterCluster.places.count)
+        marker.zIndex = 1
+        marker.mapView = self.mapView
+        marker.touchHandler = self.handler
+        self.clusterMarkers.append(marker)
+        self.clusterObjects.append(afterCluster)
+    }
+    
+    private func bindViewModel() {
+        if let viewModel = viewModel {
+            viewModel.animationMarkers.bind({ (beforeClusters, afterClusters) in
+                DispatchQueue.main.async {
+                    self.deleteBeforeMarkers()
+                    self.markerAnimation(beforeClusters: beforeClusters, afterClusters: afterClusters)
+                }
+            })
+            
+            viewModel.markers.bind({ afterClusters in
+                DispatchQueue.main.async {
+                    self.deleteBeforeMarkers()
+                    self.markerAppearAnimation(clusters: afterClusters)
+                }
+            })
+        }
+    }
     
     private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, action: UIAlertAction) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
@@ -250,18 +239,21 @@ class MainViewController: UIViewController {
         self.pullUpVC?.delegate = self
     }
     
+    @objc func longPressed(sender: UILongPressGestureRecognizer) {
+        if sender.state == UIGestureRecognizer.State.began {
+            let currentPoint: CGPoint = sender.location(in: mapView)
+            let latlng = mapView.projection.latlng(from: currentPoint)
+            guard let marker = mapView.pick(currentPoint) as? NMFMarker else {
+                addMarker(latlng: latlng)
+                return
+            }
+            deleteMarker(marker: marker)
+        }
+    }
+    
 }
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    }
-}
-
-extension UIView {
-    func getImage() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(bounds: bounds)
-        return renderer.image { rendererContext in
-            layer.render(in: rendererContext.cgContext)
-        }
     }
 }
