@@ -57,8 +57,16 @@ class MainViewController: UIViewController {
     }
     
     @objc func longPressed(sender: UILongPressGestureRecognizer) {
-        let currentPoint: CGPoint = sender.location(in: mapView)
-        let latlng = mapView.projection.latlng(from: currentPoint)
+        if sender.state == UIGestureRecognizer.State.began {
+            let currentPoint: CGPoint = sender.location(in: mapView)
+            let latlng = mapView.projection.latlng(from: currentPoint)
+            let alert = UIAlertController(title: "마커 추가", message: "마커를 추가하시겠습니까낑꾱?", preferredStyle: .alert)
+            let okButton = UIAlertAction(title: "확인", style: .default, handler: nil)
+            let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+            alert.addAction(okButton)
+            alert.addAction(cancelButton)
+            present(alert, animated: false, completion: nil)
+        }
     }
     
     func setupMapView() {
