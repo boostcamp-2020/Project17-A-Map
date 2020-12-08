@@ -47,49 +47,15 @@ class SettingTableViewController: UITableViewController {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: SettingTableViewCell.identifier, for: indexPath) as? SettingTableViewCell else {
             return UITableViewCell()
         }
-        switch indexPath.section {
-        case 0:
-            cell.titleLabel.text = Setting.Algorithm.allCases[indexPath.row].rawValue
-            let value: String = UserDefaults.standard.value(forKey: Setting.State.Algorithm.rawValue) as? String ?? Setting.Algorithm.allCases[0].rawValue
-            UserDefaults.standard.setValue(value, forKey: Setting.State.Algorithm.rawValue)
-            if Setting.Algorithm.allCases[indexPath.row].rawValue == value {
-                cell.accessoryType = .checkmark
-            } else {
-                cell.accessoryType = .none
-            }
-        case 1:
-            cell.titleLabel.text = Setting.Animation.allCases[indexPath.row].rawValue
-            let value: String = UserDefaults.standard.value(forKey: Setting.State.Animation.rawValue) as? String ?? Setting.Animation.allCases[0].rawValue
-            UserDefaults.standard.setValue(value, forKey: Setting.State.Animation.rawValue)
-            if Setting.Animation.allCases[indexPath.row].rawValue == value {
-                cell.accessoryType = .checkmark
-            } else {
-                cell.accessoryType = .none
-            }
-        default:
-            break
-        }
+        cell.configure(indexPath: indexPath)
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        for i in 0..<tableView.numberOfRows(inSection: indexPath.section) {
-            guard let cell: UITableViewCell = tableView.cellForRow(at: IndexPath(row: i, section: indexPath.section) as IndexPath) else {
+        for index in 0..<tableView.numberOfRows(inSection: indexPath.section) {
+            guard let cell: SettingTableViewCell = tableView.cellForRow(at: IndexPath(row: index, section: indexPath.section) as IndexPath) as? SettingTableViewCell else {
                 return
             }
-            if i == indexPath.row {
-                cell.accessoryType = .checkmark
-                cell.isSelected = false
-                switch indexPath.section {
-                case 0:
-                    UserDefaults.standard.setValue(Setting.Algorithm.allCases[indexPath.row].rawValue, forKey: Setting.State.Algorithm.rawValue)
-                case 1:
-                    UserDefaults.standard.setValue(Setting.Animation.allCases[indexPath.row].rawValue, forKey: Setting.State.Animation.rawValue)
-                default:
-                    break
-                }
-            } else {
-                cell.accessoryType = .none
-            }
+            cell.selectedConfigure(isSelected: index == indexPath.row, indexPath: indexPath)
         }
     }
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
