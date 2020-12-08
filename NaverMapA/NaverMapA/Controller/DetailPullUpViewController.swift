@@ -21,6 +21,8 @@ class DetailPullUpViewController: UIViewController {
         case half
         case short
     }
+    
+    private let panGestureVelocityThreshold: CGFloat = 200
 
     // MARK: - Properties
     
@@ -171,7 +173,7 @@ class DetailPullUpViewController: UIViewController {
             let maxY = UIScreen.main.bounds.height
             let yPosition = self.view.frame.minY
             let velocity = recognizer.velocity(in: self.view)
-            if abs(velocity.y) > abs(velocity.x) && abs(velocity.y) > 200 {
+            if abs(velocity.y) > abs(velocity.x) && abs(velocity.y) > self.panGestureVelocityThreshold {
                 if velocity.y < 0 {
                     if yPosition <= self.halfViewPosition {
                         self.moveView(state: .full)
