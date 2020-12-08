@@ -9,6 +9,13 @@ import Foundation
 import NMapsMap
 
 extension MainViewController: NMFMapViewCameraDelegate {
+    
+    func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
+        view.layer.sublayers?.forEach { subLayer in
+            subLayer.removeAllAnimations()
+        }
+    }
+    
     func mapViewCameraIdle(_ mapView: NMFMapView) {
         let coordBounds = mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
         let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,

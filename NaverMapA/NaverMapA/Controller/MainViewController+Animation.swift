@@ -34,10 +34,9 @@ extension MainViewController {
         let marker = NMFMarker()
         marker.iconTintColor = markerColor
         let markerView = self.view(with: marker)
-        markerView.frame.origin = CGPoint(x: -100, y: -100)
-        mapView.addSubview(markerView)
-        let markerViewLayer = markerView.layer
-        markerViewLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
+        markerView.frame.origin = CGPoint(x: -100, y: -100) // 0,0 좌표에 마커 잔상을 없애주기 위함
+        view.layer.addSublayer(markerView.layer)
+        markerView.layer.anchorPoint = CGPoint(x: 0.5, y: 1)
         DispatchQueue.global().async {
             CATransaction.begin()
             let markerAnimation = CABasicAnimation(keyPath: "position")
@@ -45,10 +44,10 @@ extension MainViewController {
             markerAnimation.fromValue = CGPoint(x: startPoint.x, y: startPoint.y)
             markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y)
             CATransaction.setCompletionBlock({
-                markerView.removeFromSuperview()
+                markerView.layer.removeFromSuperlayer()
                 self.configureNewMarker(afterCluster: afterCluster)
             })
-            markerViewLayer.add(markerAnimation, forKey: "position")
+            markerView.layer.add(markerAnimation, forKey: "position")
             CATransaction.commit()
         }
     }
@@ -65,10 +64,9 @@ extension MainViewController {
         let marker = NMFMarker()
         marker.iconTintColor = markerColor
         let markerView = self.view(with: marker)
-        mapView.addSubview(markerView)
-        let markerViewLayer = markerView.layer
-        markerViewLayer.position = point
-        markerViewLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
+        view.layer.addSublayer(markerView.layer)
+        markerView.layer.position = point
+        markerView.layer.anchorPoint = CGPoint(x: 0.5, y: 1)
         DispatchQueue.global().async {
             CATransaction.begin()
             let scaleUpAnimation = CABasicAnimation(keyPath: "transform.scale")
@@ -76,10 +74,10 @@ extension MainViewController {
             scaleUpAnimation.toValue = 1
             scaleUpAnimation.duration = 0.5
             CATransaction.setCompletionBlock({
-                markerView.removeFromSuperview()
+                markerView.layer.removeFromSuperlayer()
                 self.configureNewMarker(afterCluster: cluster)
             })
-            markerViewLayer.add(scaleUpAnimation, forKey: "transform.scale")
+            markerView.layer.add(scaleUpAnimation, forKey: "transform.scale")
             CATransaction.commit()
         }
     }
