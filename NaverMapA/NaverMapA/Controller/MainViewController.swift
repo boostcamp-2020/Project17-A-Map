@@ -51,6 +51,14 @@ class MainViewController: UIViewController {
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         backBarButtonItem.tintColor = .black
         self.navigationItem.backBarButtonItem = backBarButtonItem
+        // gesture
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
+        mapView.addGestureRecognizer(longPressGesture)
+    }
+    
+    @objc func longPressed(sender: UILongPressGestureRecognizer) {
+        let currentPoint: CGPoint = sender.location(in: mapView)
+        let latlng = mapView.projection.latlng(from: currentPoint)
     }
     
     func setupMapView() {
