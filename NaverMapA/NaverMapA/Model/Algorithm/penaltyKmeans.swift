@@ -29,16 +29,31 @@ final class PenaltyKmeans: Operation, Clusterable {
         guard places.count != 0 else { return [] }
         var candidateCluster: [[PenaltyCluster]] = []
         let maximumK = determinateMaxK(count: places.count)
+        let clusterQueue = DispatchQueue(label: "cluster", attributes: .concurrent)
+        let candidateQueue = DispatchQueue(label: "candidate")
+        let group = DispatchGroup()
+            
         for k in 1..<maximumK where !isCancelled {
-            let clusters = clustering(places: places, k: k)
-            candidateCluster.append(clusters)
+            clusterQueue.async(group: group) {
+                let clusters = self.clustering(places: places, k: k)
+                candidateQueue.sync {
+                    candidateCluster.append(clusters)
+                }
+            }
         }
-        return bestCluster(clusters: candidateCluster)
+        
+        let result = group.wait(timeout: .distantFuture)
+        
+        if isCancelled || result == .timedOut {
+            return []
+        }
+        return bestCluster(candidates: candidateCluster)
     }
     
-    private func bestCluster(clusters: [[PenaltyCluster]]) -> [PenaltyCluster] {
-        guard clusters.count != 0 else { return [] }
-        var distances = clusters.map { candidate in
+    private func bestCluster(candidates: [[PenaltyCluster]]) -> [PenaltyCluster] {
+        guard candidates.count != 0 else { return [] }
+        guard candidates.count != 1 else { return candidates[0] }
+        var distances = candidates.map { candidate in
             candidate.reduce(0.0, { $0 + $1.totalDistance })
         }
         let diffDistance = (0..<(distances.count) - 1).map { i -> Double in
@@ -55,7 +70,7 @@ final class PenaltyKmeans: Operation, Clusterable {
                 minIdx = i
             }
         }
-        return isCancelled ? [] : clusters[minIdx]
+        return isCancelled ? [] : candidates[minIdx]
     }
     
     private func clustering(places: [Place], k: Int) -> [PenaltyCluster] {

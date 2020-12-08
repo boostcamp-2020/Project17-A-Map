@@ -78,6 +78,7 @@ class PlaceProvider {
         let lngPredict = NSPredicate(format: "longitude >= %lf && longitude <= %lf", minLng, maxLng)
         let latPredict = NSPredicate(format: "latitude >= %lf && latitude <= %lf", minLat, maxLat)
         fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [lngPredict, latPredict])
+        fetchRequest.returnsObjectsAsFaults = false
         return (try? mainContext.fetch(fetchRequest)) ?? []
     }
     
