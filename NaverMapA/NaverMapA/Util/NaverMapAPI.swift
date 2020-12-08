@@ -8,15 +8,9 @@
 import Foundation
 import Network
 
-class NaverMapRepository: Repository {
-    typealias Entity = Place
-    
+class NaverMapAPI {
     private let baseURL = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc"
-    
-    func getAll(finishedCallback: @escaping (_ labels: [Entity]?) -> Void) {
-    }
-    
-    func get(item entity: Entity, completion: ((Result<Data, Error>) -> Void)?) {
+    func getData(item entity: Place, completion: ((Result<Data, Error>) -> Void)?) {
         guard let url = URL(string: "\(baseURL)?coords=\(entity.longitude),\(entity.latitude)&output=json&orders=roadaddr") else {
             return
         }
@@ -41,14 +35,8 @@ class NaverMapRepository: Repository {
         })
         task.resume()
     }
-    func insert(item: Entity) throws {
-    }
-    func update(item: Entity) throws {
-    }
-    func delete(item: Entity) throws {
-    }
 }
-extension NaverMapRepository {
+extension NaverMapAPI {
     func getAddress(address: Data) -> String? {
         let geocoding = try? JSONDecoder().decode(Geocoding.self, from: address).results?.first
         let region = geocoding?.region
