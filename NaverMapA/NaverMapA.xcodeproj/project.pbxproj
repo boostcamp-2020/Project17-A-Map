@@ -26,6 +26,7 @@
 		D44558DB256615CF006D9D66 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558D9256615CF006D9D66 /* Place.swift */; };
 		D44558E525661638006D9D66 /* NaverMapA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D44558E325661638006D9D66 /* NaverMapA.xcdatamodeld */; };
 		D44B6FCA25783BD700E912BB /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44B6FC925783BD700E912BB /* DetailViewModel.swift */; };
+		D45B7D34257F7590009208D9 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B7D33257F7590009208D9 /* Animator.swift */; };
 		D499BFCC2575C40700EF369E /* DetailCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFCA2575C40700EF369E /* DetailCollectionViewListCell.swift */; };
 		D499BFCD2575C40700EF369E /* DetailCollectionViewListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */; };
 		D499BFD32575C41400EF369E /* DetailCollectionViewDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */; };
@@ -105,6 +106,7 @@
 		D44558D9256615CF006D9D66 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Place.swift; path = NaverMapA/Model/Place/Place.swift; sourceTree = SOURCE_ROOT; };
 		D44558E425661638006D9D66 /* NaverMapA.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NaverMapA.xcdatamodel; sourceTree = "<group>"; };
 		D44B6FC925783BD700E912BB /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
+		D45B7D33257F7590009208D9 /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		D499BFCA2575C40700EF369E /* DetailCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewListCell.swift; sourceTree = "<group>"; };
 		D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailCollectionViewListCell.xib; sourceTree = "<group>"; };
 		D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewDetailCell.swift; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				E0EFA25325754F6200995B0C /* Algorithm */,
 				E0EFA25225754F4000995B0C /* Place */,
 				E0EFA23B25754EFD00995B0C /* Cluster */,
+				D45B7D33257F7590009208D9 /* Animator.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -619,6 +622,7 @@
 				8893786C257D415400A5B5C5 /* SettingTableViewCell.swift in Sources */,
 				E0EFA23D25754F0D00995B0C /* PenaltyCluster.swift in Sources */,
 				C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */,
+				D45B7D34257F7590009208D9 /* Animator.swift in Sources */,
 				E0AE5437256F50D900F799E1 /* Clusterable.swift in Sources */,
 				E0AE5492257128A700F799E1 /* penaltyKmeans.swift in Sources */,
 				E0EFA24B25754F2D00995B0C /* BasicCluster.swift in Sources */,
