@@ -170,6 +170,25 @@ class DetailPullUpViewController: UIViewController {
             guard let self = self else { return }
             let maxY = UIScreen.main.bounds.height
             let yPosition = self.view.frame.minY
+            let velocity = recognizer.velocity(in: self.view)
+            if abs(velocity.y) > abs(velocity.x) && abs(velocity.y) > 200 {
+                if velocity.y < 0 {
+                    if yPosition <= self.halfViewPosition {
+                        self.moveView(state: .full)
+                    } else
+                    if yPosition <= self.shortViewPosition {
+                        self.moveView(state: .half)
+                    }
+                } else {
+                    if yPosition >= self.halfViewPosition {
+                        self.moveView(state: .short)
+                    } else
+                    if yPosition >= self.fullViewPosition {
+                        self.moveView(state: .half)
+                    }
+                }
+                return
+            }
             if yPosition <= maxY / 3.0 {
                 self.moveView(state: .full)
             } else if yPosition <= maxY / 3.0 * 2.0 {
