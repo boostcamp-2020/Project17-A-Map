@@ -25,6 +25,7 @@ class MainViewController: UIViewController {
         return provider
     }()
     var pullUpVC: DetailPullUpViewController?
+    @IBOutlet weak var settingButton: UIButton!
     
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
@@ -41,14 +42,15 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //viewModel = MainViewModel(algorithm: ScaleBasedClustering())
-        //viewModel = MainViewModel(algorithm: KMeansClustering())
-        viewModel = MainViewModel(algorithm: PenaltyKmeans())
-        bindViewModel()
         setupMapView()
         if dataProvider.objectCount == 0 {
             dataProvider.insert(completionHandler: handleBatchOperationCompletion)
         }
+        settingButton.layer.cornerRadius = settingButton.bounds.size.width / 2.0
+        settingButton.clipsToBounds = true
+        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        backBarButtonItem.tintColor = .black
+        self.navigationItem.backBarButtonItem = backBarButtonItem
     }
     
     func setupMapView() {
@@ -116,8 +118,24 @@ class MainViewController: UIViewController {
             showAlert(title: "에러", message: "ClientID가 없습니다.", preferredStyle: UIAlertController.Style.alert, action: okAction)
             return
         }
+        self.navigationController?.isNavigationBarHidden = true
+        self.view.bringSubviewToFront(settingButton)
+        switch UserDefaults.standard.value(forKey: Setting.State.Algorithm.rawValue) as? String ?? "" {
+        case Setting.Algorithm.kims.rawValue:
+            viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        case Setting.Algorithm.kmeansElbow.rawValue:
+            viewModel = MainViewModel(algorithm: KMeansClustering())
+        case Setting.Algorithm.kmeansPenalty.rawValue:
+            viewModel = MainViewModel(algorithm: PenaltyKmeans())
+        default:
+            viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        }
+        bindViewModel()
     }
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = false
+    }
     // MARK: - Methods
     
     private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, action: UIAlertAction) {
