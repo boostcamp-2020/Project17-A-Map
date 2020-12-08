@@ -11,9 +11,11 @@ import NMapsMap
 extension MainViewController: NMFMapViewCameraDelegate {
     
     func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
-        view.layer.sublayers?.forEach { subLayer in
-            subLayer.removeAllAnimations()
-        }
+        animationLayer?.sublayers?.forEach({
+            $0.removeFromSuperlayer()
+        })
+        viewModel?.queue.cancelAllOperations()
+        viewModel?.animationQueue.cancelAllOperations()
     }
     
     func mapViewCameraIdle(_ mapView: NMFMapView) {
@@ -31,4 +33,5 @@ extension MainViewController: NMFMapViewCameraDelegate {
             viewModel.updatePlaces(places: places, bounds: bounds)
         }
     }
+    
 }

@@ -27,6 +27,8 @@ class MainViewController: UIViewController {
     var pullUpVC: DetailPullUpViewController?
     @IBOutlet weak var settingButton: UIButton!
     
+    var animationLayer: CALayer?
+    
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
             for cluster in self.clusterObjects {
@@ -51,6 +53,9 @@ class MainViewController: UIViewController {
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         backBarButtonItem.tintColor = .black
         self.navigationItem.backBarButtonItem = backBarButtonItem
+        animationLayer = CALayer()
+        animationLayer?.frame = CGRect(origin: .zero, size: view.frame.size)
+        mapView.layer.addSublayer(animationLayer!)
     }
     
     func setupMapView() {
@@ -88,23 +93,26 @@ class MainViewController: UIViewController {
         marker.mapView = self.mapView
         marker.touchHandler = self.handler
         self.clusterMarkers.append(marker)
-        self.clusterObjects.append(afterCluster)
     }
     
     func bindViewModel() {
         if let viewModel = viewModel {
             viewModel.animationMarkers.bind({ (beforeClusters, afterClusters) in
-                DispatchQueue.main.async {
+                viewModel.animationQueue.addOperation {
                     self.deleteBeforeMarkers()
-                    self.markerAnimation(beforeClusters: beforeClusters, afterClusters: afterClusters)
+                    self.clusterObjects = afterClusters
                 }
+                guard let animationLayer = self.animationLayer else { return }
+                viewModel.animationQueue.addOperation(MoveAnimator(mapView: self.mapView, animationLayer: animationLayer, beforeClusters: beforeClusters, afterClusters: afterClusters, handler: self.configureNewMarker))
             })
             
             viewModel.markers.bind({ afterClusters in
-                DispatchQueue.main.async {
+                viewModel.animationQueue.addOperation {
                     self.deleteBeforeMarkers()
-                    self.markerAppearAnimation(clusters: afterClusters)
+                    self.clusterObjects = afterClusters
                 }
+                guard let animationLayer = self.animationLayer else { return }
+                viewModel.animationQueue.addOperation(AppearAnimator(mapView: self.mapView, animationLayer: animationLayer, clusters: afterClusters, handler: self.configureNewMarker))
             })
         }
     }
@@ -199,6 +207,10 @@ class MainViewController: UIViewController {
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        
+    }
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
+        print("@@@@@@@@@@@@@@@@@")
     }
 }
 
@@ -208,5 +220,15 @@ extension UIView {
         return renderer.image { rendererContext in
             layer.render(in: rendererContext.cgContext)
         }
+    }
+}
+
+extension MainViewController {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        viewModel?.queue.cancelAllOperations()
+        viewModel?.animationQueue.cancelAllOperations()
+        animationLayer?.sublayers?.forEach({
+            $0.removeFromSuperlayer()
+        })
     }
 }
