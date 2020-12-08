@@ -62,7 +62,7 @@ class DetailPullUpViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+        UIView.animate(withDuration: 0.4, animations: { [weak self] in
             guard let self = self else { return }
             self.moveView(state: .short)
         })
@@ -166,7 +166,7 @@ class DetailPullUpViewController: UIViewController {
     @objc private func panGesture(_ recognizer: UIPanGestureRecognizer) {
         moveView(panGestureRecognizer: recognizer)
         guard recognizer.state == .ended else { return }
-        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+        UIView.animate(withDuration: 0.4, animations: { [weak self] in
             guard let self = self else { return }
             let maxY = UIScreen.main.bounds.height
             let yPosition = self.view.frame.minY
