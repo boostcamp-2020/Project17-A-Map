@@ -10,6 +10,7 @@ import NMapsMap
 import CoreData
 
 class MainViewController: UIViewController {
+    
     var naverMapView: NMFNaverMapView!
     var mapView: NMFMapView {
         return naverMapView.mapView
@@ -60,12 +61,41 @@ class MainViewController: UIViewController {
         if sender.state == UIGestureRecognizer.State.began {
             let currentPoint: CGPoint = sender.location(in: mapView)
             let latlng = mapView.projection.latlng(from: currentPoint)
-            let alert = UIAlertController(title: "마커 추가", message: "마커를 추가하시겠습니까낑꾱?", preferredStyle: .alert)
-            let okButton = UIAlertAction(title: "확인", style: .default, handler: nil)
-            let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-            alert.addAction(okButton)
-            alert.addAction(cancelButton)
-            present(alert, animated: false, completion: nil)
+            guard let marker = mapView.pick(currentPoint) as? NMFMarker else {
+                addMarker(latlng: latlng)
+                return
+            }
+            deleteMarker(marker: marker)
+        }
+    }
+    
+    func addMarker(latlng: NMGLatLng) {
+        let alert = UIAlertController(title: "마커 추가", message: "마커를 추가하시겠습니까?", preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "확인", style: .default, handler: { _ in
+            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: { error in
+                print(error)
+            })
+        })
+        let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alert.addAction(okButton)
+        alert.addAction(cancelButton)
+        present(alert, animated: false, completion: nil)
+    }
+    
+    func deleteMarker(marker: NMFMarker) {
+        clusterObjects.forEach { cluster in
+            if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng && cluster.places.count == 1 {
+                let alert = UIAlertController(title: "마커 삭제", message: "마커를 삭제하시겠습니까?", preferredStyle: .alert)
+                let okButton = UIAlertAction(title: "확인", style: .default, handler: { _ in
+                    self.dataProvider.delete(object: cluster.places[0], completionHandler: { error in
+                        print(error)
+                    })
+                })
+                let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+                alert.addAction(okButton)
+                alert.addAction(cancelButton)
+                present(alert, animated: false, completion: nil)
+            }
         }
     }
     
@@ -147,6 +177,7 @@ class MainViewController: UIViewController {
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         }
         bindViewModel()
+        naverMapView.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5656471, lng: 126.9908467), zoom: 18)))
     }
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)

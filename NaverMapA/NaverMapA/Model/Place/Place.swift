@@ -23,7 +23,7 @@ public class Place: NSManagedObject {
     
     func configure(latitude: Double, longitude: Double) {
         id = ""
-        name = ""
+        name = "사용자 지정 마커"
         self.latitude = latitude
         self.longitude = longitude
         imageUrl = nil
