@@ -122,12 +122,12 @@ class MainViewController: UIViewController {
         }
         self.navigationController?.isNavigationBarHidden = true
         self.view.bringSubviewToFront(settingButton)
-        switch UserDefaults.standard.value(forKey: Setting.State.Algorithm.rawValue) as? Int ?? 0 {
-        case 0:
+        switch UserDefaults.standard.value(forKey: Setting.State.Algorithm.rawValue) as? String ?? "" {
+        case Setting.Algorithm.kims.rawValue:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
-        case 1:
+        case Setting.Algorithm.kmeansElbow.rawValue:
             viewModel = MainViewModel(algorithm: KMeansClustering())
-        case 2:
+        case Setting.Algorithm.kmeansPenalty.rawValue:
             viewModel = MainViewModel(algorithm: PenaltyKmeans())
         default:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
