@@ -21,16 +21,16 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="as2-qC-Mrg">
-                        <rect key="frame" x="15" y="10" width="41.5" height="41"/>
+                        <rect key="frame" x="15" y="10" width="423" height="41"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ie4-uL-VBA">
-                                <rect key="frame" x="0.0" y="0.0" width="41.5" height="20.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="423" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Yjh-dr-4yu">
-                                <rect key="frame" x="0.0" y="20.5" width="41.5" height="20.5"/>
+                                <rect key="frame" x="0.0" y="20.5" width="423" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -50,7 +50,7 @@
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="XIg-N1-kPy" secondAttribute="trailing" constant="15" id="0UL-Tg-Sl8"/>
                 <constraint firstItem="XIg-N1-kPy" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="1KR-R1-HvR"/>
-                <constraint firstItem="XIg-N1-kPy" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="as2-qC-Mrg" secondAttribute="trailing" constant="10" id="6Fq-6z-NfU"/>
+                <constraint firstItem="XIg-N1-kPy" firstAttribute="leading" secondItem="as2-qC-Mrg" secondAttribute="trailing" constant="10" id="6Fq-6z-NfU"/>
                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="as2-qC-Mrg" secondAttribute="bottom" constant="10" id="BKk-dY-Urh"/>
                 <constraint firstItem="as2-qC-Mrg" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="BdM-3T-21S"/>
                 <constraint firstAttribute="bottom" secondItem="tCt-JW-wXa" secondAttribute="bottom" id="HgE-m4-TGf"/>

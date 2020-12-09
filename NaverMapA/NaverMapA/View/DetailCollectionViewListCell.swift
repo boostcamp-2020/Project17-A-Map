@@ -23,6 +23,7 @@ class DetailCollectionViewListCell: UICollectionViewCell {
         super.awakeFromNib()
         contentView.layer.borderColor = UIColor.systemGray4.cgColor
         contentView.layer.borderWidth = 1
+        backgroundColor = .systemGray5
     }
     
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
