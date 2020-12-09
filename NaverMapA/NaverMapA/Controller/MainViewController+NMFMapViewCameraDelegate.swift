@@ -11,24 +11,33 @@ import NMapsMap
 extension MainViewController: NMFMapViewCameraDelegate {
     
     func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
-        view.layer.sublayers?.forEach { subLayer in
-            subLayer.removeAllAnimations()
+        animationLayer?.sublayers?.forEach {
+            $0.removeFromSuperlayer()
         }
+        viewModel?.queue.cancelAllOperations()
+        viewModel?.animationQueue.cancelAllOperations()
     }
     
     func mapViewCameraIdle(_ mapView: NMFMapView) {
-        let coordBounds = mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
-        let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
-                                      northEastLng: coordBounds.northEastLng,
-                                      southWestLat: coordBounds.southWestLat,
-                                      northEastLat: coordBounds.northEastLat)
-        let places = self.dataProvider.fetch(bounds: bounds)
-        guard let viewModel = self.viewModel else { return }
-        if self.prevZoomLevel != mapView.zoomLevel { // 애니메이션
-            self.prevZoomLevel = mapView.zoomLevel
-            viewModel.updatePlacesAndAnimation(places: places, bounds: bounds)
-        } else {
-            viewModel.updatePlaces(places: places, bounds: bounds)
+        updateMapView()
+    }
+    
+    func updateMapView() {
+        DispatchQueue.main.async {
+            let coordBounds = self.mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
+            let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
+                                          northEastLng: coordBounds.northEastLng,
+                                          southWestLat: coordBounds.southWestLat,
+                                          northEastLat: coordBounds.northEastLat)
+            let places = self.dataProvider.fetch(bounds: bounds)
+            guard let viewModel = self.viewModel else { return }
+            if self.prevZoomLevel != self.mapView.zoomLevel { // 애니메이션
+                self.prevZoomLevel = self.mapView.zoomLevel
+                viewModel.updatePlacesAndAnimation(places: places, bounds: bounds)
+            } else {
+                viewModel.updatePlaces(places: places, bounds: bounds)
+            }
         }
     }
+    
 }
