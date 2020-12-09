@@ -13,34 +13,19 @@ class MainViewController: UIViewController {
     
     // MARK: - Properties
     
-    var naverMapView: NMFNaverMapView!
-    var mapView: NMFMapView {
-        return naverMapView.mapView
-    }
+    var naverMapView: MyNaverMapView!
+    var mapView: NMFMapView { naverMapView.mapView }
+    var animationLayer: CALayer { naverMapView.animationLayer }
+
     var viewModel: MainViewModel?
-    var clusterMarkers = [NMFMarker]()
-    var clusterObjects = [Cluster]()
     var prevZoomLevel: Double = 18
-    let markerFactory = MarkerFactory()
     lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
         provider.fetchedResultsController.delegate = self
         return provider
     }()
     var pullUpVC: DetailPullUpViewController?
-    lazy var handler = { (overlay: NMFOverlay?) -> Bool in
-        if let marker = overlay as? NMFMarker {
-            for cluster in self.clusterObjects {
-                if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng {
-                    self.moveCamera(to: cluster)
-                    self.showPullUpVC(with: cluster)
-                    break
-                }
-            }
-        }
-        return true
-    }
-    var animationLayer: CALayer?
+
     @IBOutlet weak var settingButton: UIButton!
     
     // MARK: - ViewLifeCycle
@@ -83,22 +68,13 @@ class MainViewController: UIViewController {
     }
     
     // MARK: - Initailize
-    
+
     private func setUpMapView() {
-        naverMapView = NMFNaverMapView(frame: view.frame)
-        naverMapView.showZoomControls = true
-        naverMapView.showCompass = false
-        naverMapView.showLocationButton = false
-        naverMapView.showScaleBar = false
-        naverMapView.showIndoorLevelPicker = true
+        naverMapView = MyNaverMapView(frame: view.frame)
         naverMapView.mapView.addCameraDelegate(delegate: self)
-        naverMapView.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5656471, lng: 126.9908467), zoom: 18)))
         view.addSubview(naverMapView)
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
-        mapView.addGestureRecognizer(longPressGesture)
-        animationLayer = CALayer()
-        animationLayer?.frame = CGRect(origin: .zero, size: view.frame.size)
-        mapView.layer.addSublayer(animationLayer!)
+        naverMapView.mapView.addGestureRecognizer(longPressGesture)
     }
     
     private func setUpCoreData() {
@@ -127,7 +103,7 @@ class MainViewController: UIViewController {
     }
     
     private func deleteMarker(marker: NMFMarker) {
-        for cluster in clusterObjects {
+        for cluster in naverMapView.clusterObjects {
             if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng && cluster.places.count == 1 {
                 let okAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
                     guard let self = self else { return }
@@ -147,28 +123,11 @@ class MainViewController: UIViewController {
     }
     
     private func deleteBeforeMarkers() {
-        for clusterMarker in self.clusterMarkers {
+        for clusterMarker in naverMapView.clusterMarkers {
             clusterMarker.mapView = nil
         }
-        self.clusterMarkers.removeAll()
-        self.clusterObjects.removeAll()
-    }
-    
-    func configureNewMarker(afterCluster: Cluster) {
-        let lat = afterCluster.latitude
-        let lng = afterCluster.longitude
-        let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
-        marker.iconImage = NMF_MARKER_IMAGE_BLACK
-        if afterCluster.places.count == 1 {
-            marker.iconTintColor = .systemGreen
-        } else {
-            marker.iconTintColor = .systemRed
-        }
-        marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: naverMapView.mapView, placeCount: afterCluster.places.count)
-        marker.zIndex = 1
-        marker.mapView = self.mapView
-        marker.touchHandler = self.handler
-        self.clusterMarkers.append(marker)
+        naverMapView.clusterMarkers.removeAll()
+        naverMapView.clusterObjects.removeAll()
     }
     
     func bindViewModel() {
@@ -176,19 +135,18 @@ class MainViewController: UIViewController {
         viewModel.animationMarkers.bind { (beforeClusters, afterClusters) in
             viewModel.animationQueue.addOperation {
                 self.deleteBeforeMarkers()
-                self.clusterObjects = afterClusters
+                self.naverMapView.clusterObjects = afterClusters
             }
-            guard let animationLayer = self.animationLayer else { return }
-            viewModel.animationQueue.addOperation(MoveAnimator(mapView: self.mapView, animationLayer: animationLayer, beforeClusters: beforeClusters, afterClusters: afterClusters, handler: self.configureNewMarker))
+            viewModel.animationQueue.addOperation(MoveAnimator(mapView: self.mapView, animationLayer: self.animationLayer, beforeClusters: beforeClusters, afterClusters: afterClusters, handler: self.naverMapView.configureNewMarker))
         }
         
         viewModel.markers.bind { afterClusters in
             viewModel.animationQueue.addOperation {
                 self.deleteBeforeMarkers()
-                self.clusterObjects = afterClusters
+                self.naverMapView.clusterObjects = afterClusters
             }
-            guard let animationLayer = self.animationLayer else { return }
-            viewModel.animationQueue.addOperation(AppearAnimator(mapView: self.mapView, animationLayer: animationLayer, clusters: afterClusters, handler: self.configureNewMarker))
+
+            viewModel.animationQueue.addOperation(AppearAnimator(mapView: self.mapView, animationLayer: self.animationLayer, clusters: afterClusters, handler: self.naverMapView.configureNewMarker))
         }
     }
     
@@ -207,31 +165,6 @@ class MainViewController: UIViewController {
         } else {
             dataProvider.resetAndRefetch()
         }
-    }
-    
-    private func moveCamera(to cluster: Cluster) {
-        var minLatitude = Double.greatestFiniteMagnitude
-        var maxLatitude = Double.leastNormalMagnitude
-        var minLongitude = Double.greatestFiniteMagnitude
-        var maxLongitude = Double.leastNormalMagnitude
-        for place in cluster.places {
-            if minLatitude > place.latitude {
-                minLatitude = place.latitude
-            }
-            if maxLatitude < place.latitude {
-                maxLatitude = place.latitude
-            }
-            if minLongitude > place.longitude {
-                minLongitude = place.longitude
-            }
-            if maxLongitude < place.longitude {
-                maxLongitude = place.longitude
-            }
-        }
-        let camUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50)
-        camUpdate.animation = .fly
-        camUpdate.animationDuration = 1
-        mapView.moveCamera(camUpdate)
     }
     
     private func showPullUpVC(with cluster: Cluster) {
@@ -265,15 +198,9 @@ class MainViewController: UIViewController {
     
 }
 
-extension MainViewController: NSFetchedResultsControllerDelegate {
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        
-    }
-}
-
 extension MainViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        animationLayer?.sublayers?.forEach {
+        animationLayer.sublayers?.forEach {
             $0.removeFromSuperlayer()
         }
         viewModel?.queue.cancelAllOperations()
