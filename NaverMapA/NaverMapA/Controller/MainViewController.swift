@@ -112,14 +112,6 @@ class MainViewController: UIViewController {
         }
     }
     
-    private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, actions: [UIAlertAction]) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
-        actions.forEach {
-            alert.addAction($0)
-        }
-        present(alert, animated: false, completion: nil)
-    }
-    
     private func handleBatchOperationCompletion(error: Error?) {
         if let error = error {
             AlertManager.shared.coreDataBatchError(controller: self, message: error.localizedDescription)
