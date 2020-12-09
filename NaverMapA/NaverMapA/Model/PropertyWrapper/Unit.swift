@@ -11,12 +11,12 @@ import Foundation
 struct Unit {
     
     private var value: Double
-    private var criteria : Double
+    private var threshold: Double
     var projectedValue = false
     var wrappedValue: Double {
         get { value }
         set {
-            if abs(value - newValue) > criteria {
+            if abs(value - newValue) > threshold {
                 value = newValue
                 projectedValue = true
             } else {
@@ -27,18 +27,16 @@ struct Unit {
  
     init() {
         value = 0.0
-        criteria = 0.1
+        threshold = 0.1
     }
     
     init(wrappedValue: Double) {
         value = wrappedValue
-        criteria = 0.1
+        threshold = 0.1
     }
     
-    init(wrappedValue: Double, criteria: Double) {
+    init(wrappedValue: Double, threshold: Double) {
         value = wrappedValue
-        self.criteria = criteria
+        self.threshold = threshold
     }
 }
-
-

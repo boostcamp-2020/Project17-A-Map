@@ -41,7 +41,6 @@ class MainViewController: UIViewController {
     var animationLayer: CALayer?
     @IBOutlet weak var settingButton: UIButton!
     
-    
     // MARK: - ViewLifeCycle
     
     override func viewDidLoad() {
