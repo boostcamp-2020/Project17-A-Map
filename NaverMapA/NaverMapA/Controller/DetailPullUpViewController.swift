@@ -99,6 +99,7 @@ class DetailPullUpViewController: UIViewController {
         let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGesture))
         gesture.delegate = self
         view.addGestureRecognizer(gesture)
+        parent?.view.addGestureRecognizer(gesture)
     }
     
     private func setUpCollectionView() {
@@ -135,6 +136,15 @@ class DetailPullUpViewController: UIViewController {
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
         let transition = recognizer.translation(in: view)
         let minY = view.frame.minY
+        let yLocation = recognizer.location(in: view).y
+        let velocity = recognizer.velocity(in: view)
+        if yLocation <= -100 {
+            recognizer.setTranslation(CGPoint.zero, in: view)
+            return
+        } else if yLocation < 0 && abs(velocity.y) > abs(velocity.x) && velocity.y > self.panGestureVelocityThreshold {
+            shortenView()
+            return
+        }
         guard minY + transition.y <= shortViewPosition else { return }
         guard minY + transition.y >= fullViewPosition else {
             moveView(state: .full)
@@ -173,8 +183,8 @@ class DetailPullUpViewController: UIViewController {
     
     @objc private func panGesture(_ recognizer: UIPanGestureRecognizer) {
         moveView(panGestureRecognizer: recognizer)
-        guard recognizer.state == .ended else { return }
         UIView.animate(withDuration: animationDuration, animations: { [weak self] in
+        guard recognizer.state == .ended && recognizer.location(in: view).y >= 0 else { return }
             guard let self = self else { return }
             let maxY = UIScreen.main.bounds.height
             let yPosition = self.view.frame.minY
