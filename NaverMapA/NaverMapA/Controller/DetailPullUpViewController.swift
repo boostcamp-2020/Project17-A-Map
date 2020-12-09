@@ -65,10 +65,7 @@ class DetailPullUpViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        UIView.animate(withDuration: animationDuration, animations: { [weak self] in
-            guard let self = self else { return }
-            self.moveView(state: .short)
-        })
+        shortenView()
     }
     
     // MARK: - Initialize
@@ -117,6 +114,13 @@ class DetailPullUpViewController: UIViewController {
     }
     
     // MARK: - Methods
+    
+    func shortenView() {
+        UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut) { [weak self] in
+            guard let self = self else { return }
+            self.moveView(state: .short)
+        }
+    }
     
     private func moveView(state: State) {
         if state == .full {
