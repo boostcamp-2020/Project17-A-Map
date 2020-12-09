@@ -154,16 +154,22 @@ extension MainViewController: NaverMapViewDelegate {
     }
     
     func naverMapView(_ mapView: NaverMapView, markerWillAdded latlng: NMGLatLng) {
-        AlertManager.shared.addMarker(controller: self) { [weak self] _ in
+        let title = "마커 추가"
+        let message = "마커를 추가하시겠습니까"
+        let okHandler: (UIAlertAction) -> Void = { [weak self] _ in
             guard let self = self else { return }
             self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
         }
+        AlertManager.shared.okCancle(controller: self, title: title, message: message, okHandler: okHandler, cancleHandler: nil)
     }
     
     func naverMapView(_ mapView: NaverMapView, markerWillDeleted place: Place) {
-        AlertManager.shared.deleteMarker(controller: self) { [weak self] _ in
+        let title = "마커 삭제"
+        let message = "마커를 삭제하시겠습니까"
+        let okHandler: (UIAlertAction) -> Void = { [weak self] _ in
             guard let self = self else { return }
             self.dataProvider.delete(object: place, completionHandler: self.coreDataUpdateHandler)
         }
+        AlertManager.shared.okCancle(controller: self, title: title, message: message, okHandler: okHandler, cancleHandler: nil)
     }
 }

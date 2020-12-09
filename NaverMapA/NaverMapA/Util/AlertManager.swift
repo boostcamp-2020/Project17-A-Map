@@ -15,16 +15,14 @@ class AlertManager {
         
     }
     
-    func addMarker(controller: UIViewController, okHandler: @escaping (UIAlertAction) -> Void) {
+    func okCancle(controller: UIViewController,
+                  title: String,
+                  message: String,
+                  okHandler: ((UIAlertAction) -> Void)?,
+                  cancleHandler: ((UIAlertAction) -> Void)?) {
         let okAction = UIAlertAction(title: "확인", style: .default, handler: okHandler)
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        showAlert(controller: controller, title: "마커 추가", message: "마커를 추가하시겠습니까?", preferredStyle: .alert, actions: [okAction, cancelAction])
-    }
-    
-    func deleteMarker(controller: UIViewController, okHandler: @escaping (UIAlertAction) -> Void) {
-        let okAction = UIAlertAction(title: "확인", style: .default, handler: okHandler)
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        showAlert(controller: controller, title: "마커 삭제", message: "마커를 삭제하시겠습니까?", preferredStyle: .alert, actions: [okAction, cancelAction])
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: cancleHandler)
+        showAlert(controller: controller, title: title, message: message, preferredStyle: .alert, actions: [okAction, cancelAction])
     }
     
     func clientIdIsNil(controller: UIViewController) {
