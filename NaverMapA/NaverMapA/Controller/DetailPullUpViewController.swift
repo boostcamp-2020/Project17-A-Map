@@ -28,7 +28,7 @@ class DetailPullUpViewController: UIViewController {
     // MARK: - Properties
     
     private var fullViewPosition: CGFloat {
-        return UIScreen.main.bounds.height - self.view.frame.height
+        return UIScreen.main.bounds.height - self.view.frame.height + bottomMargin.constant
     }
     
     private var halfViewPosition: CGFloat {
@@ -55,6 +55,7 @@ class DetailPullUpViewController: UIViewController {
     
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet weak var bottomMargin: NSLayoutConstraint!
     
     // MARK: - View Life Cycle
     
@@ -186,8 +187,8 @@ class DetailPullUpViewController: UIViewController {
     
     @objc private func panGesture(_ recognizer: UIPanGestureRecognizer) {
         moveView(panGestureRecognizer: recognizer)
-        UIView.animate(withDuration: animationDuration, animations: { [weak self] in
         guard recognizer.state == .ended && recognizer.location(in: view).y >= 0 else { return }
+        UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut) { [weak self] in
             guard let self = self else { return }
             let maxY = UIScreen.main.bounds.height
             let yPosition = self.view.frame.minY
@@ -217,7 +218,7 @@ class DetailPullUpViewController: UIViewController {
             } else {
                 self.moveView(state: .short)
             }
-        })
+        }
     }
 
     // MARK: IBActions
