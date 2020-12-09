@@ -157,7 +157,7 @@ extension MainViewController: NaverMapViewDelegate {
             guard let self = self else { return }
             self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
         }
-        AlertManager.shared.okCancle(controller: self, title: title, message: message, okHandler: okHandler, cancleHandler: nil)
+        AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
     
     func naverMapView(_ mapView: NaverMapView, markerWillDeleted place: Place) {
@@ -167,6 +167,6 @@ extension MainViewController: NaverMapViewDelegate {
             guard let self = self else { return }
             self.dataProvider.delete(object: place, completionHandler: self.coreDataUpdateHandler)
         }
-        AlertManager.shared.okCancle(controller: self, title: title, message: message, okHandler: okHandler, cancleHandler: nil)
+        AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
 }
