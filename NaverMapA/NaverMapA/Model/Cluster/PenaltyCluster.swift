@@ -53,6 +53,10 @@ class PenaltyCluster: Cluster, Equatable {
         return sqrt(pow(latitude - place.latitude, 2) + pow(longitude - place.longitude, 2))
     }
     
+    func distanceTo(_ cluster: Cluster) -> Double {
+        return sqrt(pow(latitude - cluster.latitude, 2) + pow(longitude - cluster.longitude, 2))
+    }
+    
     var totalDistance: Double {
         places.reduce(0.0, {$0 + $1.distanceTo(self)})
     }

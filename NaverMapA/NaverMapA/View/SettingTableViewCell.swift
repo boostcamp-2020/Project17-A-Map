@@ -24,9 +24,10 @@ class SettingTableViewCell: UITableViewCell {
         switch indexPath.section {
         case 0:
             self.titleLabel.text = Setting.Algorithm.allCases[indexPath.row].rawValue
-            let value: String = UserDefaults.standard.value(forKey: Setting.State.Algorithm.rawValue) as? String ?? Setting.Algorithm.allCases[0].rawValue
-            UserDefaults.standard.setValue(value, forKey: Setting.State.Algorithm.rawValue)
-            if Setting.Algorithm.allCases[indexPath.row].rawValue == value {
+            if InfoSetting.algorithm == "" {
+                InfoSetting.algorithm = Setting.Algorithm.allCases[0].rawValue
+            }
+            if Setting.Algorithm.allCases[indexPath.row].rawValue == InfoSetting.algorithm {
                 self.accessoryType = .checkmark
                 self.isSelected = false
             } else {
@@ -34,9 +35,11 @@ class SettingTableViewCell: UITableViewCell {
             }
         case 1:
             self.titleLabel.text = Setting.Animation.allCases[indexPath.row].rawValue
-            let value: String = UserDefaults.standard.value(forKey: Setting.State.Animation.rawValue) as? String ?? Setting.Animation.allCases[0].rawValue
-            UserDefaults.standard.setValue(value, forKey: Setting.State.Animation.rawValue)
-            if Setting.Animation.allCases[indexPath.row].rawValue == value {
+            
+            if InfoSetting.animation == "" {
+                InfoSetting.animation = Setting.Animation.allCases[0].rawValue
+            }
+            if Setting.Animation.allCases[indexPath.row].rawValue == InfoSetting.animation {
                 self.accessoryType = .checkmark
                 self.isSelected = false
             } else {
@@ -53,9 +56,9 @@ class SettingTableViewCell: UITableViewCell {
             self.isSelected = false
             switch indexPath.section {
             case 0:
-                UserDefaults.standard.setValue(Setting.Algorithm.allCases[indexPath.row].rawValue, forKey: Setting.State.Algorithm.rawValue)
+                InfoSetting.algorithm = Setting.Algorithm.allCases[indexPath.row].rawValue
             case 1:
-                UserDefaults.standard.setValue(Setting.Animation.allCases[indexPath.row].rawValue, forKey: Setting.State.Animation.rawValue)
+                InfoSetting.animation = Setting.Animation.allCases[indexPath.row].rawValue
             default:
                 break
             }
