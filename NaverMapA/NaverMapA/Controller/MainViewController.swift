@@ -11,6 +11,8 @@ import CoreData
 
 class MainViewController: UIViewController {
     
+    // MARK: - Properties
+    
     var naverMapView: NMFNaverMapView!
     var mapView: NMFMapView {
         return naverMapView.mapView
@@ -41,25 +43,13 @@ class MainViewController: UIViewController {
     var animationLayer: CALayer?
     @IBOutlet weak var settingButton: UIButton!
     
-    
     // MARK: - ViewLifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupMapView()
-        if dataProvider.objectCount == 0 {
-            dataProvider.insert(completionHandler: handleBatchOperationCompletion)
-        }
-        settingButton.layer.cornerRadius = settingButton.bounds.size.width / 2.0
-        settingButton.clipsToBounds = true
-        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
-        backBarButtonItem.tintColor = .black
-        self.navigationItem.backBarButtonItem = backBarButtonItem
-        animationLayer = CALayer()
-        animationLayer?.frame = CGRect(origin: .zero, size: view.frame.size)
-        mapView.layer.addSublayer(animationLayer!)
-        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
-        mapView.addGestureRecognizer(longPressGesture)
+        setUpMapView()
+        setUpCoreData()
+        setUpOtherViews()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -68,7 +58,7 @@ class MainViewController: UIViewController {
             let okAction = UIAlertAction(title: "OK", style: .destructive) { _ in
                 UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
             }
-            showAlert(title: "에러", message: "ClientID가 없습니다.", preferredStyle: UIAlertController.Style.alert, action: okAction)
+            showAlert(title: "에러", message: "ClientID가 없습니다.", preferredStyle: UIAlertController.Style.alert, actions: [okAction])
             return
         }
         self.navigationController?.isNavigationBarHidden = true
@@ -94,7 +84,7 @@ class MainViewController: UIViewController {
     
     // MARK: - Initailize
     
-    private func setupMapView() {
+    private func setUpMapView() {
         naverMapView = NMFNaverMapView(frame: view.frame)
         naverMapView.showZoomControls = true
         naverMapView.showCompass = false
@@ -104,34 +94,47 @@ class MainViewController: UIViewController {
         naverMapView.mapView.addCameraDelegate(delegate: self)
         naverMapView.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5656471, lng: 126.9908467), zoom: 18)))
         view.addSubview(naverMapView)
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
+        mapView.addGestureRecognizer(longPressGesture)
+        animationLayer = CALayer()
+        animationLayer?.frame = CGRect(origin: .zero, size: view.frame.size)
+        mapView.layer.addSublayer(animationLayer!)
     }
     
-    // MARK: - Method
+    private func setUpCoreData() {
+        if dataProvider.objectCount == 0 {
+            dataProvider.insert(completionHandler: handleBatchOperationCompletion)
+        }
+    }
+    
+    private func setUpOtherViews() {
+        settingButton.layer.cornerRadius = settingButton.bounds.size.width / 2.0
+        settingButton.clipsToBounds = true
+        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        backBarButtonItem.tintColor = .black
+        self.navigationItem.backBarButtonItem = backBarButtonItem
+    }
+    
+    // MARK: - Methods
     
     private func addMarker(latlng: NMGLatLng) {
-        let alert = UIAlertController(title: "마커 추가", message: "마커를 추가하시겠습니까?", preferredStyle: .alert)
-        let okButton = UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+        let okAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
             guard let self = self else { return }
             self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
-        })
-        let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        alert.addAction(okButton)
-        alert.addAction(cancelButton)
-        present(alert, animated: false, completion: nil)
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        showAlert(title: "마커 추가", message: "마커를 추가하시겠습니까?", preferredStyle: .alert, actions: [okAction, cancelAction])
     }
     
     private func deleteMarker(marker: NMFMarker) {
         for cluster in clusterObjects {
             if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng && cluster.places.count == 1 {
-                let alert = UIAlertController(title: "마커 삭제", message: "마커를 삭제하시겠습니까?", preferredStyle: .alert)
-                let okButton = UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+                let okAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     self.dataProvider.delete(object: cluster.places[0], completionHandler: self.coreDataUpdateHandler)
-                })
-                let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-                alert.addAction(okButton)
-                alert.addAction(cancelButton)
-                present(alert, animated: false, completion: nil)
+                }
+                let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+                showAlert(title: "마커 삭제", message: "마커를 삭제하시겠습니까?", preferredStyle: .alert, actions: [okAction, cancelAction])
                 break
             }
         }
@@ -189,16 +192,18 @@ class MainViewController: UIViewController {
         }
     }
     
-    private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, action: UIAlertAction) {
+    private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, actions: [UIAlertAction]) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(action)
+        actions.forEach {
+            alert.addAction($0)
+        }
         present(alert, animated: false, completion: nil)
     }
     
     private func handleBatchOperationCompletion(error: Error?) {
         if let error = error {
             let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            showAlert(title: "Executing batch operation error!", message: error.localizedDescription, preferredStyle: .alert, action: okAction)
+            showAlert(title: "Executing batch operation error!", message: error.localizedDescription, preferredStyle: .alert, actions: [okAction])
         } else {
             dataProvider.resetAndRefetch()
         }
@@ -246,7 +251,7 @@ class MainViewController: UIViewController {
         self.pullUpVC?.delegate = self
     }
     
-    @objc func longPressed(sender: UILongPressGestureRecognizer) {
+    @objc private func longPressed(sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizer.State.began {
             let currentPoint: CGPoint = sender.location(in: mapView)
             let latlng = mapView.projection.latlng(from: currentPoint)
