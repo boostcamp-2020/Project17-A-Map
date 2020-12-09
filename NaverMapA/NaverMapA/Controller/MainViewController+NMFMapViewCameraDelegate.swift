@@ -11,9 +11,9 @@ import NMapsMap
 extension MainViewController: NMFMapViewCameraDelegate {
     
     func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
-        animationLayer?.sublayers?.forEach({
+        animationLayer?.sublayers?.forEach {
             $0.removeFromSuperlayer()
-        })
+        }
         viewModel?.queue.cancelAllOperations()
         viewModel?.animationQueue.cancelAllOperations()
     }

@@ -97,23 +97,23 @@ class MainViewController: UIViewController {
     
     func bindViewModel() {
         guard let viewModel = viewModel else { return }
-        viewModel.animationMarkers.bind({ (beforeClusters, afterClusters) in
+        viewModel.animationMarkers.bind { (beforeClusters, afterClusters) in
             viewModel.animationQueue.addOperation {
                 self.deleteBeforeMarkers()
                 self.clusterObjects = afterClusters
             }
             guard let animationLayer = self.animationLayer else { return }
             viewModel.animationQueue.addOperation(MoveAnimator(mapView: self.mapView, animationLayer: animationLayer, beforeClusters: beforeClusters, afterClusters: afterClusters, handler: self.configureNewMarker))
-        })
+        }
         
-        viewModel.markers.bind({ afterClusters in
+        viewModel.markers.bind { afterClusters in
             viewModel.animationQueue.addOperation {
                 self.deleteBeforeMarkers()
                 self.clusterObjects = afterClusters
             }
             guard let animationLayer = self.animationLayer else { return }
             viewModel.animationQueue.addOperation(AppearAnimator(mapView: self.mapView, animationLayer: animationLayer, clusters: afterClusters, handler: self.configureNewMarker))
-        })
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -221,10 +221,10 @@ extension UIView {
 
 extension MainViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        animationLayer?.sublayers?.forEach {
+            $0.removeFromSuperlayer()
+        }
         viewModel?.queue.cancelAllOperations()
         viewModel?.animationQueue.cancelAllOperations()
-        animationLayer?.sublayers?.forEach({
-            $0.removeFromSuperlayer()
-        })
     }
 }

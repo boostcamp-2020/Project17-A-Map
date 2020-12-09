@@ -53,10 +53,10 @@ final class AppearAnimator: Operation, Animatorable {
             scaleUpAnimation.fromValue = 0
             scaleUpAnimation.toValue = 1
             scaleUpAnimation.duration = 0.4
-            CATransaction.setCompletionBlock({
+            CATransaction.setCompletionBlock {
                 markerView.layer.removeFromSuperlayer()
                 self.handler(cluster)
-            })
+            }
             markerView.layer.add(scaleUpAnimation, forKey: "transform.scale")
             CATransaction.commit()
         }
@@ -125,10 +125,10 @@ final class MoveAnimator: Operation, Animatorable {
             markerAnimation.duration = 0.4
             markerAnimation.fromValue = CGPoint(x: startPoint.x, y: startPoint.y)
             markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y)
-            CATransaction.setCompletionBlock({
+            CATransaction.setCompletionBlock {
                 markerView.layer.removeFromSuperlayer()
                 self.handler(afterCluster)
-            })
+            }
             markerView.layer.add(markerAnimation, forKey: "position")
             CATransaction.commit()
         }
