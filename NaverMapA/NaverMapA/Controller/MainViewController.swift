@@ -33,15 +33,17 @@ class MainViewController: UIViewController {
         setUpCoreData()
         setUpOtherViews()
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.view.bringSubviewToFront(settingButton)
+        self.navigationController?.isNavigationBarHidden = true
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let _ = NMFAuthManager.shared().clientId else {
             AlertManager.shared.clientIdIsNil(controller: self)
             return
         }
-        self.navigationController?.isNavigationBarHidden = true
-        self.view.bringSubviewToFront(settingButton)
         switch UserDefaults.standard.value(forKey: Setting.State.Algorithm.rawValue) as? String ?? "" {
         case Setting.Algorithm.kims.rawValue:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
@@ -54,11 +56,6 @@ class MainViewController: UIViewController {
         }
         bindViewModel()
         updateMapView()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.navigationController?.isNavigationBarHidden = false
     }
     
     // MARK: - Initailize

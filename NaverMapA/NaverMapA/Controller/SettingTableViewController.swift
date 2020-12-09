@@ -29,7 +29,10 @@ class SettingTableViewController: UITableViewController {
         super.viewDidLoad()
         self.tableView.register(UINib(nibName: SettingTableViewCell.identifier, bundle: .main), forCellReuseIdentifier: SettingTableViewCell.identifier)
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = false
+    }
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
