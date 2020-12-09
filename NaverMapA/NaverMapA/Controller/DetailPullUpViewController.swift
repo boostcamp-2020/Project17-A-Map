@@ -21,6 +21,9 @@ class DetailPullUpViewController: UIViewController {
         case half
         case short
     }
+    
+    private let panGestureVelocityThreshold: CGFloat = 200
+    private let animationDuration = 0.4
 
     // MARK: - Properties
     
@@ -62,7 +65,7 @@ class DetailPullUpViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+        UIView.animate(withDuration: animationDuration, animations: { [weak self] in
             guard let self = self else { return }
             self.moveView(state: .short)
         })
@@ -166,10 +169,29 @@ class DetailPullUpViewController: UIViewController {
     @objc private func panGesture(_ recognizer: UIPanGestureRecognizer) {
         moveView(panGestureRecognizer: recognizer)
         guard recognizer.state == .ended else { return }
-        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+        UIView.animate(withDuration: animationDuration, animations: { [weak self] in
             guard let self = self else { return }
             let maxY = UIScreen.main.bounds.height
             let yPosition = self.view.frame.minY
+            let velocity = recognizer.velocity(in: self.view)
+            if abs(velocity.y) > abs(velocity.x) && abs(velocity.y) > self.panGestureVelocityThreshold {
+                if velocity.y < 0 {
+                    if yPosition <= self.halfViewPosition {
+                        self.moveView(state: .full)
+                    } else
+                    if yPosition <= self.shortViewPosition {
+                        self.moveView(state: .half)
+                    }
+                } else {
+                    if yPosition >= self.halfViewPosition {
+                        self.moveView(state: .short)
+                    } else
+                    if yPosition >= self.fullViewPosition {
+                        self.moveView(state: .half)
+                    }
+                }
+                return
+            }
             if yPosition <= maxY / 3.0 {
                 self.moveView(state: .full)
             } else if yPosition <= maxY / 3.0 * 2.0 {
@@ -213,7 +235,7 @@ extension DetailPullUpViewController: UICollectionViewDelegate {
             }()
             self.cluster = newCluster
         }
-        UIView.animate(withDuration: 0.5, animations: { [weak self] in
+        UIView.animate(withDuration: animationDuration, animations: { [weak self] in
             guard let self = self else { return }
             self.moveView(state: .half)
         })

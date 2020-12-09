@@ -8,13 +8,10 @@
 import Foundation
 
 final class PenaltyKmeans: Operation, Clusterable {
+    
     var places: [Place] = []
     var bounds: CoordinateBounds = CoordinateBounds(southWestLng: 0, northEastLng: 0, southWestLat: 0, northEastLat: 0)
     var clusters: [Cluster] = []
-    func copy(with zone: NSZone? = nil) -> Any {
-        let copy = PenaltyKmeans()
-        return copy
-    }
 
     override func main() {
         if isCancelled {
@@ -23,25 +20,46 @@ final class PenaltyKmeans: Operation, Clusterable {
         clusters = execute(places: places, bounds: bounds)
     }
     
+    func copy(with zone: NSZone? = nil) -> Any {
+        let copy = PenaltyKmeans()
+        return copy
+    }
+    
     func execute(places: [Place], bounds: CoordinateBounds) -> [Cluster] {
         guard places.count != 0 else { return [] }
         var candidateCluster: [[PenaltyCluster]] = []
-        let maximumK = determinateMaxK(count: places.count, bounds: bounds)
+        let maximumK = determinateMaxK(count: places.count)
+        let clusterQueue = DispatchQueue(label: "cluster", attributes: .concurrent)
+        let candidateQueue = DispatchQueue(label: "candidate")
+        let group = DispatchGroup()
+            
         for k in 1..<maximumK where !isCancelled {
-            let clusters = clustering(places: places, k: k)
-            candidateCluster.append(clusters)
+            clusterQueue.async(group: group) {
+                let clusters = self.clustering(places: places, k: k)
+                candidateQueue.sync {
+                    candidateCluster.append(clusters)
+                }
+            }
         }
-        return bestCluster(clusters: candidateCluster, count: places.count)
+        
+        let result = group.wait(timeout: .distantFuture)
+        
+        if isCancelled || result == .timedOut {
+            return []
+        }
+        return bestCluster(candidates: candidateCluster)
     }
     
-    func bestCluster(clusters: [[PenaltyCluster]], count: Int) -> [PenaltyCluster] {
-        var distances = clusters.map { candidate in
+    private func bestCluster(candidates: [[PenaltyCluster]]) -> [PenaltyCluster] {
+        guard candidates.count != 0 else { return [] }
+        guard candidates.count != 1 else { return candidates[0] }
+        var distances = candidates.map { candidate in
             candidate.reduce(0.0, { $0 + $1.totalDistance })
         }
         let diffDistance = (0..<(distances.count) - 1).map { i -> Double in
             return distances[i] - distances[i + 1]
         }
-        let decreaseAverage = diffDistance.reduce(0.0, {$0 + $1}) / Double(diffDistance.count) / 2
+        let decreaseAverage = diffDistance.reduce(0.0, {$0 + $1}) / Double(diffDistance.count)
         var minDistance = Double.greatestFiniteMagnitude
         var minIdx = 0
         
@@ -52,28 +70,31 @@ final class PenaltyKmeans: Operation, Clusterable {
                 minIdx = i
             }
         }
-        return isCancelled ? [] : clusters[minIdx]
+        return isCancelled ? [] : candidates[minIdx]
     }
     
-    func clustering(places: [Place], k: Int) -> [PenaltyCluster] {
+    private func clustering(places: [Place], k: Int) -> [PenaltyCluster] {
         var centroids = initialCentroid(k: k, places: places)
-        let iterationCount = 3
+        let iterationCount = 5
         centroids = distributeToCentroid(places: places, centroids: centroids)
 
         for _ in 0..<iterationCount {
             var newCentroids = centroids.map { PenaltyCluster(lat: $0.latitude, lng: $0.longitude, places: [])}
             newCentroids = distributeToCentroid(places: places, centroids: newCentroids)
-            centroids = newCentroids
+            centroids = newCentroids.map {
+                PenaltyCluster(lat: $0.averageLatitude,
+                               lng: $0.averageLongitude,
+                               places: $0.places )
+            }
         }
         return centroids
             .map { PenaltyCluster(lat: $0.latitude, lng: $0.longitude, places: $0.places)}
             .filter { $0.places.count > 0 }
     }
     
-    func initialCentroid(k: Int, places: [Place]) -> [PenaltyCluster] {
-        let initialRandomCentroid = (0..<k).map { _ -> Place in
-            let idx = Int.random(in: 0..<places.count)
-            return places[idx]
+    private func initialCentroid(k: Int, places: [Place]) -> [PenaltyCluster] {
+        let initialRandomCentroid = (0..<k).map {
+            return places[$0]
         }
         var centerOfCentroid = PenaltyCluster(places: initialRandomCentroid)
         
@@ -91,35 +112,34 @@ final class PenaltyKmeans: Operation, Clusterable {
         return centroidToCluster
     }
     
-    func distributeToCentroid(places: [Place], centroids: [PenaltyCluster]) -> [PenaltyCluster] {
+    private func distributeToCentroid(places: [Place], centroids: [PenaltyCluster]) -> [PenaltyCluster] {
         let distributedCentroid = centroids
         
         for place in places where !isCancelled {
-            let distances = distributedCentroid
-                            .map { ($0.distanceTo(place), $0) }
-                            .sorted { $0.0 < $1.0 }
-            distances[0].1.append(jsonPlace: place)
+            let nearCluster = distributedCentroid
+                .min { $0.distanceTo(place) < $1.distanceTo(place) }
+            nearCluster?.append(place: place)
         }
-
+        
         return distributedCentroid
     }
     
-    func determinateMaxK(count: Int, bounds: CoordinateBounds) -> Int {
-        guard count > 40 else { return 40 }
-        let mapScale = sqrt(pow(bounds.northEastLat - bounds.southWestLat, 2) + pow(bounds.northEastLng - bounds.southWestLng, 2))
-        switch mapScale {
-        case let x where x > 10:
+    private func determinateMaxK(count: Int) -> Int {
+        let MAXOPERATION: Double = 125000
+        let a: Double = 5
+        let b: Double = 1
+        let c: Double = MAXOPERATION / Double(count)
+        let root = Int((-b + sqrt(1 + 4 * a * c)) / Double(2 * a))
+        
+        switch (count, root) {
+        case (let x, let y) where x > y:
+            return y
+        case (let x, let y) where x <= y:
+            return x
+        case (_, let y) where y == 0:
             return 1
-        case let x where x > 1:
-            return 2
-        case let x where x > 0.1:
-            return 10
-        case let x where x > 0.01:
-            return 20
-        case let x where x > 0.001:
-            return 30
         default:
-            return 40
+            return 1
         }
     }
 }
