@@ -10,6 +10,7 @@ import NMapsMap
 import CoreData
 
 class MainViewController: UIViewController {
+    
     var naverMapView: NMFNaverMapView!
     var mapView: NMFMapView {
         return naverMapView.mapView
@@ -25,8 +26,6 @@ class MainViewController: UIViewController {
         return provider
     }()
     var pullUpVC: DetailPullUpViewController?
-    @IBOutlet weak var settingButton: UIButton!
-    
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
             for cluster in self.clusterObjects {
@@ -39,6 +38,9 @@ class MainViewController: UIViewController {
         }
         return true
     }
+    @IBOutlet weak var settingButton: UIButton!
+    
+    // MARK: - ViewLifeCycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,9 +53,43 @@ class MainViewController: UIViewController {
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         backBarButtonItem.tintColor = .black
         self.navigationItem.backBarButtonItem = backBarButtonItem
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
+        mapView.addGestureRecognizer(longPressGesture)
     }
     
-    func setupMapView() {
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        guard let _ = NMFAuthManager.shared().clientId else {
+            let okAction = UIAlertAction(title: "OK", style: .destructive) { _ in
+                UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
+            }
+            showAlert(title: "에러", message: "ClientID가 없습니다.", preferredStyle: UIAlertController.Style.alert, action: okAction)
+            return
+        }
+        self.navigationController?.isNavigationBarHidden = true
+        self.view.bringSubviewToFront(settingButton)
+        switch UserDefaults.standard.value(forKey: Setting.State.Algorithm.rawValue) as? String ?? "" {
+        case Setting.Algorithm.kims.rawValue:
+            viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        case Setting.Algorithm.kmeansElbow.rawValue:
+            viewModel = MainViewModel(algorithm: KMeansClustering())
+        case Setting.Algorithm.kmeansPenalty.rawValue:
+            viewModel = MainViewModel(algorithm: PenaltyKmeans())
+        default:
+            viewModel = MainViewModel(algorithm: ScaleBasedClustering())
+        }
+        bindViewModel()
+        updateMapView()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.navigationController?.isNavigationBarHidden = false
+    }
+    
+    // MARK: - Initailize
+    
+    private func setupMapView() {
         naverMapView = NMFNaverMapView(frame: view.frame)
         naverMapView.showZoomControls = true
         naverMapView.showCompass = false
@@ -65,7 +101,44 @@ class MainViewController: UIViewController {
         view.addSubview(naverMapView)
     }
     
-    func deleteBeforeMarkers() {
+    // MARK: - Method
+    
+    private func addMarker(latlng: NMGLatLng) {
+        let alert = UIAlertController(title: "마커 추가", message: "마커를 추가하시겠습니까?", preferredStyle: .alert)
+        let okButton = UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+            guard let self = self else { return }
+            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
+        })
+        let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        alert.addAction(okButton)
+        alert.addAction(cancelButton)
+        present(alert, animated: false, completion: nil)
+    }
+    
+    private func deleteMarker(marker: NMFMarker) {
+        for cluster in clusterObjects {
+            if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng && cluster.places.count == 1 {
+                let alert = UIAlertController(title: "마커 삭제", message: "마커를 삭제하시겠습니까?", preferredStyle: .alert)
+                let okButton = UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    self.dataProvider.delete(object: cluster.places[0], completionHandler: self.coreDataUpdateHandler)
+                })
+                let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+                alert.addAction(okButton)
+                alert.addAction(cancelButton)
+                present(alert, animated: false, completion: nil)
+                break
+            }
+        }
+    }
+    
+    private func coreDataUpdateHandler(result: Error?) {
+        if result == nil {
+            updateMapView()
+        }
+    }
+    
+    private func deleteBeforeMarkers() {
         for clusterMarker in self.clusterMarkers {
             clusterMarker.mapView = nil
         }
@@ -91,7 +164,7 @@ class MainViewController: UIViewController {
         self.clusterObjects.append(afterCluster)
     }
     
-    func bindViewModel() {
+    private func bindViewModel() {
         if let viewModel = viewModel {
             viewModel.animationMarkers.bind({ (beforeClusters, afterClusters) in
                 DispatchQueue.main.async {
@@ -108,35 +181,6 @@ class MainViewController: UIViewController {
             })
         }
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        guard let _ = NMFAuthManager.shared().clientId else {
-            let okAction = UIAlertAction(title: "OK", style: .destructive) { _ in
-                UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
-            }
-            showAlert(title: "에러", message: "ClientID가 없습니다.", preferredStyle: UIAlertController.Style.alert, action: okAction)
-            return
-        }
-        self.navigationController?.isNavigationBarHidden = true
-        self.view.bringSubviewToFront(settingButton)
-        switch UserDefaults.standard.value(forKey: Setting.State.Algorithm.rawValue) as? String ?? "" {
-        case Setting.Algorithm.kims.rawValue:
-            viewModel = MainViewModel(algorithm: ScaleBasedClustering())
-        case Setting.Algorithm.kmeansElbow.rawValue:
-            viewModel = MainViewModel(algorithm: KMeansClustering())
-        case Setting.Algorithm.kmeansPenalty.rawValue:
-            viewModel = MainViewModel(algorithm: PenaltyKmeans())
-        default:
-            viewModel = MainViewModel(algorithm: ScaleBasedClustering())
-        }
-        bindViewModel()
-    }
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.navigationController?.isNavigationBarHidden = false
-    }
-    // MARK: - Methods
     
     private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, action: UIAlertAction) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
@@ -195,18 +239,21 @@ class MainViewController: UIViewController {
         self.pullUpVC?.delegate = self
     }
     
+    @objc func longPressed(sender: UILongPressGestureRecognizer) {
+        if sender.state == UIGestureRecognizer.State.began {
+            let currentPoint: CGPoint = sender.location(in: mapView)
+            let latlng = mapView.projection.latlng(from: currentPoint)
+            guard let marker = mapView.pick(currentPoint) as? NMFMarker else {
+                addMarker(latlng: latlng)
+                return
+            }
+            deleteMarker(marker: marker)
+        }
+    }
+    
 }
 
 extension MainViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    }
-}
-
-extension UIView {
-    func getImage() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(bounds: bounds)
-        return renderer.image { rendererContext in
-            layer.render(in: rendererContext.cgContext)
-        }
     }
 }
