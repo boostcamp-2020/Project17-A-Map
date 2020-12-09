@@ -13,7 +13,7 @@ class MainViewController: UIViewController {
 
     // MARK: - Properties
     
-    var naverMapView: MyNaverMapView!
+    var naverMapView: NaverMapView!
     var mapView: NMFMapView { naverMapView.mapView }
     var animationLayer: CALayer { naverMapView.animationLayer }
     var viewModel: MainViewModel?
@@ -64,7 +64,7 @@ class MainViewController: UIViewController {
     // MARK: - Initailize
 
     private func setUpMapView() {
-        naverMapView = MyNaverMapView(frame: view.frame)
+        naverMapView = NaverMapView(frame: view.frame)
         naverMapView.mapView.addCameraDelegate(delegate: self)
         naverMapView.myMapdelegate = self
         view.addSubview(naverMapView)
@@ -148,19 +148,19 @@ extension MainViewController {
     }
 }
 
-extension MainViewController: MyNaverMapViewDelegate {
-    func myNaverMapView(_ mapView: MyNaverMapView, markerDidSelected cluster: Cluster) {
+extension MainViewController: NaverMapViewDelegate {
+    func naverMapView(_ mapView: NaverMapView, markerDidSelected cluster: Cluster) {
         self.showPullUpVC(with: cluster)
     }
     
-    func myNaverMapView(_ mapView: MyNaverMapView, markerWillAdded latlng: NMGLatLng) {
+    func naverMapView(_ mapView: NaverMapView, markerWillAdded latlng: NMGLatLng) {
         AlertManager.shared.addMarker(controller: self) { [weak self] _ in
             guard let self = self else { return }
             self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
         }
     }
     
-    func myNaverMapView(_ mapView: MyNaverMapView, markerWillDeleted place: Place) {
+    func naverMapView(_ mapView: NaverMapView, markerWillDeleted place: Place) {
         AlertManager.shared.deleteMarker(controller: self) { [weak self] _ in
             guard let self = self else { return }
             self.dataProvider.delete(object: place, completionHandler: self.coreDataUpdateHandler)

@@ -8,13 +8,13 @@
 import UIKit
 import NMapsMap
 
-protocol MyNaverMapViewDelegate: class {
-    func myNaverMapView(_ mapView: MyNaverMapView, markerDidSelected cluster: Cluster)
-    func myNaverMapView(_ mapView: MyNaverMapView, markerWillAdded latlng: NMGLatLng)
-    func myNaverMapView(_ mapView: MyNaverMapView, markerWillDeleted place: Place)
+protocol NaverMapViewDelegate: class {
+    func naverMapView(_ mapView: NaverMapView, markerDidSelected cluster: Cluster)
+    func naverMapView(_ mapView: NaverMapView, markerWillAdded latlng: NMGLatLng)
+    func naverMapView(_ mapView: NaverMapView, markerWillDeleted place: Place)
 }
 
-class MyNaverMapView: NMFNaverMapView {
+class NaverMapView: NMFNaverMapView {
     
     let defaultPosition = NMFCameraPosition(NMGLatLng(lat: 37.5656471, lng: 126.9908467), zoom: 18)
     var animationLayer: CALayer = CALayer()
@@ -22,14 +22,14 @@ class MyNaverMapView: NMFNaverMapView {
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
     var prevZoomLevel: Double = 18
-    weak var myMapdelegate: MyNaverMapViewDelegate?
+    weak var myMapdelegate: NaverMapViewDelegate?
     
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
             for cluster in self.clusterObjects {
                 if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng {
                     self.moveCamera(to: cluster)
-                    self.myMapdelegate?.myNaverMapView(self, markerDidSelected: cluster)
+                    self.myMapdelegate?.naverMapView(self, markerDidSelected: cluster)
                     break
                 }
             }
@@ -120,13 +120,13 @@ class MyNaverMapView: NMFNaverMapView {
     }
     
     func addMarker(latlng: NMGLatLng) {
-        myMapdelegate?.myNaverMapView(self, markerWillAdded: latlng)
+        myMapdelegate?.naverMapView(self, markerWillAdded: latlng)
     }
     
     func deleteMarker(marker: NMFMarker) {
         for cluster in clusterObjects {
             if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng && cluster.places.count == 1 {
-                myMapdelegate?.myNaverMapView(self, markerWillDeleted: cluster.places[0])
+                myMapdelegate?.naverMapView(self, markerWillDeleted: cluster.places[0])
                 break
             }
         }

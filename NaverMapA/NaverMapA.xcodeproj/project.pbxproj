@@ -47,8 +47,9 @@
 		E07AD780257F728700D07EAF /* UserInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD77F257F728700D07EAF /* UserInfo.swift */; };
 		E07AD788257F7FD100D07EAF /* AtomicArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD787257F7FD100D07EAF /* AtomicArray.swift */; };
 		E07AD79C2580592900D07EAF /* Unit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD79B2580592900D07EAF /* Unit.swift */; };
-		E07AD7B82580F64800D07EAF /* MyNaverMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7B72580F64800D07EAF /* MyNaverMapView.swift */; };
+		E07AD7B82580F64800D07EAF /* NaverMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7B72580F64800D07EAF /* NaverMapView.swift */; };
 		E07AD7C32581087100D07EAF /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7C22581087100D07EAF /* AlertManager.swift */; };
+		E07AD7CE25812C5000D07EAF /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7CD25812C5000D07EAF /* Animator.swift */; };
 		E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5424256F4AA700F799E1 /* MainViewModel.swift */; };
 		E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE542C256F4BC800F799E1 /* Dynamic.swift */; };
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
@@ -138,8 +139,9 @@
 		E07AD77F257F728700D07EAF /* UserInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfo.swift; sourceTree = "<group>"; };
 		E07AD787257F7FD100D07EAF /* AtomicArray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtomicArray.swift; sourceTree = "<group>"; };
 		E07AD79B2580592900D07EAF /* Unit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unit.swift; sourceTree = "<group>"; };
-		E07AD7B72580F64800D07EAF /* MyNaverMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyNaverMapView.swift; sourceTree = "<group>"; };
+		E07AD7B72580F64800D07EAF /* NaverMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverMapView.swift; sourceTree = "<group>"; };
 		E07AD7C22581087100D07EAF /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
+		E07AD7CD25812C5000D07EAF /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		E0AE5424256F4AA700F799E1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0AE542C256F4BC800F799E1 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
@@ -208,7 +210,7 @@
 			isa = PBXGroup;
 			children = (
 				C816202625789C8A00DF61C4 /* MarkerFactory.swift */,
-				E07AD7B72580F64800D07EAF /* MyNaverMapView.swift */,
+				E07AD7B72580F64800D07EAF /* NaverMapView.swift */,
 			);
 			path = Marker;
 			sourceTree = "<group>";
@@ -245,6 +247,7 @@
 				D4FB056A25808A3C0078EE09 /* Animatorable.swift */,
 				D45B7D33257F7590009208D9 /* MoveAnimator.swift */,
 				D4FB056525808A220078EE09 /* AppearAnimator.swift */,
+				E07AD7CD25812C5000D07EAF /* Animator.swift */,
 			);
 			path = Animator;
 			sourceTree = "<group>";
@@ -658,7 +661,7 @@
 				8893786C257D415400A5B5C5 /* SettingTableViewCell.swift in Sources */,
 				E0EFA23D25754F0D00995B0C /* PenaltyCluster.swift in Sources */,
 				C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */,
-				E07AD7B82580F64800D07EAF /* MyNaverMapView.swift in Sources */,
+				E07AD7B82580F64800D07EAF /* NaverMapView.swift in Sources */,
 				D45B7D34257F7590009208D9 /* MoveAnimator.swift in Sources */,
 				E07AD79C2580592900D07EAF /* Unit.swift in Sources */,
 				E0AE5437256F50D900F799E1 /* Clusterable.swift in Sources */,
@@ -667,6 +670,7 @@
 				D4FB056B25808A3C0078EE09 /* Animatorable.swift in Sources */,
 				8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */,
 				D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */,
+				E07AD7CE25812C5000D07EAF /* Animator.swift in Sources */,
 				88A67A02257E73AF004CA6C7 /* Geocoding.swift in Sources */,
 				E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */,
 				D499BFCC2575C40700EF369E /* DetailCollectionViewListCell.swift in Sources */,
