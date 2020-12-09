@@ -63,7 +63,7 @@ class MainViewController: UIViewController {
             let okAction = UIAlertAction(title: "OK", style: .destructive) { _ in
                 UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
             }
-            showAlert(title: "에러", message: "ClientID가 없습니다.", preferredStyle: UIAlertController.Style.alert, action: okAction)
+            showAlert(title: "에러", message: "ClientID가 없습니다.", preferredStyle: UIAlertController.Style.alert, actions: [okAction])
             return
         }
         self.navigationController?.isNavigationBarHidden = true
@@ -104,29 +104,23 @@ class MainViewController: UIViewController {
     // MARK: - Method
     
     private func addMarker(latlng: NMGLatLng) {
-        let alert = UIAlertController(title: "마커 추가", message: "마커를 추가하시겠습니까?", preferredStyle: .alert)
-        let okButton = UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+        let okAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
             guard let self = self else { return }
             self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
-        })
-        let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        alert.addAction(okButton)
-        alert.addAction(cancelButton)
-        present(alert, animated: false, completion: nil)
+        }
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+        showAlert(title: "마커 추가", message: "마커를 추가하시겠습니까?", preferredStyle: .alert, actions: [okAction, cancelAction])
     }
     
     private func deleteMarker(marker: NMFMarker) {
         for cluster in clusterObjects {
             if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng && cluster.places.count == 1 {
-                let alert = UIAlertController(title: "마커 삭제", message: "마커를 삭제하시겠습니까?", preferredStyle: .alert)
-                let okButton = UIAlertAction(title: "확인", style: .default, handler: { [weak self] _ in
+                let okAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
                     guard let self = self else { return }
                     self.dataProvider.delete(object: cluster.places[0], completionHandler: self.coreDataUpdateHandler)
-                })
-                let cancelButton = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-                alert.addAction(okButton)
-                alert.addAction(cancelButton)
-                present(alert, animated: false, completion: nil)
+                }
+                let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
+                showAlert(title: "마커 삭제", message: "마커를 삭제하시겠습니까?", preferredStyle: .alert, actions: [okAction, cancelAction])
                 break
             }
         }
@@ -182,16 +176,18 @@ class MainViewController: UIViewController {
         }
     }
     
-    private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, action: UIAlertAction) {
+    private func showAlert(title: String?, message: String?, preferredStyle: UIAlertController.Style, actions: [UIAlertAction]) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertController.Style.alert)
-        alert.addAction(action)
+        actions.forEach {
+            alert.addAction($0)
+        }
         present(alert, animated: false, completion: nil)
     }
     
     private func handleBatchOperationCompletion(error: Error?) {
         if let error = error {
             let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            showAlert(title: "Executing batch operation error!", message: error.localizedDescription, preferredStyle: .alert, action: okAction)
+            showAlert(title: "Executing batch operation error!", message: error.localizedDescription, preferredStyle: .alert, actions: [okAction])
         } else {
             dataProvider.resetAndRefetch()
         }
