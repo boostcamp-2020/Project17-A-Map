@@ -32,6 +32,7 @@ class MainViewModel {
         queue.addOperation(operation)
         queue.addBarrierBlock {
             guard !operation.isCancelled else { return }
+            self.beforeMarkers = cluster.clusters
             self.markers.value = cluster.clusters
         }
     }
