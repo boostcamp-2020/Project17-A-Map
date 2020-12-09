@@ -22,3 +22,20 @@ struct AtomicArray<Value> {
         values = []
     }
 }
+
+
+@propertyWrapper
+struct Atomic<Value> {
+    
+    private var values: Value
+    private let queue = DispatchQueue(label: "atomicArray")
+
+    var wrappedValue: Value {
+        get { queue.sync { values } }
+        set { queue.sync { values = newValue } }
+    }
+ 
+    init(value: Value) {
+        self.values = value
+    }
+}
