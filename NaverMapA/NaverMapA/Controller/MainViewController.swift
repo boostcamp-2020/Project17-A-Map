@@ -10,18 +10,16 @@ import NMapsMap
 import CoreData
 
 class MainViewController: UIViewController {
-    
+
     // MARK: - Properties
     
     var naverMapView: MyNaverMapView!
     var mapView: NMFMapView { naverMapView.mapView }
     var animationLayer: CALayer { naverMapView.animationLayer }
-
     var viewModel: MainViewModel?
     var prevZoomLevel: Double = 18
     lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
-        provider.fetchedResultsController.delegate = self
         return provider
     }()
     var pullUpVC: DetailPullUpViewController?
@@ -40,10 +38,7 @@ class MainViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let _ = NMFAuthManager.shared().clientId else {
-            let okAction = UIAlertAction(title: "OK", style: .destructive) { _ in
-                UIControl().sendAction(#selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
-            }
-            showAlert(title: "에러", message: "ClientID가 없습니다.", preferredStyle: UIAlertController.Style.alert, actions: [okAction])
+            AlertManager.shared.clientIdIsNil(controller: self)
             return
         }
         self.navigationController?.isNavigationBarHidden = true
@@ -72,9 +67,8 @@ class MainViewController: UIViewController {
     private func setUpMapView() {
         naverMapView = MyNaverMapView(frame: view.frame)
         naverMapView.mapView.addCameraDelegate(delegate: self)
+        naverMapView.myMapdelegate = self
         view.addSubview(naverMapView)
-        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
-        naverMapView.mapView.addGestureRecognizer(longPressGesture)
     }
     
     private func setUpCoreData() {
@@ -93,56 +87,25 @@ class MainViewController: UIViewController {
     
     // MARK: - Methods
     
-    private func addMarker(latlng: NMGLatLng) {
-        let okAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
-            guard let self = self else { return }
-            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
-        }
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-        showAlert(title: "마커 추가", message: "마커를 추가하시겠습니까?", preferredStyle: .alert, actions: [okAction, cancelAction])
-    }
-    
-    private func deleteMarker(marker: NMFMarker) {
-        for cluster in naverMapView.clusterObjects {
-            if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng && cluster.places.count == 1 {
-                let okAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
-                    guard let self = self else { return }
-                    self.dataProvider.delete(object: cluster.places[0], completionHandler: self.coreDataUpdateHandler)
-                }
-                let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
-                showAlert(title: "마커 삭제", message: "마커를 삭제하시겠습니까?", preferredStyle: .alert, actions: [okAction, cancelAction])
-                break
-            }
-        }
-    }
-    
     private func coreDataUpdateHandler(result: Error?) {
         if result == nil {
             updateMapView()
         }
     }
-    
-    private func deleteBeforeMarkers() {
-        for clusterMarker in naverMapView.clusterMarkers {
-            clusterMarker.mapView = nil
-        }
-        naverMapView.clusterMarkers.removeAll()
-        naverMapView.clusterObjects.removeAll()
-    }
-    
+
     func bindViewModel() {
         guard let viewModel = viewModel else { return }
         viewModel.animationMarkers.bind { (beforeClusters, afterClusters) in
             viewModel.animationQueue.addOperation {
-                self.deleteBeforeMarkers()
+                self.naverMapView.deleteBeforeMarkers()
                 self.naverMapView.clusterObjects = afterClusters
             }
             viewModel.animationQueue.addOperation(MoveAnimator(mapView: self.mapView, animationLayer: self.animationLayer, beforeClusters: beforeClusters, afterClusters: afterClusters, handler: self.naverMapView.configureNewMarker))
         }
-        
+
         viewModel.markers.bind { afterClusters in
             viewModel.animationQueue.addOperation {
-                self.deleteBeforeMarkers()
+                self.naverMapView.deleteBeforeMarkers()
                 self.naverMapView.clusterObjects = afterClusters
             }
 
@@ -160,14 +123,13 @@ class MainViewController: UIViewController {
     
     private func handleBatchOperationCompletion(error: Error?) {
         if let error = error {
-            let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            showAlert(title: "Executing batch operation error!", message: error.localizedDescription, preferredStyle: .alert, actions: [okAction])
+            AlertManager.shared.coreDataBatchError(controller: self, message: error.localizedDescription)
         } else {
             dataProvider.resetAndRefetch()
         }
     }
     
-    private func showPullUpVC(with cluster: Cluster) {
+    func showPullUpVC(with cluster: Cluster) {
         guard self.pullUpVC == nil else {
             pullUpVC?.cluster = cluster
             return
@@ -183,19 +145,6 @@ class MainViewController: UIViewController {
         self.pullUpVC?.cluster = cluster
         self.pullUpVC?.delegate = self
     }
-    
-    @objc private func longPressed(sender: UILongPressGestureRecognizer) {
-        if sender.state == UIGestureRecognizer.State.began {
-            let currentPoint: CGPoint = sender.location(in: mapView)
-            let latlng = mapView.projection.latlng(from: currentPoint)
-            guard let marker = mapView.pick(currentPoint) as? NMFMarker else {
-                addMarker(latlng: latlng)
-                return
-            }
-            deleteMarker(marker: marker)
-        }
-    }
-    
 }
 
 extension MainViewController {
@@ -205,5 +154,25 @@ extension MainViewController {
         }
         viewModel?.queue.cancelAllOperations()
         viewModel?.animationQueue.cancelAllOperations()
+    }
+}
+
+extension MainViewController: MyNaverMapViewDelegate {
+    func myNaverMapView(_ mapView: MyNaverMapView, markerDidSelected cluster: Cluster) {
+        self.showPullUpVC(with: cluster)
+    }
+    
+    func myNaverMapView(_ mapView: MyNaverMapView, markerWillAdded latlng: NMGLatLng) {
+        AlertManager.shared.addMarker(controller: self) { [weak self] _ in
+            guard let self = self else { return }
+            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
+        }
+    }
+    
+    func myNaverMapView(_ mapView: MyNaverMapView, markerWillDeleted place: Place) {
+        AlertManager.shared.deleteMarker(controller: self) { [weak self] _ in
+            guard let self = self else { return }
+            self.dataProvider.delete(object: place, completionHandler: self.coreDataUpdateHandler)
+        }
     }
 }

@@ -8,6 +8,12 @@
 import UIKit
 import NMapsMap
 
+protocol MyNaverMapViewDelegate: class {
+    func myNaverMapView(_ mapView: MyNaverMapView, markerDidSelected cluster: Cluster)
+    func myNaverMapView(_ mapView: MyNaverMapView, markerWillAdded latlng: NMGLatLng)
+    func myNaverMapView(_ mapView: MyNaverMapView, markerWillDeleted place: Place)
+}
+
 class MyNaverMapView: NMFNaverMapView {
     
     let defaultPosition = NMFCameraPosition(NMGLatLng(lat: 37.5656471, lng: 126.9908467), zoom: 18)
@@ -15,12 +21,14 @@ class MyNaverMapView: NMFNaverMapView {
     let markerFactory = MarkerFactory()
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
+    weak var myMapdelegate: MyNaverMapViewDelegate?
+    
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
             for cluster in self.clusterObjects {
                 if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng {
                     self.moveCamera(to: cluster)
-//                    self.showPullUpVC(with: cluster)
+                    self.myMapdelegate?.myNaverMapView(self, markerDidSelected: cluster)
                     break
                 }
             }
@@ -52,6 +60,8 @@ class MyNaverMapView: NMFNaverMapView {
         self.mapView.moveCamera(NMFCameraUpdate(position: position))
         animationLayer.frame = CGRect(origin: .zero, size: frame.size)
         mapView.layer.addSublayer(animationLayer)
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
+        mapView.addGestureRecognizer(longPressGesture)
     }
     
     func moveCamera(to cluster: Cluster) {
@@ -95,4 +105,38 @@ class MyNaverMapView: NMFNaverMapView {
         marker.touchHandler = self.handler
         self.clusterMarkers.append(marker)
     }
+    
+    @objc private func longPressed(sender: UILongPressGestureRecognizer) {
+        if sender.state == UIGestureRecognizer.State.began {
+            let currentPoint: CGPoint = sender.location(in: mapView)
+            let latlng = mapView.projection.latlng(from: currentPoint)
+            guard let marker = mapView.pick(currentPoint) as? NMFMarker else {
+                addMarker(latlng: latlng)
+                return
+            }
+            deleteMarker(marker: marker)
+        }
+    }
+    
+    func addMarker(latlng: NMGLatLng) {
+        myMapdelegate?.myNaverMapView(self, markerWillAdded: latlng)
+    }
+    
+    func deleteMarker(marker: NMFMarker) {
+        for cluster in clusterObjects {
+            if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng && cluster.places.count == 1 {
+                myMapdelegate?.myNaverMapView(self, markerWillDeleted: cluster.places[0])
+                break
+            }
+        }
+    }
+    
+    func deleteBeforeMarkers() {
+        for clusterMarker in clusterMarkers {
+            clusterMarker.mapView = nil
+        }
+        clusterMarkers.removeAll()
+        clusterObjects.removeAll()
+    }
+    
 }
