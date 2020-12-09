@@ -17,7 +17,6 @@
 		997FE8701C4893C3A09145F8 /* Pods_NaverMapATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87992EA48C88244E5F3BD1C3 /* Pods_NaverMapATests.framework */; };
 		C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C816202625789C8A00DF61C4 /* MarkerFactory.swift */; };
 		C8C1FB4A257F6D4200D98A92 /* UIView+Rendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C1FB49257F6D4200D98A92 /* UIView+Rendering.swift */; };
-		C8CE03A42577925B006659D6 /* MainViewController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8CE03A32577925B006659D6 /* MainViewController+Animation.swift */; };
 		C8D647D8256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D647D7256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift */; };
 		C8E6A8902575D65600E2451F /* MainViewController+NMFMapViewCameraDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8E6A88F2575D65600E2451F /* MainViewController+NMFMapViewCameraDelegate.swift */; };
 		D41830D6257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41830D5257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift */; };
@@ -27,12 +26,15 @@
 		D44558DB256615CF006D9D66 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558D9256615CF006D9D66 /* Place.swift */; };
 		D44558E525661638006D9D66 /* NaverMapA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D44558E325661638006D9D66 /* NaverMapA.xcdatamodeld */; };
 		D44B6FCA25783BD700E912BB /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44B6FC925783BD700E912BB /* DetailViewModel.swift */; };
+		D45B7D34257F7590009208D9 /* MoveAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B7D33257F7590009208D9 /* MoveAnimator.swift */; };
 		D499BFCC2575C40700EF369E /* DetailCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFCA2575C40700EF369E /* DetailCollectionViewListCell.swift */; };
 		D499BFCD2575C40700EF369E /* DetailCollectionViewListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */; };
 		D499BFD32575C41400EF369E /* DetailCollectionViewDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */; };
 		D499BFD42575C41400EF369E /* DetailCollectionViewDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */; };
 		D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */; };
 		D4C2F82B2575193D00F784CE /* DetailPullUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */; };
+		D4FB056625808A220078EE09 /* AppearAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FB056525808A220078EE09 /* AppearAnimator.swift */; };
+		D4FB056B25808A3C0078EE09 /* Animatorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FB056A25808A3C0078EE09 /* Animatorable.swift */; };
 		D506A0E6CC326EDBF1BE4462 /* Pods_NaverMapA_NaverMapAUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE572E6A770EBAC94B87E86 /* Pods_NaverMapA_NaverMapAUITests.framework */; };
 		E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FA42563726900CE6BD7 /* AppDelegate.swift */; };
 		E0059FA72563726900CE6BD7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FA62563726900CE6BD7 /* SceneDelegate.swift */; };
@@ -97,7 +99,6 @@
 		C6BD3042AD95BA3CF13B5BF8 /* Pods-NaverMapA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapA.debug.xcconfig"; path = "Target Support Files/Pods-NaverMapA/Pods-NaverMapA.debug.xcconfig"; sourceTree = "<group>"; };
 		C816202625789C8A00DF61C4 /* MarkerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerFactory.swift; sourceTree = "<group>"; };
 		C8C1FB49257F6D4200D98A92 /* UIView+Rendering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Rendering.swift"; sourceTree = "<group>"; };
-		C8CE03A32577925B006659D6 /* MainViewController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+Animation.swift"; sourceTree = "<group>"; };
 		C8D647D7256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+NMFOverlayImageDataSource.swift"; sourceTree = "<group>"; };
 		C8E6A88F2575D65600E2451F /* MainViewController+NMFMapViewCameraDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+NMFMapViewCameraDelegate.swift"; sourceTree = "<group>"; };
 		D41830D5257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+PullUpViewDelegate.swift"; sourceTree = "<group>"; };
@@ -107,12 +108,15 @@
 		D44558D9256615CF006D9D66 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Place.swift; path = NaverMapA/Model/Place/Place.swift; sourceTree = SOURCE_ROOT; };
 		D44558E425661638006D9D66 /* NaverMapA.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NaverMapA.xcdatamodel; sourceTree = "<group>"; };
 		D44B6FC925783BD700E912BB /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
+		D45B7D33257F7590009208D9 /* MoveAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveAnimator.swift; sourceTree = "<group>"; };
 		D499BFCA2575C40700EF369E /* DetailCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewListCell.swift; sourceTree = "<group>"; };
 		D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailCollectionViewListCell.xib; sourceTree = "<group>"; };
 		D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewDetailCell.swift; sourceTree = "<group>"; };
 		D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailCollectionViewDetailCell.xib; sourceTree = "<group>"; };
 		D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPullUpViewController.swift; sourceTree = "<group>"; };
+		D4FB056525808A220078EE09 /* AppearAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearAnimator.swift; sourceTree = "<group>"; };
+		D4FB056A25808A3C0078EE09 /* Animatorable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animatorable.swift; sourceTree = "<group>"; };
 		E0059FA12563726900CE6BD7 /* NaverMapA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaverMapA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0059FA42563726900CE6BD7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0059FA62563726900CE6BD7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -207,6 +211,7 @@
 				E0EFA25325754F6200995B0C /* Algorithm */,
 				E0EFA25225754F4000995B0C /* Place */,
 				E0EFA23B25754EFD00995B0C /* Cluster */,
+				D4FB0564258089F80078EE09 /* Animator */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -222,6 +227,16 @@
 				8893786B257D415400A5B5C5 /* SettingTableViewCell.xib */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		D4FB0564258089F80078EE09 /* Animator */ = {
+			isa = PBXGroup;
+			children = (
+				D4FB056A25808A3C0078EE09 /* Animatorable.swift */,
+				D45B7D33257F7590009208D9 /* MoveAnimator.swift */,
+				D4FB056525808A220078EE09 /* AppearAnimator.swift */,
+			);
+			path = Animator;
 			sourceTree = "<group>";
 		};
 		E0059F982563726900CE6BD7 = {
@@ -303,7 +318,6 @@
 				D41830D5257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift */,
 				D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */,
 				C8E6A88F2575D65600E2451F /* MainViewController+NMFMapViewCameraDelegate.swift */,
-				C8CE03A32577925B006659D6 /* MainViewController+Animation.swift */,
 				88937865257D3BC000A5B5C5 /* SettingTableViewController.swift */,
 			);
 			path = Controller;
@@ -616,16 +630,17 @@
 				C8C1FB4A257F6D4200D98A92 /* UIView+Rendering.swift in Sources */,
 				D44558CA25660D79006D9D66 /* JsonPlace.swift in Sources */,
 				D430320E2570663200BCEB54 /* KMeansClustering.swift in Sources */,
-				C8CE03A42577925B006659D6 /* MainViewController+Animation.swift in Sources */,
 				88937866257D3BC000A5B5C5 /* SettingTableViewController.swift in Sources */,
 				E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */,
 				E0059FA92563726900CE6BD7 /* MainViewController.swift in Sources */,
 				8893786C257D415400A5B5C5 /* SettingTableViewCell.swift in Sources */,
 				E0EFA23D25754F0D00995B0C /* PenaltyCluster.swift in Sources */,
 				C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */,
+				D45B7D34257F7590009208D9 /* MoveAnimator.swift in Sources */,
 				E0AE5437256F50D900F799E1 /* Clusterable.swift in Sources */,
 				E0AE5492257128A700F799E1 /* penaltyKmeans.swift in Sources */,
 				E0EFA24B25754F2D00995B0C /* BasicCluster.swift in Sources */,
+				D4FB056B25808A3C0078EE09 /* Animatorable.swift in Sources */,
 				8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */,
 				D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */,
 				88A67A02257E73AF004CA6C7 /* Geocoding.swift in Sources */,
@@ -639,6 +654,7 @@
 				E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */,
 				E0AE5442256F859B00F799E1 /* CoordinateBounds.swift in Sources */,
 				C8E6A8902575D65600E2451F /* MainViewController+NMFMapViewCameraDelegate.swift in Sources */,
+				D4FB056625808A220078EE09 /* AppearAnimator.swift in Sources */,
 				88A679FD257E7317004CA6C7 /* NaverMapAPI.swift in Sources */,
 				D44558DB256615CF006D9D66 /* Place.swift in Sources */,
 				D44B6FCA25783BD700E912BB /* DetailViewModel.swift in Sources */,

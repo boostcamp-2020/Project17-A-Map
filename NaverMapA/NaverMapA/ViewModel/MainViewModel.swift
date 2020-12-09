@@ -14,11 +14,12 @@ class MainViewModel {
     var clusteringAlgorithm: Clusterable
     var beforeMarkers: [Cluster] = []
     let queue = OperationQueue()
+    let animationQueue = OperationQueue.main
+    
     init(algorithm: Clusterable) {
         clusteringAlgorithm = algorithm
     }
     func updatePlaces(places: [Place], bounds: CoordinateBounds) {
-        queue.cancelAllOperations()
         let clusteringAlgorithm = self.clusteringAlgorithm.copy()
         guard let cluster = clusteringAlgorithm as? Clusterable else {
             return
@@ -30,12 +31,12 @@ class MainViewModel {
         }
         queue.addOperation(operation)
         queue.addBarrierBlock {
+            guard !operation.isCancelled else { return }
             self.markers.value = cluster.clusters
         }
     }
     
     func updatePlacesAndAnimation(places: [Place], bounds: CoordinateBounds) {
-        queue.cancelAllOperations()
         let clusteringAlgorithm = self.clusteringAlgorithm.copy()
         guard let cluster = clusteringAlgorithm as? Clusterable else {
             return
@@ -47,13 +48,15 @@ class MainViewModel {
         }
         queue.addOperation(operation)
         queue.addBarrierBlock {
+            guard !operation.isCancelled else { return }
             var newClusters = cluster.clusters
-            for index in 0..<newClusters.count {
+            for index in 0..<newClusters.count where !operation.isCancelled {
                 newClusters[index].placesDictionary.removeAll()
                 newClusters[index].places.forEach { place in
                     newClusters[index].placesDictionary.updateValue(1, forKey: Point(latitude: place.latitude, longitude: place.longitude))
                 }
             }
+            guard !operation.isCancelled else { return }
             self.animationMarkers.value = (self.beforeMarkers, newClusters)
             self.beforeMarkers = newClusters
         }
