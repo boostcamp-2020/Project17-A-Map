@@ -17,7 +17,6 @@ class MainViewController: UIViewController {
     var mapView: NMFMapView { naverMapView.mapView }
     var animationLayer: CALayer { naverMapView.animationLayer }
     var viewModel: MainViewModel?
-    var prevZoomLevel: Double = 18
     lazy var dataProvider: PlaceProvider = {
         let provider = PlaceProvider.shared
         return provider

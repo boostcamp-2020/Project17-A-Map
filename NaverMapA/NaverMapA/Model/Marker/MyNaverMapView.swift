@@ -21,6 +21,7 @@ class MyNaverMapView: NMFNaverMapView {
     let markerFactory = MarkerFactory()
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
+    var prevZoomLevel: Double = 18
     weak var myMapdelegate: MyNaverMapViewDelegate?
     
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
