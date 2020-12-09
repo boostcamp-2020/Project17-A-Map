@@ -49,6 +49,8 @@ class DetailPullUpViewController: UIViewController {
     
     weak var delegate: PullUpViewDelegate?
     
+    private var gesture: UIPanGestureRecognizer?
+    
     // MARK: - Views
     
     @IBOutlet private weak var collectionView: UICollectionView!
@@ -96,10 +98,11 @@ class DetailPullUpViewController: UIViewController {
     }
     
     private func setUpGesture() {
-        let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGesture))
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(panGesture))
         gesture.delegate = self
         view.addGestureRecognizer(gesture)
         parent?.view.addGestureRecognizer(gesture)
+        self.gesture = gesture
     }
     
     private func setUpCollectionView() {
@@ -221,6 +224,8 @@ class DetailPullUpViewController: UIViewController {
     
     @IBAction private func touchedCloseButton(_ sender: Any) {
         delegate?.dismissPullUpVC()
+        guard let gesture = gesture else { return }
+        parent?.view.removeGestureRecognizer(gesture)
     }
     
 }
