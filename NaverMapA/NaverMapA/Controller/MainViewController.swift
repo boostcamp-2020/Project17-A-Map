@@ -11,6 +11,8 @@ import CoreData
 
 class MainViewController: UIViewController {
     
+    // MARK: - Properties
+    
     var naverMapView: NMFNaverMapView!
     var mapView: NMFMapView {
         return naverMapView.mapView
@@ -44,17 +46,9 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupMapView()
-        if dataProvider.objectCount == 0 {
-            dataProvider.insert(completionHandler: handleBatchOperationCompletion)
-        }
-        settingButton.layer.cornerRadius = settingButton.bounds.size.width / 2.0
-        settingButton.clipsToBounds = true
-        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
-        backBarButtonItem.tintColor = .black
-        self.navigationItem.backBarButtonItem = backBarButtonItem
-        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
-        mapView.addGestureRecognizer(longPressGesture)
+        setUpMapView()
+        setUpCoreData()
+        setUpOtherViews()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -89,7 +83,7 @@ class MainViewController: UIViewController {
     
     // MARK: - Initailize
     
-    private func setupMapView() {
+    private func setUpMapView() {
         naverMapView = NMFNaverMapView(frame: view.frame)
         naverMapView.showZoomControls = true
         naverMapView.showCompass = false
@@ -99,9 +93,25 @@ class MainViewController: UIViewController {
         naverMapView.mapView.addCameraDelegate(delegate: self)
         naverMapView.mapView.moveCamera(NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: 37.5656471, lng: 126.9908467), zoom: 18)))
         view.addSubview(naverMapView)
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
+        mapView.addGestureRecognizer(longPressGesture)
     }
     
-    // MARK: - Method
+    private func setUpCoreData() {
+        if dataProvider.objectCount == 0 {
+            dataProvider.insert(completionHandler: handleBatchOperationCompletion)
+        }
+    }
+    
+    private func setUpOtherViews() {
+        settingButton.layer.cornerRadius = settingButton.bounds.size.width / 2.0
+        settingButton.clipsToBounds = true
+        let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
+        backBarButtonItem.tintColor = .black
+        self.navigationItem.backBarButtonItem = backBarButtonItem
+    }
+    
+    // MARK: - Methods
     
     private func addMarker(latlng: NMGLatLng) {
         let okAction = UIAlertAction(title: "확인", style: .default) { [weak self] _ in
@@ -235,7 +245,7 @@ class MainViewController: UIViewController {
         self.pullUpVC?.delegate = self
     }
     
-    @objc func longPressed(sender: UILongPressGestureRecognizer) {
+    @objc private func longPressed(sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizer.State.began {
             let currentPoint: CGPoint = sender.location(in: mapView)
             let latlng = mapView.projection.latlng(from: currentPoint)
