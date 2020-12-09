@@ -88,18 +88,18 @@ final class PenaltyKmeans: Operation, Clusterable {
                     }
                 }
             }
+            
             if let i = first, let j = second {
                 let newCluster = PenaltyCluster(places: tempCluster[i].places + tempCluster[j].places)
                 tempCluster.remove(at: j)
                 tempCluster.remove(at: i)
                 tempCluster.append(newCluster)
-                
             } else {
-                
                 isFlag = false
                 continue
             }
         }
+        
         return tempCluster
     }
     
