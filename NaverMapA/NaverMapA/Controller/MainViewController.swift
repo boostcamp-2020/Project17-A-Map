@@ -66,7 +66,7 @@ class MainViewController: UIViewController {
     private func setUpMapView() {
         naverMapView = NaverMapView(frame: view.frame)
         naverMapView.mapView.addCameraDelegate(delegate: self)
-        naverMapView.myMapdelegate = self
+        naverMapView.naverMapDelegate = self
         view.addSubview(naverMapView)
     }
     

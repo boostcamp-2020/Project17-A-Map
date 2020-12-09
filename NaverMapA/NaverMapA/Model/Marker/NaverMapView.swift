@@ -22,14 +22,14 @@ class NaverMapView: NMFNaverMapView {
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
     var prevZoomLevel: Double = 18
-    weak var myMapdelegate: NaverMapViewDelegate?
+    weak var naverMapDelegate: NaverMapViewDelegate?
     
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
             for cluster in self.clusterObjects {
                 if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng {
                     self.moveCamera(to: cluster)
-                    self.myMapdelegate?.naverMapView(self, markerDidSelected: cluster)
+                    self.naverMapDelegate?.naverMapView(self, markerDidSelected: cluster)
                     break
                 }
             }
@@ -120,13 +120,13 @@ class NaverMapView: NMFNaverMapView {
     }
     
     func addMarker(latlng: NMGLatLng) {
-        myMapdelegate?.naverMapView(self, markerWillAdded: latlng)
+        naverMapDelegate?.naverMapView(self, markerWillAdded: latlng)
     }
     
     func deleteMarker(marker: NMFMarker) {
         for cluster in clusterObjects {
             if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng && cluster.places.count == 1 {
-                myMapdelegate?.naverMapView(self, markerWillDeleted: cluster.places[0])
+                naverMapDelegate?.naverMapView(self, markerWillDeleted: cluster.places[0])
                 break
             }
         }
