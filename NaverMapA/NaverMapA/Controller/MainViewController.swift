@@ -43,7 +43,6 @@ class MainViewController: UIViewController {
     var animationLayer: CALayer?
     @IBOutlet weak var settingButton: UIButton!
     
-    
     // MARK: - ViewLifeCycle
     
     override func viewDidLoad() {
@@ -97,6 +96,9 @@ class MainViewController: UIViewController {
         view.addSubview(naverMapView)
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
         mapView.addGestureRecognizer(longPressGesture)
+        animationLayer = CALayer()
+        animationLayer?.frame = CGRect(origin: .zero, size: view.frame.size)
+        mapView.layer.addSublayer(animationLayer!)
     }
     
     private func setUpCoreData() {
