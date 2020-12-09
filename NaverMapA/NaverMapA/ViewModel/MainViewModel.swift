@@ -19,6 +19,7 @@ class MainViewModel {
     init(algorithm: Clusterable) {
         clusteringAlgorithm = algorithm
     }
+    
     func updatePlaces(places: [Place], bounds: CoordinateBounds) {
         let clusteringAlgorithm = self.clusteringAlgorithm.copy()
         guard let cluster = clusteringAlgorithm as? Clusterable else {
