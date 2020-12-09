@@ -70,6 +70,7 @@ final class AppearAnimator: Operation, Animatorable {
     }
     
 }
+
 final class MoveAnimator: Operation, Animatorable {
     
     var mapView: NMFMapView
@@ -96,9 +97,7 @@ final class MoveAnimator: Operation, Animatorable {
         for beforeCluster in beforeClusters where !isCancelled {
             for afterCluster in afterClusters where !isCancelled {
                 for beforePlace in beforeCluster.places where !isCancelled {
-                    if afterCluster.placesDictionary[Point(latitude: beforePlace.latitude, longitude: beforePlace.longitude)] == nil {
-                        continue
-                    }
+                    guard afterCluster.placesDictionary[Point(latitude: beforePlace.latitude, longitude: beforePlace.longitude)] != nil else { continue }
                     let startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeCluster.latitude, lng: beforeCluster.longitude))
                     let endPoint = mapView.projection.point(from: NMGLatLng(lat: afterCluster.latitude, lng: afterCluster.longitude))
                     let markerColor = (beforeClusters.count > 1) ? UIColor.systemRed : UIColor.systemGreen

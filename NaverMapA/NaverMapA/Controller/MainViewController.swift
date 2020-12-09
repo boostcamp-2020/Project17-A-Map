@@ -96,25 +96,24 @@ class MainViewController: UIViewController {
     }
     
     func bindViewModel() {
-        if let viewModel = viewModel {
-            viewModel.animationMarkers.bind({ (beforeClusters, afterClusters) in
-                viewModel.animationQueue.addOperation {
-                    self.deleteBeforeMarkers()
-                    self.clusterObjects = afterClusters
-                }
-                guard let animationLayer = self.animationLayer else { return }
-                viewModel.animationQueue.addOperation(MoveAnimator(mapView: self.mapView, animationLayer: animationLayer, beforeClusters: beforeClusters, afterClusters: afterClusters, handler: self.configureNewMarker))
-            })
-            
-            viewModel.markers.bind({ afterClusters in
-                viewModel.animationQueue.addOperation {
-                    self.deleteBeforeMarkers()
-                    self.clusterObjects = afterClusters
-                }
-                guard let animationLayer = self.animationLayer else { return }
-                viewModel.animationQueue.addOperation(AppearAnimator(mapView: self.mapView, animationLayer: animationLayer, clusters: afterClusters, handler: self.configureNewMarker))
-            })
-        }
+        guard let viewModel = viewModel else { return }
+        viewModel.animationMarkers.bind({ (beforeClusters, afterClusters) in
+            viewModel.animationQueue.addOperation {
+                self.deleteBeforeMarkers()
+                self.clusterObjects = afterClusters
+            }
+            guard let animationLayer = self.animationLayer else { return }
+            viewModel.animationQueue.addOperation(MoveAnimator(mapView: self.mapView, animationLayer: animationLayer, beforeClusters: beforeClusters, afterClusters: afterClusters, handler: self.configureNewMarker))
+        })
+        
+        viewModel.markers.bind({ afterClusters in
+            viewModel.animationQueue.addOperation {
+                self.deleteBeforeMarkers()
+                self.clusterObjects = afterClusters
+            }
+            guard let animationLayer = self.animationLayer else { return }
+            viewModel.animationQueue.addOperation(AppearAnimator(mapView: self.mapView, animationLayer: animationLayer, clusters: afterClusters, handler: self.configureNewMarker))
+        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -208,9 +207,6 @@ class MainViewController: UIViewController {
 extension MainViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         
-    }
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-        print("@@@@@@@@@@@@@@@@@")
     }
 }
 
