@@ -24,9 +24,7 @@ final class ImageCache {
         return cachedImages.object(forKey: url)
     }
     
-    // Returns the cached image if available, otherwise asynchronously loads and caches it.
     final func load(url: URL, item: Item, completion: @escaping (Item, UIImage?) -> Void) {
-        // Check for a cached image.
         let urlStr = url.absoluteString as NSString
         if let cachedImage = image(url: urlStr) {
             DispatchQueue.main.async {
@@ -35,9 +33,7 @@ final class ImageCache {
             return
         }
         loadingResponses[urlStr] = completion
-        // Go fetch the image.
-        imageURLProtocol.urlSession.dataTask(with: url) { (data, response, error) in
-            // Check for the error, then data and try to create the image.
+        imageURLProtocol.urlSession.dataTask(with: url) { (data, _, error) in
             guard let responseData = data, let image = UIImage(data: responseData),
                 let block = self.loadingResponses[urlStr], error == nil else {
                 DispatchQueue.main.async {
@@ -45,7 +41,6 @@ final class ImageCache {
                 }
                 return
             }
-            // Cache the image.
             self.cachedImages.setObject(image, forKey: urlStr, cost: responseData.count)
             DispatchQueue.main.async {
                 block(item, image)

@@ -32,7 +32,7 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
             return UICollectionViewCell()
         }
         let viewModel = viewModels[indexPath.item]
-        viewModel.loadAddress() {
+        viewModel.loadAddress {
             DispatchQueue.main.async {
                 guard collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else { return }
             }
