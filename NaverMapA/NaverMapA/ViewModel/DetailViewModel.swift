@@ -18,9 +18,9 @@ final class DetailViewModel: NSObject {
     
     var longitude: Dynamic<Double>
     
-    var address: Dynamic<String>?
+    var address: Dynamic<String>
     
-    var item: Dynamic<Item>?
+    var item: Dynamic<Item>
     
     init(place: Place) {
         self.name = .init(place.name)
@@ -28,7 +28,9 @@ final class DetailViewModel: NSObject {
         self.longitude = .init(place.longitude)
         self.address = .init("불러오는 중")
         if let url = URL(string: place.imageUrl ?? "") {
-            self.item = .init(Item(image: UIImage(systemName: "nosign")!, url: url))
+            self.item = .init(Item(image: UIImage(systemName: "hourglass")!, url: url))
+        } else {
+            self.item = .init(Item(image: UIImage(systemName: "xmark.circle")!, url: nil))
         }
     }
     
@@ -39,7 +41,7 @@ final class DetailViewModel: NSObject {
                 do {
                     let data = try response.get()
                     let address = NaverMapAPI.getAddress(address: data)
-                    self.address?.value = address ?? "주소 오류"
+                    self.address.value = address ?? "주소 오류"
                     completion()
                 } catch {
                     print(error)
@@ -51,10 +53,10 @@ final class DetailViewModel: NSObject {
     func loadImage(imageCacher: ImageCache, completion: @escaping () -> Void) {
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             guard let self = self else { return }
-            guard let item = self.item?.value else { return }
-            imageCacher.load(url: item.url, item: item) { (fetchedItem, image) in
+            guard let url = self.item.value.url else { return }
+            imageCacher.load(url: url, item: self.item.value) { (fetchedItem, image) in
                 if let img = image, img != fetchedItem.image {
-                    self.item?.value.image = img
+                    self.item.value.image = img
                     completion()
                 }
             }
@@ -65,7 +67,7 @@ final class DetailViewModel: NSObject {
 class Item {
     
     var image: UIImage!
-    let url: URL!
+    let url: URL?
     let identifier = UUID()
     
     func hash(into hasher: inout Hasher) {
@@ -75,7 +77,7 @@ class Item {
         return lhs.identifier == rhs.identifier
     }
     
-    init(image: UIImage, url: URL) {
+    init(image: UIImage, url: URL? = nil) {
         self.image = image
         self.url = url
     }

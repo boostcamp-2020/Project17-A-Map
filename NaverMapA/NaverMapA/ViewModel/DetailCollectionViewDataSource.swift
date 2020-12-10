@@ -107,12 +107,12 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
             cell.imageView.image = imageCacher.placeholderImage
             return
         }
-        viewModel.address?.bindAndFire { address in
+        viewModel.address.bindAndFire { address in
             DispatchQueue.main.async {
                 cell.addressLabel.text = "\(address)"
             }
         }
-        viewModel.item?.bindAndFire { item in
+        viewModel.item.bindAndFire { item in
             DispatchQueue.main.async {
                 cell.imageView.image = item.image
             }
@@ -131,12 +131,12 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
                 cell.nameLabel.text = name
             }
         }
-        viewModel.address?.bindAndFire { address in
+        viewModel.address.bindAndFire { address in
             DispatchQueue.main.async {
                 cell.addressLabel.text = "\(address)"
             }
         }
-        viewModel.item?.bindAndFire { item in
+        viewModel.item.bindAndFire { item in
             DispatchQueue.main.async {
                 cell.imageView.image = item.image
             }
