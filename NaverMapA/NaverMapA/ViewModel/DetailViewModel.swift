@@ -30,14 +30,17 @@ final class DetailViewModel: NSObject {
         if let url = URL(string: place.imageUrl ?? "") {
             self.item = .init(Item(image: UIImage(systemName: "nosign")!, url: url))
         }
-        super.init()
-        DispatchQueue.global(qos: .utility).async { [weak self] in
+    }
+    
+    func loadAddress(completion: @escaping () -> Void) {
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             guard let self = self else { return }
             NaverMapAPI.getData(lng: self.longitude.value, lat: self.latitude.value) { response in
                 do {
                     let data = try response.get()
                     let address = NaverMapAPI.getAddress(address: data)
                     self.address?.value = address ?? "주소 오류"
+                    completion()
                 } catch {
                     print(error)
                 }
@@ -46,10 +49,9 @@ final class DetailViewModel: NSObject {
     }
     
     func loadImage(imageCacher: ImageCache, completion: @escaping () -> Void) {
-        DispatchQueue.global(qos: .utility).async { [weak self] in
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             guard let self = self else { return }
             guard let item = self.item?.value else { return }
-            
             imageCacher.load(url: item.url, item: item) { (fetchedItem, image) in
                 if let img = image, img != fetchedItem.image {
                     self.item?.value.image = img

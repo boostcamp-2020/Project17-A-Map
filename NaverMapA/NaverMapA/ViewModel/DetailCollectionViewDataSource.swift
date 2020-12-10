@@ -27,19 +27,23 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        print(indexPath.row)
         let placeCount = viewModels.count
         guard placeCount > indexPath.item && placeCount > 0 else {
             return UICollectionViewCell()
         }
         let viewModel = viewModels[indexPath.item]
-        
+        viewModel.loadAddress() {
+            DispatchQueue.main.async {
+                guard collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else { return }
+            }
+        }
         viewModel.loadImage(imageCacher: imageCacher) {
             DispatchQueue.main.async {
                 guard collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else { return }
                 collectionView.reloadItems(at: [indexPath])
             }
         }
+        
         let identifier = viewModel.identifier
         if placeCount == 1,
            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewDetailCell.identifier, for: indexPath) as? DetailCollectionViewDetailCell {

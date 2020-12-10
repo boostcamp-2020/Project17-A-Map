@@ -12,9 +12,13 @@ final class ImageCache {
     public static let publicCache = ImageCache()
     var placeholderImage = UIImage(systemName: "nosign")!
     let cachedImages = NSCache<NSString, UIImage>()
-    var loadingResponses = [NSString: [(Item, UIImage?) -> Void]]()
+    var loadingResponses = [NSString: (Item, UIImage?) -> Void]()
     
     let imageURLProtocol = ImageURLProtocol()
+    
+    let loadingResponseInsertQueue = DispatchQueue(label: "loadingResponseInsertQueue")
+    
+    static var checkedArray: [Bool] = []
     
     public final func image(url: NSString) -> UIImage? {
         return cachedImages.object(forKey: url)
@@ -30,20 +34,12 @@ final class ImageCache {
             }
             return
         }
-        // In case there are more than one requestor for the image, we append their completion block.
-        if loadingResponses[urlStr] != nil {
-            loadingResponses[urlStr]?.append(completion)
-            return
-        } else {
-            loadingResponses[urlStr] = [completion]
-        }
+        loadingResponses[urlStr] = completion
         // Go fetch the image.
         imageURLProtocol.urlSession.dataTask(with: url) { (data, response, error) in
             // Check for the error, then data and try to create the image.
-            print(error)
-            print(response)
             guard let responseData = data, let image = UIImage(data: responseData),
-                let blocks = self.loadingResponses[urlStr], error == nil else {
+                let block = self.loadingResponses[urlStr], error == nil else {
                 DispatchQueue.main.async {
                     completion(item, nil)
                 }
@@ -51,12 +47,8 @@ final class ImageCache {
             }
             // Cache the image.
             self.cachedImages.setObject(image, forKey: urlStr, cost: responseData.count)
-            // Iterate over each requestor for the image and pass it back.
-            for block in blocks {
-                DispatchQueue.main.async {
-                    block(item, image)
-                }
-                return
+            DispatchQueue.main.async {
+                block(item, image)
             }
         }.resume()
     }
@@ -72,7 +64,7 @@ class ImageURLProtocol: URLProtocol {
     var cancelledOrComplete: Bool = false
     var block: DispatchWorkItem!
     
-    private let queue = OS_dispatch_queue_serial(label: "com.apple.imageLoaderURLProtocol")
+    private let queue = DispatchQueue(label: "imageLoader")
     
     override class func canInit(with request: URLRequest) -> Bool {
         return true
@@ -90,7 +82,6 @@ class ImageURLProtocol: URLProtocol {
         guard let reqURL = request.url, let urlClient = client else {
             return
         }
-        
         block = DispatchWorkItem(block: {
             if self.cancelledOrComplete == false {
                 let fileURL = URL(fileURLWithPath: reqURL.path)
@@ -101,10 +92,9 @@ class ImageURLProtocol: URLProtocol {
             }
             self.cancelledOrComplete = true
         })
-        
         queue.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 500 * NSEC_PER_MSEC), execute: block)
     }
-    
+
     final override func stopLoading() {
         queue.async {
             if self.cancelledOrComplete == false, let cancelBlock = self.block {

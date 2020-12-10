@@ -27,9 +27,8 @@ class DetailCollectionViewListCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
-        print("asdf")
-        nameLabel.text = "ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㅇㄹㄴ"
-        addressLabel.text = "ㅁㄴㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹ"
+        nameLabel.text = "불러오는 중"
+        addressLabel.text = "불러오는 중"
         imageView.image = ImageCache.publicCache.placeholderImage
     }
 }
