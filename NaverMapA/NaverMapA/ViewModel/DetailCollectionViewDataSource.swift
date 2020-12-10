@@ -17,7 +17,11 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
     // MARK: UICollectionViewDataSource
 
     func setUpViewModels(cluster: Cluster, completion: @escaping () -> Void) {
-        viewModels = cluster.places.map { DetailViewModel(place: $0) }
+        viewModels = cluster.places.map {
+            let viewModel = DetailViewModel(place: $0)
+            viewModel.updateAddress()
+            return viewModel
+        }
         completion()
     }
     
@@ -90,16 +94,12 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
     
     private func bindDetailCell(cell: DetailCollectionViewDetailCell, viewModel: DetailViewModel?) {
         guard let viewModel = viewModel else {
-            cell.latitudeLabel.text = "불러오는 중"
-            cell.longitudeLabel.text = "불러오는 중"
+            cell.addressLabel.text = "불러오는 중"
             cell.imageView = nil
             return
         }
-        viewModel.latitude.bindAndFire { latitude in
-            cell.latitudeLabel.text = "lat: \(latitude)"
-        }
-        viewModel.longitude.bindAndFire { longitude in
-            cell.longitudeLabel.text = "lng: \(longitude)"
+        viewModel.address?.bindAndFire { address in
+            cell.addressLabel.text = "\(address)"
         }
         viewModel.imageUrl.bindAndFire { str in
             if let url = URL(string: str),
@@ -112,19 +112,15 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
     private func bindListCell(cell: DetailCollectionViewListCell, viewModel: DetailViewModel?) {
         guard let viewModel = viewModel else {
             cell.nameLabel.text = "불러오는 중"
-            cell.latitudeLabel.text = ""
-            cell.longitudeLabel.text = ""
+            cell.addressLabel.text = "불러오는 중"
             cell.imageView.image = nil
             return
         }
         viewModel.name.bindAndFire { name in
             cell.nameLabel.text = name
         }
-        viewModel.latitude.bindAndFire { latitude in
-            cell.latitudeLabel.text = "lat: \(latitude)"
-        }
-        viewModel.longitude.bindAndFire { longitude in
-            cell.longitudeLabel.text = "lng: \(longitude)"
+        viewModel.address?.bindAndFire { address in
+            cell.addressLabel.text = "\(address)"
         }
         viewModel.imageUrl.bindAndFire { str in
             if let url = URL(string: str),

@@ -8,9 +8,9 @@
 import Foundation
 import Network
 
-class NaverMapAPI {
-    private let baseURL = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc"
-    func getData(item entity: Place, completion: ((Result<Data, Error>) -> Void)?) {
+final class NaverMapAPI {
+    private static let baseURL = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc"
+    static func getData(item entity: Place, completion: ((Result<Data, Error>) -> Void)?) {
         guard let url = URL(string: "\(baseURL)?coords=\(entity.longitude),\(entity.latitude)&output=json&orders=roadaddr") else {
             return
         }
@@ -35,9 +35,35 @@ class NaverMapAPI {
         })
         task.resume()
     }
+    static func getData(lng: Double, lat: Double, completion: ((Result<Data, Error>) -> Void)?) {
+        guard let url = URL(string: "\(baseURL)?coords=\(lng),\(lat)&output=json&orders=roadaddr") else {
+            return
+        }
+        let session = URLSession.shared
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.setValue(Environment.clientId, forHTTPHeaderField: "X-NCP-APIGW-API-KEY-ID")
+        request.setValue(Environment.clientSecret, forHTTPHeaderField: "X-NCP-APIGW-API-KEY")
+        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, _, error in
+            guard error == nil else {
+                print(error!)
+                return
+            }
+            guard let data = data else {
+                return
+            }
+            guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                return
+            }
+            print(json)
+            completion?(.success(data))
+        })
+        task.resume()
+    }
 }
+
 extension NaverMapAPI {
-    func getAddress(address: Data) -> String? {
+    static func getAddress(address: Data) -> String? {
         let geocoding = try? JSONDecoder().decode(Geocoding.self, from: address).results?.first
         let region = geocoding?.region
         let area1 = region?.area1?.name ?? ""
