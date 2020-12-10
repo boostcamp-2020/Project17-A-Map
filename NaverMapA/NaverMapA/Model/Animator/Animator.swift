@@ -17,6 +17,9 @@ protocol Animator {
     var queue: DispatchQueue { get }
     var group: DispatchGroup { get }
     var isAnimating: Bool { get }
+    var mapView: NMFMapView { get }
+    var animationLayer: CALayer { get }
+    var completionHandler: (Cluster) -> Void { get }
     func animatingView(with overlay: NMFOverlay) -> UIView
     func animateOneView(startPoint: CGPoint, markerColor: UIColor, cluster: Cluster)
     func animateOneView(startPoint: CGPoint, endPoint: CGPoint, markerColor: UIColor, afterCluster: Cluster)
