@@ -20,16 +20,39 @@ extension MainViewController: NMFOverlayImageDataSource {
 
 extension MainViewController: NMFMapViewCameraDelegate {
     
-    func mapView(_ mapView: NMFMapView, cameraWillChangeByReason reason: Int, animated: Bool) {
-//        animationLayer.sublayers?.forEach {
-//            $0.removeFromSuperlayer()
-//        }
-        viewModel?.queue.cancelAllOperations()
-//        viewModel?.animationQueue.cancelAllOperations()
+    func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
+        DispatchQueue.main.async {
+            let coordBounds = self.mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
+            let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
+                                          northEastLng: coordBounds.northEastLng,
+                                          southWestLat: coordBounds.southWestLat,
+                                          northEastLat: coordBounds.northEastLat)
+            let places = self.dataProvider.fetch(bounds: bounds)
+            guard let viewModel = self.viewModel else { return }
+            self.zoomLevelCheck = mapView.zoomLevel
+            self.naverMapView.prevZoomLevel = mapView.zoomLevel
+            if self.$zoomLevelCheck {
+                //애니메이팅
+                viewModel.updatePlacesAndAnimation(places: places, bounds: bounds)
+            }
+        }
     }
     
     func mapViewCameraIdle(_ mapView: NMFMapView) {
-        updateMapView()
+        //updateMapView()
+        DispatchQueue.main.async {
+            let coordBounds = self.mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
+            let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
+                                          northEastLng: coordBounds.northEastLng,
+                                          southWestLat: coordBounds.southWestLat,
+                                          northEastLat: coordBounds.northEastLat)
+            let places = self.dataProvider.fetch(bounds: bounds)
+            guard let viewModel = self.viewModel else { return }
+            if self.naverMapView.prevZoomLevel == mapView.zoomLevel {
+                viewModel.updatePlaces(places: places, bounds: bounds)
+            }
+        }
+        
     }
     
     func updateMapView() {
