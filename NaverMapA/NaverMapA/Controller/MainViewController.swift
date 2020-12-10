@@ -60,6 +60,11 @@ class MainViewController: UIViewController {
 
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.view.bringSubviewToFront(settingButton)
+        self.navigationController?.isNavigationBarHidden = true
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let _ = NMFAuthManager.shared().clientId else {
@@ -81,11 +86,6 @@ class MainViewController: UIViewController {
         animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         bindViewModel()
         updateMapView()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.navigationController?.isNavigationBarHidden = false
     }
     
     // MARK: - Initailize
@@ -200,7 +200,7 @@ extension MainViewController: NaverMapViewDelegate {
             guard let self = self else { return }
             self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
         }
-        AlertManager.shared.okCancle(controller: self, title: title, message: message, okHandler: okHandler, cancleHandler: nil)
+        AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
     
     func naverMapView(_ mapView: NaverMapView, markerWillDeleted place: Place) {
@@ -210,6 +210,6 @@ extension MainViewController: NaverMapViewDelegate {
             guard let self = self else { return }
             self.dataProvider.delete(object: place, completionHandler: self.coreDataUpdateHandler)
         }
-        AlertManager.shared.okCancle(controller: self, title: title, message: message, okHandler: okHandler, cancleHandler: nil)
+        AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
 }

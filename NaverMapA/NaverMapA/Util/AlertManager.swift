@@ -15,13 +15,13 @@ class AlertManager {
         
     }
     
-    func okCancle(controller: UIViewController,
+    func okCancel(controller: UIViewController,
                   title: String,
                   message: String,
                   okHandler: ((UIAlertAction) -> Void)?,
-                  cancleHandler: ((UIAlertAction) -> Void)?) {
+                  cancelHandler: ((UIAlertAction) -> Void)?) {
         let okAction = UIAlertAction(title: "확인", style: .default, handler: okHandler)
-        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: cancleHandler)
+        let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: cancelHandler)
         showAlert(controller: controller, title: title, message: message, preferredStyle: .alert, actions: [okAction, cancelAction])
     }
     
