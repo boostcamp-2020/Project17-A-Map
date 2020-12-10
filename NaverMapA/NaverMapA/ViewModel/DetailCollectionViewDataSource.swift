@@ -7,9 +7,14 @@
 
 import UIKit
 
-final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource {
+final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource, UICollectionViewDataSourcePrefetching {
+    
+    // MARK: Properties
     
     private var viewModels: [DetailViewModel] = []
+    private let asyncFetcher = AsyncFetcher()
+    
+    // MARK: UICollectionViewDataSource
 
     func setUpViewModels(cluster: Cluster, completion: @escaping () -> Void) {
         viewModels = cluster.places.map { DetailViewModel(place: $0) }
@@ -26,22 +31,70 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
             return UICollectionViewCell()
         }
         let viewModel = viewModels[indexPath.item]
+        let identifier = viewModel.identifier
         if placeCount == 1,
            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewDetailCell.identifier, for: indexPath) as? DetailCollectionViewDetailCell {
-            bindDetailCell(cell: cell, viewModel: viewModel)
+            cell.representedIdentifier = identifier
+            if let fetchedData = asyncFetcher.fetchedData(for: viewModel) {
+                bindDetailCell(cell: cell, viewModel: fetchedData)
+            } else {
+                bindDetailCell(cell: cell, viewModel: nil)
+                asyncFetcher.fetchAsync(viewModel) { [weak self] fetchedData in
+                    DispatchQueue.main.async {
+                        guard cell.representedIdentifier == identifier else { return }
+                        self?.bindDetailCell(cell: cell, viewModel: fetchedData)
+                    }
+                }
+            }
             cell.layoutIfNeeded()
             return cell
         } else if
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewListCell.identifier, for: indexPath) as? DetailCollectionViewListCell {
-            bindListCell(cell: cell, viewModel: viewModel)
+            cell.representedIdentifier = identifier
+            if let fetchedData = asyncFetcher.fetchedData(for: viewModel) {
+                bindListCell(cell: cell, viewModel: fetchedData)
+            } else {
+                bindListCell(cell: cell, viewModel: nil)
+                asyncFetcher.fetchAsync(viewModel) { [weak self] fetchedData in
+                    DispatchQueue.main.async {
+                        guard cell.representedIdentifier == identifier else { return }
+                        self?.bindListCell(cell: cell, viewModel: fetchedData)
+                    }
+                }
+            }
             cell.layoutIfNeeded()
             return cell
         } else {
             return UICollectionViewCell()
         }
+            
+    }
+    
+    // MARK: UICollectionViewDataSourcePrefetching
+    
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            let viewModel = viewModels[indexPath.item]
+            asyncFetcher.fetchAsync(viewModel)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            let viewModel = viewModels[indexPath.item]
+            asyncFetcher.cancelFetch(viewModel)
+        }
     }
 
-    private func bindDetailCell(cell: DetailCollectionViewDetailCell, viewModel: DetailViewModel) {
+    // MARK: ViewModel Bind Methods
+    
+    private func bindDetailCell(cell: DetailCollectionViewDetailCell, viewModel: DetailViewModel?) {
+        guard let viewModel = viewModel else {
+            cell.latitudeLabel.text = "불러오는 중"
+            cell.longitudeLabel.text = "불러오는 중"
+            cell.imageView = nil
+            return
+        }
         viewModel.latitude.bindAndFire { latitude in
             cell.latitudeLabel.text = "lat: \(latitude)"
         }
@@ -56,7 +109,14 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
         }
     }
     
-    private func bindListCell(cell: DetailCollectionViewListCell, viewModel: DetailViewModel) {
+    private func bindListCell(cell: DetailCollectionViewListCell, viewModel: DetailViewModel?) {
+        guard let viewModel = viewModel else {
+            cell.nameLabel.text = "불러오는 중"
+            cell.latitudeLabel.text = ""
+            cell.longitudeLabel.text = ""
+            cell.imageView.image = nil
+            return
+        }
         viewModel.name.bindAndFire { name in
             cell.nameLabel.text = name
         }

@@ -33,6 +33,8 @@
 		D499BFD42575C41400EF369E /* DetailCollectionViewDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */; };
 		D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */; };
 		D4C2F82B2575193D00F784CE /* DetailPullUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */; };
+		D4C8115225812CDD0097A3FA /* AsyncFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C8115125812CDD0097A3FA /* AsyncFetcher.swift */; };
+		D4C8115F2581DC790097A3FA /* AsyncFetcherOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C8115E2581DC790097A3FA /* AsyncFetcherOperation.swift */; };
 		D4FB056625808A220078EE09 /* AppearAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FB056525808A220078EE09 /* AppearAnimator.swift */; };
 		D4FB056B25808A3C0078EE09 /* Animatorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FB056A25808A3C0078EE09 /* Animatorable.swift */; };
 		D506A0E6CC326EDBF1BE4462 /* Pods_NaverMapA_NaverMapAUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE572E6A770EBAC94B87E86 /* Pods_NaverMapA_NaverMapAUITests.framework */; };
@@ -118,6 +120,8 @@
 		D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailCollectionViewDetailCell.xib; sourceTree = "<group>"; };
 		D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPullUpViewController.swift; sourceTree = "<group>"; };
+		D4C8115125812CDD0097A3FA /* AsyncFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetcher.swift; sourceTree = "<group>"; };
+		D4C8115E2581DC790097A3FA /* AsyncFetcherOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetcherOperation.swift; sourceTree = "<group>"; };
 		D4FB056525808A220078EE09 /* AppearAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearAnimator.swift; sourceTree = "<group>"; };
 		D4FB056A25808A3C0078EE09 /* Animatorable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animatorable.swift; sourceTree = "<group>"; };
 		E0059FA12563726900CE6BD7 /* NaverMapA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaverMapA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -219,6 +223,7 @@
 				E0EFA25225754F4000995B0C /* Place */,
 				E0EFA23B25754EFD00995B0C /* Cluster */,
 				D4FB0564258089F80078EE09 /* Animator */,
+				D4C8115025812CBD0097A3FA /* AsyncFetcher */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -234,6 +239,15 @@
 				8893786B257D415400A5B5C5 /* SettingTableViewCell.xib */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		D4C8115025812CBD0097A3FA /* AsyncFetcher */ = {
+			isa = PBXGroup;
+			children = (
+				D4C8115125812CDD0097A3FA /* AsyncFetcher.swift */,
+				D4C8115E2581DC790097A3FA /* AsyncFetcherOperation.swift */,
+			);
+			path = AsyncFetcher;
 			sourceTree = "<group>";
 		};
 		D4FB0564258089F80078EE09 /* Animator */ = {
@@ -666,6 +680,8 @@
 				E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */,
 				D499BFCC2575C40700EF369E /* DetailCollectionViewListCell.swift in Sources */,
 				C8D647D8256F66FB00E3BB14 /* MainViewController+NMFOverlayImageDataSource.swift in Sources */,
+				D4C8115F2581DC790097A3FA /* AsyncFetcherOperation.swift in Sources */,
+				D4C8115225812CDD0097A3FA /* AsyncFetcher.swift in Sources */,
 				D44558E525661638006D9D66 /* NaverMapA.xcdatamodeld in Sources */,
 				D41830D6257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift in Sources */,
 				E0059FA72563726900CE6BD7 /* SceneDelegate.swift in Sources */,

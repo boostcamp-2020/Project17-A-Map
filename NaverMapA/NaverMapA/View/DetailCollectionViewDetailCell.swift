@@ -11,6 +11,8 @@ class DetailCollectionViewDetailCell: UICollectionViewCell {
     
     static let identifier: String = String(describing: DetailCollectionViewDetailCell.self)
     
+    var representedIdentifier: UUID?
+    
     @IBOutlet weak var latitudeLabel: UILabel!
     
     @IBOutlet weak var longitudeLabel: UILabel!

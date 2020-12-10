@@ -9,6 +9,8 @@ import Foundation
 
 final class DetailViewModel: NSObject {
     
+    var identifier = UUID()
+    
     var name: Dynamic<String>
     
     var latitude: Dynamic<Double>

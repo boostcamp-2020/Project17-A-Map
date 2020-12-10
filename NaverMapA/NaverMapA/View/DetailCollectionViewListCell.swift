@@ -10,6 +10,8 @@ import UIKit
 class DetailCollectionViewListCell: UICollectionViewCell {
     
     static let identifier: String = String(describing: DetailCollectionViewListCell.self)
+    
+    var representedIdentifier: UUID?
 
     @IBOutlet weak var nameLabel: UILabel!
     
