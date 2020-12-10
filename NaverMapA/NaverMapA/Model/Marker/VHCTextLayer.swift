@@ -31,7 +31,7 @@ class VHCTextLayer: CATextLayer {
         case 2:
             fsize = 0.7
         case 3:
-            fsize = 0.6
+            fsize = 0.58
         case 4:
             fsize = 0.4
         default:
@@ -43,6 +43,7 @@ class VHCTextLayer: CATextLayer {
         self.font = UIFont.systemFont(ofSize: frame.width * fsize)
         self.fontSize = CGFloat(frame.width * fsize)
         self.foregroundColor = UIColor.black.cgColor
+        contentsScale = UIScreen.main.scale
         string = text
     }
     
