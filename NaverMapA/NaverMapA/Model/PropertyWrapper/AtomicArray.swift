@@ -23,7 +23,6 @@ struct AtomicArray<Value> {
     }
 }
 
-
 @propertyWrapper
 struct Atomic<Value> {
     

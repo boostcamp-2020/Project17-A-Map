@@ -124,9 +124,7 @@ class MainViewController: UIViewController {
             DispatchQueue.main.async {
                 self.naverMapView.deleteBeforeMarkers()
                 self.naverMapView.clusterObjects = afterClusters
-                
                 self.animator.animate(before: [], after: afterClusters, type: .appear)
-
             }
         }
     }

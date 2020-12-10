@@ -50,6 +50,7 @@
 		E07AD7B82580F64800D07EAF /* NaverMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7B72580F64800D07EAF /* NaverMapView.swift */; };
 		E07AD7C32581087100D07EAF /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7C22581087100D07EAF /* AlertManager.swift */; };
 		E07AD7CE25812C5000D07EAF /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7CD25812C5000D07EAF /* Animator.swift */; };
+		E07AD7FD2581DF3F00D07EAF /* VHCTextLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7FC2581DF3F00D07EAF /* VHCTextLayer.swift */; };
 		E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5424256F4AA700F799E1 /* MainViewModel.swift */; };
 		E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE542C256F4BC800F799E1 /* Dynamic.swift */; };
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
@@ -142,6 +143,7 @@
 		E07AD7B72580F64800D07EAF /* NaverMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverMapView.swift; sourceTree = "<group>"; };
 		E07AD7C22581087100D07EAF /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		E07AD7CD25812C5000D07EAF /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
+		E07AD7FC2581DF3F00D07EAF /* VHCTextLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VHCTextLayer.swift; sourceTree = "<group>"; };
 		E0AE5424256F4AA700F799E1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0AE542C256F4BC800F799E1 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 			children = (
 				C816202625789C8A00DF61C4 /* MarkerFactory.swift */,
 				E07AD7B72580F64800D07EAF /* NaverMapView.swift */,
+				E07AD7FC2581DF3F00D07EAF /* VHCTextLayer.swift */,
 			);
 			path = Marker;
 			sourceTree = "<group>";
@@ -686,6 +689,7 @@
 				D44558DB256615CF006D9D66 /* Place.swift in Sources */,
 				D44B6FCA25783BD700E912BB /* DetailViewModel.swift in Sources */,
 				D44558CF256611DF006D9D66 /* PlaceProvider.swift in Sources */,
+				E07AD7FD2581DF3F00D07EAF /* VHCTextLayer.swift in Sources */,
 				E0BCC6C625638972005AD87F /* Environment.swift in Sources */,
 				E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */,
 				E07AD780257F728700D07EAF /* UserInfo.swift in Sources */,
