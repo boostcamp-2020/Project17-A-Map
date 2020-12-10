@@ -238,9 +238,8 @@ class DetailPullUpViewController: UIViewController {
 extension DetailPullUpViewController: UICollectionViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y <= 0 {
+        if scrollView.contentOffset.y < 0 {
             scrollView.contentOffset.y = 0
-            scrollView.isScrollEnabled = false
         }
     }
     
@@ -281,7 +280,7 @@ extension DetailPullUpViewController: UIGestureRecognizerDelegate {
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard otherGestureRecognizer == collectionView.panGestureRecognizer else {
+        guard otherGestureRecognizer == collectionView.panGestureRecognizer && collectionView.contentOffset.y > 0 else {
             return false
         }
         return true
