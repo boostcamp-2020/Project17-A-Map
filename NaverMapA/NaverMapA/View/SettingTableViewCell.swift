@@ -10,8 +10,8 @@ import UIKit
 class SettingTableViewCell: UITableViewCell {
 
     static let identifier: String = String(describing: SettingTableViewCell.self)
-
     @IBOutlet weak var titleLabel: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -46,6 +46,9 @@ class SettingTableViewCell: UITableViewCell {
             }
         case 2:
             self.titleLabel.text = Setting.MarkerColor.allCases[indexPath.row].rawValue
+            self.titleLabel.textColor = GetMarkerColor.getColor(
+                colorString: Setting.MarkerColor.allCases[indexPath.row].rawValue
+            )
             if InfoSetting.markerColor == "" {
                 InfoSetting.markerColor = Setting.MarkerColor.allCases[0].rawValue
             }

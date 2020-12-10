@@ -25,6 +25,14 @@ class GetMarkerColor {
             return .systemGray
         case Setting.MarkerColor.teal.rawValue:
             return .systemTeal
+        case Setting.MarkerColor.color1.rawValue:
+            return UIColor(red: 239/255, green: 194/255, blue: 150/255, alpha: 1)
+        case Setting.MarkerColor.color2.rawValue:
+            return UIColor(red: 181/255, green: 225/255, blue: 232/255, alpha: 1)
+        case Setting.MarkerColor.color3.rawValue:
+            return UIColor(red: 233/255, green: 175/255, blue: 185/255, alpha: 1)
+        case Setting.MarkerColor.color4.rawValue:
+            return UIColor(red: 108/255, green: 153/255, blue: 202/255, alpha: 1)
         default:
             return .systemTeal
         }

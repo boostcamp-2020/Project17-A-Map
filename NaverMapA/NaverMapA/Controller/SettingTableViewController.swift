@@ -30,10 +30,14 @@ struct Setting {
         case red = "빨강색"
         case yellow = "노랑색"
         case blue = "파랑색"
-        case green = "초록섹"
+        case green = "초록색"
         case purple = "보라색"
         case gray = "회색"
         case teal = "하늘색"
+        case color1 = "color1"
+        case color2 = "color2"
+        case color3 = "color3"
+        case color4 = "color4"
     }
 }
 
