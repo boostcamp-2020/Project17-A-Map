@@ -17,11 +17,7 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
     // MARK: UICollectionViewDataSource
 
     func setUpViewModels(cluster: Cluster, completion: @escaping () -> Void) {
-        viewModels = cluster.places.map {
-            let viewModel = DetailViewModel(place: $0)
-            viewModel.updateAddress()
-            return viewModel
-        }
+        viewModels = cluster.places.map { DetailViewModel(place: $0) }
         completion()
     }
     

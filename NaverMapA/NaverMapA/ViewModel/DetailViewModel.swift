@@ -26,9 +26,7 @@ final class DetailViewModel: NSObject {
         self.latitude = .init(place.latitude)
         self.longitude = .init(place.longitude)
         self.imageUrl = .init(place.imageUrl ?? "")
-    }
-    
-    func updateAddress() {
+        super.init()
         NaverMapAPI.getData(lng: longitude.value, lat: latitude.value) { response in
             do {
                 let data = try response.get()
