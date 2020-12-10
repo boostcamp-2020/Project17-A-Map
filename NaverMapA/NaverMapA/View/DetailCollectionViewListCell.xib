@@ -33,8 +33,8 @@
                             </label>
                         </subviews>
                     </stackView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="map.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="FEP-xU-ld6">
-                        <rect key="frame" x="254" y="10.5" width="70" height="68.5"/>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nosign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="FEP-xU-ld6">
+                        <rect key="frame" x="254" y="10.5" width="70" height="69"/>
                         <color key="tintColor" systemColor="systemGreenColor"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="70" id="1tQ-bg-oEH"/>
@@ -62,7 +62,7 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="map.fill" catalog="system" width="128" height="110"/>
+        <image name="nosign" catalog="system" width="128" height="121"/>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
