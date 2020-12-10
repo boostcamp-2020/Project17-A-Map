@@ -69,6 +69,8 @@ class SettingTableViewCell: UITableViewCell {
                 InfoSetting.algorithm = Setting.Algorithm.allCases[indexPath.row].rawValue
             case 1:
                 InfoSetting.animation = Setting.Animation.allCases[indexPath.row].rawValue
+            case 2:
+                InfoSetting.markerColor = Setting.MarkerColor.allCases[indexPath.row].rawValue
             default:
                 break
             }

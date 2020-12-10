@@ -27,10 +27,13 @@ struct Setting {
     }
     
     enum MarkerColor: String, CaseIterable {
-        case red = "빨강"
-        case yellow = "노랑"
-        case blue = "파랑"
-        case green = "초록"
+        case red = "빨강색"
+        case yellow = "노랑색"
+        case blue = "파랑색"
+        case green = "초록섹"
+        case purple = "보라색"
+        case gray = "회색"
+        case teal = "하늘색"
     }
 }
 

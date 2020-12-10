@@ -16,6 +16,7 @@
 		88A67A02257E73AF004CA6C7 /* Geocoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88A67A01257E73AF004CA6C7 /* Geocoding.swift */; };
 		997FE8701C4893C3A09145F8 /* Pods_NaverMapATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87992EA48C88244E5F3BD1C3 /* Pods_NaverMapATests.framework */; };
 		C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C816202625789C8A00DF61C4 /* MarkerFactory.swift */; };
+		C87AE2B22582602400017EA5 /* GetMarkerColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87AE2B12582602400017EA5 /* GetMarkerColor.swift */; };
 		C8C1FB4A257F6D4200D98A92 /* UIView+Rendering.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8C1FB49257F6D4200D98A92 /* UIView+Rendering.swift */; };
 		C8D647D8256F66FB00E3BB14 /* MainViewController+NaverMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8D647D7256F66FB00E3BB14 /* MainViewController+NaverMap.swift */; };
 		D41830D6257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D41830D5257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift */; };
@@ -104,6 +105,7 @@
 		C216106B7FE5408B63595379 /* Pods-NaverMapATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapATests.debug.xcconfig"; path = "Target Support Files/Pods-NaverMapATests/Pods-NaverMapATests.debug.xcconfig"; sourceTree = "<group>"; };
 		C6BD3042AD95BA3CF13B5BF8 /* Pods-NaverMapA.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapA.debug.xcconfig"; path = "Target Support Files/Pods-NaverMapA/Pods-NaverMapA.debug.xcconfig"; sourceTree = "<group>"; };
 		C816202625789C8A00DF61C4 /* MarkerFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerFactory.swift; sourceTree = "<group>"; };
+		C87AE2B12582602400017EA5 /* GetMarkerColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetMarkerColor.swift; sourceTree = "<group>"; };
 		C8C1FB49257F6D4200D98A92 /* UIView+Rendering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Rendering.swift"; sourceTree = "<group>"; };
 		C8D647D7256F66FB00E3BB14 /* MainViewController+NaverMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+NaverMap.swift"; sourceTree = "<group>"; };
 		D41830D5257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainViewController+PullUpViewDelegate.swift"; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				C816202625789C8A00DF61C4 /* MarkerFactory.swift */,
 				E07AD7B72580F64800D07EAF /* NaverMapView.swift */,
 				E07AD7FC2581DF3F00D07EAF /* VHCTextLayer.swift */,
+				C87AE2B12582602400017EA5 /* GetMarkerColor.swift */,
 			);
 			path = Marker;
 			sourceTree = "<group>";
@@ -671,6 +674,7 @@
 				E0AE5492257128A700F799E1 /* penaltyKmeans.swift in Sources */,
 				E0EFA24B25754F2D00995B0C /* BasicCluster.swift in Sources */,
 				D4FB056B25808A3C0078EE09 /* Animatorable.swift in Sources */,
+				C87AE2B22582602400017EA5 /* GetMarkerColor.swift in Sources */,
 				8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */,
 				D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */,
 				E07AD7CE25812C5000D07EAF /* Animator.swift in Sources */,
