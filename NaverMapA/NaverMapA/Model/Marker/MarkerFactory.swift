@@ -9,26 +9,6 @@ import UIKit
 import NMapsMap
 
 class MarkerFactory {
-//    func makeMarker(markerOverlay: NMFOverlay, mapView: NMFMapView, placeCount: Int) -> NMFOverlayImage {
-//        let markerOverlay = markerOverlay as? NMFMarker
-//        let markerImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: markerOverlay?.iconImage.imageWidth ?? 0, height: markerOverlay?.iconImage.imageHeight ?? 0))
-//        markerImageView.image = markerOverlay?.iconImage.image
-//        let label = UILabel()
-//        label.clipsToBounds = true
-//        label.text = "\(placeCount)"
-//        label.font = .boldSystemFont(ofSize: UIFont.labelFontSize)
-//        label.textAlignment = NSTextAlignment.center
-//        label.adjustsFontSizeToFitWidth = true
-//        label.textColor = .black
-//        label.backgroundColor = .white
-//        markerImageView.addSubview(label)
-//        setLayout(label: label, markerImageView: markerImageView)
-//        mapView.addSubview(markerImageView)
-//        let image = markerImageView.getImage()
-//        let markerImage = NMFOverlayImage(image: image)
-//        markerImageView.removeFromSuperview()
-//        return markerImage
-//    }
     
     func setLayout(label: UILabel, markerImageView: UIImageView) {
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -39,7 +19,15 @@ class MarkerFactory {
         label.bottomAnchor.constraint(equalTo: markerImageView.bottomAnchor, constant: -18).isActive = true
     }
     
-    func makeCMarker(rect: CGRect, color: UIColor, text: String = "8") -> CALayer {
+    func makeCmarkerView(frame: CGRect, color: UIColor, text: String = "8") -> UIView {
+        let mRect = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+        let mlayer = makeCMarkerLayer(rect: mRect, color: color, text: text)
+        let mView = UIView(frame: frame)
+        mView.layer.addSublayer(mlayer)
+        return mView
+    }
+    
+    func makeCMarkerLayer(rect: CGRect, color: UIColor, text: String = "8") -> CALayer {
         let centerX = rect.midX
         let centerY = rect.midY
         let radius = rect.width / 3
