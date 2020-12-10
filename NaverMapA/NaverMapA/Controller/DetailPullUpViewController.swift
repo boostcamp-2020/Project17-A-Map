@@ -113,10 +113,6 @@ class DetailPullUpViewController: UIViewController {
         collectionView.backgroundColor = .systemGray6
         collectionView.register(UINib(nibName: DetailCollectionViewListCell.identifier, bundle: .main), forCellWithReuseIdentifier: DetailCollectionViewListCell.identifier)
         collectionView.register(UINib(nibName: DetailCollectionViewDetailCell.identifier, bundle: .main), forCellWithReuseIdentifier: DetailCollectionViewDetailCell.identifier)
-        collectionView.layoutIfNeeded()
-        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
-        let insets = (collectionView.contentInset.left + collectionView.contentInset.right)
-        layout?.estimatedItemSize = CGSize(width: collectionView.bounds.width - insets, height: 200)
     }
     
     // MARK: - Methods
@@ -180,7 +176,6 @@ class DetailPullUpViewController: UIViewController {
         }
         dataSource.setUpViewModels(cluster: cluster, completion: {
             self.collectionView.reloadData()
-            self.collectionView.layoutIfNeeded()
         })
     }
     
@@ -263,6 +258,12 @@ extension DetailPullUpViewController: UICollectionViewDelegate {
         })
     }
     
+}
+
+extension DetailPullUpViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 130)
+    }
 }
 
 // MARK: GestureRecognizerDelegate

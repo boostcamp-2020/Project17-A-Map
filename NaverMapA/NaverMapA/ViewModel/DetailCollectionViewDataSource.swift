@@ -46,7 +46,6 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
                     }
                 }
             }
-            cell.layoutIfNeeded()
             return cell
         } else if
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewListCell.identifier, for: indexPath) as? DetailCollectionViewListCell {
@@ -62,7 +61,6 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
                     }
                 }
             }
-            cell.layoutIfNeeded()
             return cell
         } else {
             return UICollectionViewCell()

@@ -21,22 +21,22 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="as2-qC-Mrg">
-                        <rect key="frame" x="15" y="10" width="423" height="20.5"/>
+                        <rect key="frame" x="15" y="10" width="443" height="20.5"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ie4-uL-VBA">
-                                <rect key="frame" x="0.0" y="0.0" width="423" height="20.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="443" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                     </stackView>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="map.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="XIg-N1-kPy">
-                        <rect key="frame" x="448" y="10.5" width="120" height="118.5"/>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="nosign" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="XIg-N1-kPy">
+                        <rect key="frame" x="468" y="10.5" width="100" height="99"/>
                         <color key="tintColor" systemColor="systemGreenColor"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="XIg-N1-kPy" secondAttribute="height" multiplier="1:1" id="BDt-1L-3yx"/>
-                            <constraint firstAttribute="height" constant="120" id="JMd-e7-fDW"/>
+                            <constraint firstAttribute="height" constant="100" id="JMd-e7-fDW"/>
                         </constraints>
                     </imageView>
                 </subviews>
@@ -63,7 +63,7 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="map.fill" catalog="system" width="128" height="110"/>
+        <image name="nosign" catalog="system" width="128" height="121"/>
         <systemColor name="systemGreenColor">
             <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
