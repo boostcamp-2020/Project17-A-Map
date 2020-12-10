@@ -22,9 +22,9 @@ class MainViewController: UIViewController {
         return provider
     }()
     var pullUpVC: DetailPullUpViewController?
+    var fetchBtn: FetchButton!
     var animator: MoveAnimator1!
     @Unit(wrappedValue: 18, threshold: 0.5) var zoomLevelCheck
-    var places: [Place] = []
     
     @IBOutlet weak var settingButton: UIButton!
     
@@ -35,23 +35,8 @@ class MainViewController: UIViewController {
         setUpMapView()
         setUpCoreData()
         setUpOtherViews()
-        
-        animator = MoveAnimator1(mapView: self.naverMapView, appearCompletionHandler: self.naverMapView.configureNewMarker, moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:))
-        let btn = UIButton(frame: CGRect(x: 50, y: 50, width: 50, height: 30))
-        btn.backgroundColor = .systemBlue
-        view.addSubview(btn)
-        btn.addTarget(self, action: #selector(test), for: .touchDown)
-    }
-    
-    @objc func test() {
-        let coordBounds = self.mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
-
-        let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
-                                      northEastLng: coordBounds.northEastLng,
-                                      southWestLat: coordBounds.southWestLat,
-                                      northEastLat: coordBounds.northEastLat)
-        places = self.dataProvider.fetch(bounds: bounds)
-
+        animator = MoveAnimator1(mapView: self.naverMapView,
+                                 appearCompletionHandler: self.naverMapView.configureNewMarker, moveCompletionHandler: self.naverMapView.configureNewMarkers)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -102,6 +87,9 @@ class MainViewController: UIViewController {
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         backBarButtonItem.tintColor = .black
         self.navigationItem.backBarButtonItem = backBarButtonItem
+        fetchBtn = FetchButton(frame: CGRect(x: 80, y: 100, width: 160, height: 40))
+        view.addSubview(fetchBtn)
+        fetchBtn.addTarget(self, action: #selector(fetchDidTouched), for: .touchDown)
     }
     
     // MARK: - Methods
@@ -117,7 +105,7 @@ class MainViewController: UIViewController {
         viewModel.animationMarkers.bind { (beforeClusters, afterClusters) in
             DispatchQueue.main.async {
                 if self.animator.isAnimating { // 애니메이션중일때
-                    print("애니메이션중..")
+//                    print("애니메이션중..")
                     // 1. 애니메이션중인 레이어 모두 지우기
                     self.animator.isAnimating = false // 새로운 마커를 그리지 않음
                     self.animationLayer.sublayers?.removeAll()
@@ -136,13 +124,22 @@ class MainViewController: UIViewController {
         }
 
         viewModel.markers.bind { afterClusters in
-       
             DispatchQueue.main.async {
                 self.naverMapView.deleteBeforeMarkers()
                 self.naverMapView.clusterObjects = afterClusters
                 self.animator.animate(before: [], after: afterClusters, type: .appear)
             }
         }
+    }
+    
+    @objc func fetchDidTouched() {
+        let places = fetchPlaceInScreen()
+        viewModel?.fetchedPlaces = places
+        viewModel?.updatePlaces(places: places, bounds: naverMapView.coordBounds)
+    }
+    
+    func fetchPlaceInScreen() -> [Place] {
+        return self.dataProvider.fetch(bounds: naverMapView.coordBounds)
     }
     
     private func handleBatchOperationCompletion(error: Error?) {

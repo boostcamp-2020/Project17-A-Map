@@ -22,52 +22,27 @@ extension MainViewController: NMFMapViewCameraDelegate {
     
     func mapView(_ mapView: NMFMapView, cameraDidChangeByReason reason: Int, animated: Bool) {
         DispatchQueue.main.async {
-            let coordBounds = self.mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
-            let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
-                                          northEastLng: coordBounds.northEastLng,
-                                          southWestLat: coordBounds.southWestLat,
-                                          northEastLat: coordBounds.northEastLat)
-//            let places = self.dataProvider.fetch(bounds: bounds)
             guard let viewModel = self.viewModel else { return }
+            let coordBounds = self.naverMapView.coordBounds
+            let filtedPlaces = viewModel.fetchedPlaces(with: coordBounds)
             self.zoomLevelCheck = mapView.zoomLevel
             self.naverMapView.prevZoomLevel = mapView.zoomLevel
             if self.$zoomLevelCheck {
-                //애니메이팅
-                viewModel.updatePlacesAndAnimation(places: self.places, bounds: bounds)
+                viewModel.updatePlacesAndAnimation(places: filtedPlaces, bounds: self.naverMapView.coordBounds)
             }
         }
     }
     
-//    func mapViewCameraIdle(_ mapView: NMFMapView) {
-//        //updateMapView()
-//        DispatchQueue.main.async {
-//            let coordBounds = self.mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
-//            let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
-//                                          northEastLng: coordBounds.northEastLng,
-//                                          southWestLat: coordBounds.southWestLat,
-//                                          northEastLat: coordBounds.northEastLat)
-////            let places = self.dataProvider.fetch(bounds: bounds)
-//            guard let viewModel = self.viewModel else { return }
-//            if self.naverMapView.prevZoomLevel == mapView.zoomLevel {
-//                viewModel.updatePlaces(places: self.places, bounds: bounds)
-//            }
-//        }
-//        
-//    }
-    
     func updateMapView() {
         DispatchQueue.main.async {
-            let coordBounds = self.mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
-            let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
-                                          northEastLng: coordBounds.northEastLng,
-                                          southWestLat: coordBounds.southWestLat,
-                                          northEastLat: coordBounds.northEastLat)
             guard let viewModel = self.viewModel else { return }
-            if self.naverMapView.prevZoomLevel != self.mapView.zoomLevel { // 애니메이션
+            let coordBounds = self.naverMapView.coordBounds
+            let filtedPlaces = viewModel.fetchedPlaces(with: coordBounds)
+            if self.naverMapView.prevZoomLevel != self.mapView.zoomLevel {
                 self.naverMapView.prevZoomLevel = self.mapView.zoomLevel
-                viewModel.updatePlacesAndAnimation(places: self.places, bounds: bounds)
+                viewModel.updatePlacesAndAnimation(places: filtedPlaces, bounds: coordBounds)
             } else {
-                viewModel.updatePlaces(places: self.places, bounds: bounds)
+                viewModel.updatePlaces(places: filtedPlaces, bounds: coordBounds)
             }
         }
     }
