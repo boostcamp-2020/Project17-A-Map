@@ -71,8 +71,6 @@ class MainViewController: UIViewController {
             AlertManager.shared.clientIdIsNil(controller: self)
             return
         }
-        self.navigationController?.isNavigationBarHidden = true
-        self.view.bringSubviewToFront(settingButton)
         switch InfoSetting.algorithm {
         case Setting.Algorithm.kims.rawValue:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
