@@ -36,7 +36,13 @@ class MainViewController: UIViewController {
         setUpCoreData()
         setUpOtherViews()
         
-        animator = MoveAnimator1(mapView: self.naverMapView, appearCompletionHandler: self.naverMapView.configureNewMarker, moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:))
+        let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
+        animator = MoveAnimator1(
+            mapView: self.naverMapView,
+            markerColor: markerColor,
+            appearCompletionHandler: self.naverMapView.configureNewMarker(afterCluster:markerColor:),
+            moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:markerColor:)
+        )
         let btn = UIButton(frame: CGRect(x: 50, y: 50, width: 50, height: 30))
         btn.backgroundColor = .systemBlue
         view.addSubview(btn)
@@ -72,6 +78,7 @@ class MainViewController: UIViewController {
         default:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         }
+        animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         bindViewModel()
         updateMapView()
     }
@@ -126,7 +133,7 @@ class MainViewController: UIViewController {
                         $0.mapView = nil
                     }
                     // 3. 현재 바운드에 맞는 마커 바로 맵뷰에 추가
-                    self.naverMapView.configureNewMarkers(afterClusters: afterClusters)
+                    self.naverMapView.configureNewMarkers(afterClusters: afterClusters, markerColor: self.animator.markerColor)
                 } else { // 애니메이션중이 아닐때
                     self.naverMapView.deleteBeforeMarkers()
                     self.naverMapView.clusterObjects = afterClusters
