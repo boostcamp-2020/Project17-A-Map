@@ -21,7 +21,6 @@ final class AsyncFetcherOperation: Operation {
     // MARK: Operation overrides
 
     override func main() {
-        Thread.sleep(until: Date().addingTimeInterval(1))
         guard !isCancelled else { return }
     }
     

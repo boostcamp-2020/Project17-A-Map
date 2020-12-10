@@ -40,8 +40,8 @@ final class AsyncFetcher {
         }
     }
 
-    func fetchedData(for viewModel: DetailViewModel) -> DetailViewModel? {
-        return cache.object(forKey: viewModel.identifier as NSUUID)
+    func fetchedData(for identifier: UUID) -> DetailViewModel? {
+        return cache.object(forKey: identifier as NSUUID)
     }
 
     func cancelFetch(_ viewModel: DetailViewModel) {
@@ -58,7 +58,7 @@ final class AsyncFetcher {
 
     private func fetchData(for viewModel: DetailViewModel) {
         guard operation(for: viewModel.identifier) == nil else { return }
-        if let data = fetchedData(for: viewModel) {
+        if let data = fetchedData(for: viewModel.identifier) {
             invokeCompletionHandlers(for: viewModel.identifier, with: data)
         } else {
             let operation = AsyncFetcherOperation(viewModel: viewModel)
