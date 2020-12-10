@@ -41,7 +41,7 @@ final class DetailViewModel: NSObject {
                 do {
                     let data = try response.get()
                     let address = NaverMapAPI.getAddress(address: data)
-                    self.address.value = address ?? "주소 오류"
+                    self.address.value = address ?? "도로명 주소가 없습니다."
                     completion()
                 } catch {
                     print(error)

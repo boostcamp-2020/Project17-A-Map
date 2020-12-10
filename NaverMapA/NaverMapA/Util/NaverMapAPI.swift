@@ -38,6 +38,9 @@ final class NaverMapAPI {
 
 extension NaverMapAPI {
     static func getAddress(address: Data) -> String? {
+        if let statusCode = try? JSONDecoder().decode(Geocoding.self, from: address).status, statusCode.code == 3 {
+            return nil
+        }
         let geocoding = try? JSONDecoder().decode(Geocoding.self, from: address).results?.first
         let region = geocoding?.region
         let area1 = region?.area1?.name ?? ""
