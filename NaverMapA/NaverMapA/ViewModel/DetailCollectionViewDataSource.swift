@@ -13,6 +13,7 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
     
     private var viewModels: [DetailViewModel] = []
     private let asyncFetcher = AsyncFetcher()
+    private let imageCacher = ImageCache()
     
     // MARK: UICollectionViewDataSource
 
@@ -26,16 +27,24 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        print(indexPath.row)
         let placeCount = viewModels.count
         guard placeCount > indexPath.item && placeCount > 0 else {
             return UICollectionViewCell()
         }
         let viewModel = viewModels[indexPath.item]
+        
+        viewModel.loadImage(imageCacher: imageCacher) {
+            DispatchQueue.main.async {
+                guard collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else { return }
+                collectionView.reloadItems(at: [indexPath])
+            }
+        }
         let identifier = viewModel.identifier
         if placeCount == 1,
            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewDetailCell.identifier, for: indexPath) as? DetailCollectionViewDetailCell {
             cell.representedIdentifier = identifier
-            if let fetchedData = asyncFetcher.fetchedData(for: viewModel) {
+            if let fetchedData = asyncFetcher.fetchedData(for: viewModel.identifier) {
                 bindDetailCell(cell: cell, viewModel: fetchedData)
             } else {
                 bindDetailCell(cell: cell, viewModel: nil)
@@ -43,6 +52,7 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
                     DispatchQueue.main.async {
                         guard cell.representedIdentifier == identifier else { return }
                         self?.bindDetailCell(cell: cell, viewModel: fetchedData)
+                        collectionView.reloadItems(at: [indexPath])
                     }
                 }
             }
@@ -50,7 +60,7 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
         } else if
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewListCell.identifier, for: indexPath) as? DetailCollectionViewListCell {
             cell.representedIdentifier = identifier
-            if let fetchedData = asyncFetcher.fetchedData(for: viewModel) {
+            if let fetchedData = asyncFetcher.fetchedData(for: viewModel.identifier) {
                 bindListCell(cell: cell, viewModel: fetchedData)
             } else {
                 bindListCell(cell: cell, viewModel: nil)
@@ -58,6 +68,7 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
                     DispatchQueue.main.async {
                         guard cell.representedIdentifier == identifier else { return }
                         self?.bindListCell(cell: cell, viewModel: fetchedData)
+                        collectionView.reloadItems(at: [indexPath])
                     }
                 }
             }
@@ -78,7 +89,7 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
     }
     
     func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
-        for indexPath in indexPaths {
+        for indexPath in indexPaths where indexPath.item < viewModels.count {
             let viewModel = viewModels[indexPath.item]
             asyncFetcher.cancelFetch(viewModel)
         }
@@ -89,16 +100,17 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
     private func bindDetailCell(cell: DetailCollectionViewDetailCell, viewModel: DetailViewModel?) {
         guard let viewModel = viewModel else {
             cell.addressLabel.text = "불러오는 중"
-            cell.imageView = nil
+            cell.imageView.image = imageCacher.placeholderImage
             return
         }
         viewModel.address?.bindAndFire { address in
-            cell.addressLabel.text = "\(address)"
+            DispatchQueue.main.async {
+                cell.addressLabel.text = "\(address)"
+            }
         }
-        viewModel.imageUrl.bindAndFire { str in
-            if let url = URL(string: str),
-               let data = try? Data(contentsOf: url) {
-                cell.imageView.image = UIImage(data: data)
+        viewModel.item?.bindAndFire { item in
+            DispatchQueue.main.async {
+                cell.imageView.image = item.image
             }
         }
     }
@@ -107,19 +119,22 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
         guard let viewModel = viewModel else {
             cell.nameLabel.text = "불러오는 중"
             cell.addressLabel.text = "불러오는 중"
-            cell.imageView.image = nil
+            cell.imageView.image = imageCacher.placeholderImage
             return
         }
         viewModel.name.bindAndFire { name in
-            cell.nameLabel.text = name
+            DispatchQueue.main.async {
+                cell.nameLabel.text = name
+            }
         }
         viewModel.address?.bindAndFire { address in
-            cell.addressLabel.text = "\(address)"
+            DispatchQueue.main.async {
+                cell.addressLabel.text = "\(address)"
+            }
         }
-        viewModel.imageUrl.bindAndFire { str in
-            if let url = URL(string: str),
-               let data = try? Data(contentsOf: url) {
-                cell.imageView.image = UIImage(data: data)
+        viewModel.item?.bindAndFire { item in
+            DispatchQueue.main.async {
+                cell.imageView.image = item.image
             }
         }
     }

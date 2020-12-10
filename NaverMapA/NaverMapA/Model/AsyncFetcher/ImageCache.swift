@@ -1,0 +1,119 @@
+//
+//  ImageCache.swift
+//  NaverMapA
+//
+//  Created by 홍경표 on 2020/12/10.
+//
+
+import UIKit
+
+final class ImageCache {
+    
+    public static let publicCache = ImageCache()
+    var placeholderImage = UIImage(systemName: "nosign")!
+    let cachedImages = NSCache<NSString, UIImage>()
+    var loadingResponses = [NSString: [(Item, UIImage?) -> Void]]()
+    
+    let imageURLProtocol = ImageURLProtocol()
+    
+    public final func image(url: NSString) -> UIImage? {
+        return cachedImages.object(forKey: url)
+    }
+    
+    // Returns the cached image if available, otherwise asynchronously loads and caches it.
+    final func load(url: URL, item: Item, completion: @escaping (Item, UIImage?) -> Void) {
+        // Check for a cached image.
+        let urlStr = url.absoluteString as NSString
+        if let cachedImage = image(url: urlStr) {
+            DispatchQueue.main.async {
+                completion(item, cachedImage)
+            }
+            return
+        }
+        // In case there are more than one requestor for the image, we append their completion block.
+        if loadingResponses[urlStr] != nil {
+            loadingResponses[urlStr]?.append(completion)
+            return
+        } else {
+            loadingResponses[urlStr] = [completion]
+        }
+        // Go fetch the image.
+        imageURLProtocol.urlSession.dataTask(with: url) { (data, response, error) in
+            // Check for the error, then data and try to create the image.
+            print(error)
+            print(response)
+            guard let responseData = data, let image = UIImage(data: responseData),
+                let blocks = self.loadingResponses[urlStr], error == nil else {
+                DispatchQueue.main.async {
+                    completion(item, nil)
+                }
+                return
+            }
+            // Cache the image.
+            self.cachedImages.setObject(image, forKey: urlStr, cost: responseData.count)
+            // Iterate over each requestor for the image and pass it back.
+            for block in blocks {
+                DispatchQueue.main.async {
+                    block(item, image)
+                }
+                return
+            }
+        }.resume()
+    }
+    
+    func cancelLoading() {
+        loadingResponses.removeAll()
+    }
+        
+}
+
+class ImageURLProtocol: URLProtocol {
+
+    var cancelledOrComplete: Bool = false
+    var block: DispatchWorkItem!
+    
+    private let queue = OS_dispatch_queue_serial(label: "com.apple.imageLoaderURLProtocol")
+    
+    override class func canInit(with request: URLRequest) -> Bool {
+        return true
+    }
+    
+    override class func canonicalRequest(for request: URLRequest) -> URLRequest {
+        return request
+    }
+    
+    class override func requestIsCacheEquivalent(_ aRequest: URLRequest, to bRequest: URLRequest) -> Bool {
+        return false
+    }
+    
+    final override func startLoading() {
+        guard let reqURL = request.url, let urlClient = client else {
+            return
+        }
+        
+        block = DispatchWorkItem(block: {
+            if self.cancelledOrComplete == false {
+                let fileURL = URL(fileURLWithPath: reqURL.path)
+                if let data = try? Data(contentsOf: fileURL) {
+                    urlClient.urlProtocol(self, didLoad: data)
+                    urlClient.urlProtocolDidFinishLoading(self)
+                }
+            }
+            self.cancelledOrComplete = true
+        })
+        
+        queue.asyncAfter(deadline: DispatchTime(uptimeNanoseconds: 500 * NSEC_PER_MSEC), execute: block)
+    }
+    
+    final override func stopLoading() {
+        queue.async {
+            if self.cancelledOrComplete == false, let cancelBlock = self.block {
+                cancelBlock.cancel()
+                self.cancelledOrComplete = true
+            }
+        }
+    }
+    
+    let urlSession = URLSession(configuration: .default)
+
+}

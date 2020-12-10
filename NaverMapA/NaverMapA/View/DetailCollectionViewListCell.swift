@@ -26,5 +26,10 @@ class DetailCollectionViewListCell: UICollectionViewCell {
         backgroundColor = .systemGray5
     }
     
+    override func prepareForReuse() {
+        print("asdf")
+        nameLabel.text = "ㅁㄴㅇㄹㅁㄴㅇㄹㅁㄴㅇㄹㅁㅇㄹㄴ"
+        addressLabel.text = "ㅁㄴㅇㄹㅁㄴㅇㄹㅁㅇㄴㄹ"
+        imageView.image = ImageCache.publicCache.placeholderImage
     }
 }
