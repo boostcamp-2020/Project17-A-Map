@@ -33,15 +33,17 @@ class MainViewController: UIViewController {
         setUpCoreData()
         setUpOtherViews()
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.view.bringSubviewToFront(settingButton)
+        self.navigationController?.isNavigationBarHidden = true
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let _ = NMFAuthManager.shared().clientId else {
             AlertManager.shared.clientIdIsNil(controller: self)
             return
         }
-        self.navigationController?.isNavigationBarHidden = true
-        self.view.bringSubviewToFront(settingButton)
         switch UserDefaults.standard.value(forKey: Setting.State.Algorithm.rawValue) as? String ?? "" {
         case Setting.Algorithm.kims.rawValue:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
@@ -54,11 +56,6 @@ class MainViewController: UIViewController {
         }
         bindViewModel()
         updateMapView()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.navigationController?.isNavigationBarHidden = false
     }
     
     // MARK: - Initailize
@@ -160,7 +157,7 @@ extension MainViewController: NaverMapViewDelegate {
             guard let self = self else { return }
             self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
         }
-        AlertManager.shared.okCancle(controller: self, title: title, message: message, okHandler: okHandler, cancleHandler: nil)
+        AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
     
     func naverMapView(_ mapView: NaverMapView, markerWillDeleted place: Place) {
@@ -170,6 +167,6 @@ extension MainViewController: NaverMapViewDelegate {
             guard let self = self else { return }
             self.dataProvider.delete(object: place, completionHandler: self.coreDataUpdateHandler)
         }
-        AlertManager.shared.okCancle(controller: self, title: title, message: message, okHandler: okHandler, cancleHandler: nil)
+        AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
 }
