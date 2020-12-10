@@ -35,11 +35,21 @@ class SettingTableViewCell: UITableViewCell {
             }
         case 1:
             self.titleLabel.text = Setting.Animation.allCases[indexPath.row].rawValue
-            
             if InfoSetting.animation == "" {
                 InfoSetting.animation = Setting.Animation.allCases[0].rawValue
             }
             if Setting.Animation.allCases[indexPath.row].rawValue == InfoSetting.animation {
+                self.accessoryType = .checkmark
+                self.isSelected = false
+            } else {
+                self.accessoryType = .none
+            }
+        case 2:
+            self.titleLabel.text = Setting.MarkerColor.allCases[indexPath.row].rawValue
+            if InfoSetting.markerColor == "" {
+                InfoSetting.markerColor = Setting.MarkerColor.allCases[0].rawValue
+            }
+            if Setting.MarkerColor.allCases[indexPath.row].rawValue == InfoSetting.markerColor {
                 self.accessoryType = .checkmark
                 self.isSelected = false
             } else {
