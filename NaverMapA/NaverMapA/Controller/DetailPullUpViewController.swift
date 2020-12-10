@@ -174,6 +174,9 @@ class DetailPullUpViewController: UIViewController {
         } else if placeCount > 1 {
             titleLabel.text = "\(cluster.places.count)개의 장소"
         }
+        let newDataSource = DetailCollectionViewDataSource()
+        dataSource = newDataSource
+        collectionView.dataSource = dataSource
         dataSource.setUpViewModels(cluster: cluster, completion: {
             self.collectionView.reloadData()
         })
