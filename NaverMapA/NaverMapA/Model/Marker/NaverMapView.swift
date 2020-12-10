@@ -95,14 +95,11 @@ class NaverMapView: NMFNaverMapView {
         let lng = afterCluster.longitude
         let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
         marker.iconImage = NMF_MARKER_IMAGE_BLACK
-   
         let w = marker.iconImage.imageWidth * 1.2
         let h = marker.iconImage.imageHeight * 1.2
-        
         let tlayer = markerFactory.makeCMarker(rect: CGRect(x: 0, y: 0, width: w, height: h), color: .systemTeal, text: "\(afterCluster.places.count)")
         let tview = UIView(frame: CGRect(x: 0, y: 0, width: w, height: h))
         tview.layer.addSublayer(tlayer)
-        
         marker.iconImage = NMFOverlayImage(image: tview.getImage())
         marker.zIndex = 1
         marker.mapView = self.mapView
@@ -116,12 +113,12 @@ class NaverMapView: NMFNaverMapView {
             let lng = afterCluster.longitude
             let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
             marker.iconImage = NMF_MARKER_IMAGE_BLACK
-            if afterCluster.places.count == 1 {
-                marker.iconTintColor = .systemGreen
-            } else {
-                marker.iconTintColor = .systemRed
-            }
-            marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: mapView, placeCount: afterCluster.places.count)
+            let w = marker.iconImage.imageWidth * 1.2
+            let h = marker.iconImage.imageHeight * 1.2
+            let tlayer = markerFactory.makeCMarker(rect: CGRect(x: 0, y: 0, width: w, height: h), color: .systemTeal, text: "\(afterCluster.places.count)")
+            let tview = UIView(frame: CGRect(x: 0, y: 0, width: w, height: h))
+            tview.layer.addSublayer(tlayer)
+            marker.iconImage = NMFOverlayImage(image: tview.getImage())
             marker.zIndex = 1
             marker.mapView = self.mapView
             marker.touchHandler = self.handler

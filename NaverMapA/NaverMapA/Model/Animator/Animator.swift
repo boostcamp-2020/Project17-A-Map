@@ -19,7 +19,8 @@ protocol Animator {
     var isAnimating: Bool { get }
     var mapView: NMFMapView { get }
     var animationLayer: CALayer { get }
-    var completionHandler: (Cluster) -> Void { get }
+    var appearCompletionHandler: (Cluster) -> Void { get }
+    var moveCompletionHandler: ([Cluster]) -> Void { get }
     func animatingView(with overlay: NMFOverlay) -> UIView
     func animateOneView(startPoint: CGPoint, markerColor: UIColor, cluster: Cluster)
     func animateOneView(startPoint: CGPoint, endPoint: CGPoint, markerColor: UIColor, afterClusters: [Cluster])
@@ -94,36 +95,39 @@ class MoveAnimator1: Animator {
     }
     
     func animateOneView(startPoint: CGPoint, markerColor: UIColor, cluster: Cluster) {
-        let marker = NMFMarker()
-        marker.iconTintColor = markerColor
-        let markerView = animatingView(with: marker)
-        animationLayer.addSublayer(markerView.layer)
-        markerView.layer.position = startPoint
-        markerView.layer.anchorPoint = CGPoint(x: 0.5, y: 1)
+        let markerLayer = MarkerFactory().makeCMarker(rect: CGRect(x: 0, y: 0, width: NMFMarker().iconImage.imageWidth, height: NMFMarker().iconImage.imageHeight), color: .systemTeal)
+        //marker.iconTintColor = markerColor
+        //let markerView = animatingView(with: marker)
+        animationLayer.addSublayer(markerLayer)
+        markerLayer.position = startPoint
+        markerLayer.anchorPoint = CGPoint(x: markerLayer.bounds.origin.x / 2, y: markerLayer.bounds.origin.x - markerLayer.bounds.height)
         count += 1
         queue.async {
             CATransaction.begin()
-            let scaleUpAnimation = CABasicAnimation(keyPath: "transform.scale")
+            let scaleUpAnimation = CABasicAnimation(keyPath: "transform.scale.y")
             scaleUpAnimation.fromValue = 0
             scaleUpAnimation.toValue = 1
             scaleUpAnimation.duration = 0.4
             CATransaction.setCompletionBlock {
                 self.count -= 1
-                markerView.layer.removeFromSuperlayer()
+                markerLayer.removeFromSuperlayer()
                 self.appearCompletionHandler(cluster)
             }
-            markerView.layer.add(scaleUpAnimation, forKey: "transform.scale")
+            markerLayer.add(scaleUpAnimation, forKey: "transform.scale.y")
             CATransaction.commit()
         }
     }
         
     func animateOneView(startPoint: CGPoint, endPoint: CGPoint, markerColor: UIColor, afterClusters: [Cluster]) {
-        let marker = NMFMarker()
-        marker.iconTintColor = markerColor
-        let markerView = animatingView(with: marker)
-        markerView.frame.origin = CGPoint(x: -100, y: -100)
-        animationLayer.addSublayer(markerView.layer)
-        markerView.layer.anchorPoint = CGPoint(x: 0.5, y: 1)
+        //let marker = NMFMarker()
+        let markerLayer = MarkerFactory().makeCMarker(rect: CGRect(x: 0, y: 0, width: NMFMarker().iconImage.imageWidth, height: NMFMarker().iconImage.imageHeight), color: .systemTeal)
+        //marker.iconTintColor = markerColor
+        //let markerView = animatingView(with: marker)
+        //let markerView = ani
+        //markerView.frame.origin = CGPoint(x: -100, y: -100)
+        //animationLayer.addSublayer(markerView.layer)
+        animationLayer.addSublayer(markerLayer)
+        markerLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         isAnimating = true
         count += 1
         queue.async {
@@ -134,13 +138,13 @@ class MoveAnimator1: Animator {
             markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y)
             CATransaction.setCompletionBlock {
                 self.count -= 1
-                markerView.layer.removeFromSuperlayer()
+                markerLayer.removeFromSuperlayer()
                 if self.count == 0 && self.isAnimating {
                     self.isAnimating = false
                     self.moveCompletionHandler(afterClusters)
                 }
             }
-            markerView.layer.add(markerAnimation, forKey: "position")
+            markerLayer.add(markerAnimation, forKey: "position")
             CATransaction.commit()
         }
     }

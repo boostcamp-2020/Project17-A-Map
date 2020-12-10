@@ -9,26 +9,26 @@ import UIKit
 import NMapsMap
 
 class MarkerFactory {
-    func makeMarker(markerOverlay: NMFOverlay, mapView: NMFMapView, placeCount: Int) -> NMFOverlayImage {
-        let markerOverlay = markerOverlay as? NMFMarker
-        let markerImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: markerOverlay?.iconImage.imageWidth ?? 0, height: markerOverlay?.iconImage.imageHeight ?? 0))
-        markerImageView.image = markerOverlay?.iconImage.image
-        let label = UILabel()
-        label.clipsToBounds = true
-        label.text = "\(placeCount)"
-        label.font = .boldSystemFont(ofSize: UIFont.labelFontSize)
-        label.textAlignment = NSTextAlignment.center
-        label.adjustsFontSizeToFitWidth = true
-        label.textColor = .black
-        label.backgroundColor = .white
-        markerImageView.addSubview(label)
-        setLayout(label: label, markerImageView: markerImageView)
-        mapView.addSubview(markerImageView)
-        let image = markerImageView.getImage()
-        let markerImage = NMFOverlayImage(image: image)
-        markerImageView.removeFromSuperview()
-        return markerImage
-    }
+//    func makeMarker(markerOverlay: NMFOverlay, mapView: NMFMapView, placeCount: Int) -> NMFOverlayImage {
+//        let markerOverlay = markerOverlay as? NMFMarker
+//        let markerImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: markerOverlay?.iconImage.imageWidth ?? 0, height: markerOverlay?.iconImage.imageHeight ?? 0))
+//        markerImageView.image = markerOverlay?.iconImage.image
+//        let label = UILabel()
+//        label.clipsToBounds = true
+//        label.text = "\(placeCount)"
+//        label.font = .boldSystemFont(ofSize: UIFont.labelFontSize)
+//        label.textAlignment = NSTextAlignment.center
+//        label.adjustsFontSizeToFitWidth = true
+//        label.textColor = .black
+//        label.backgroundColor = .white
+//        markerImageView.addSubview(label)
+//        setLayout(label: label, markerImageView: markerImageView)
+//        mapView.addSubview(markerImageView)
+//        let image = markerImageView.getImage()
+//        let markerImage = NMFOverlayImage(image: image)
+//        markerImageView.removeFromSuperview()
+//        return markerImage
+//    }
     
     func setLayout(label: UILabel, markerImageView: UIImageView) {
         label.translatesAutoresizingMaskIntoConstraints = false
