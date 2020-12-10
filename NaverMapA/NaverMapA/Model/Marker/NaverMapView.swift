@@ -107,6 +107,25 @@ class NaverMapView: NMFNaverMapView {
         self.clusterMarkers.append(marker)
     }
     
+    func configureNewMarkers(afterClusters: [Cluster]) {
+        afterClusters.forEach {afterCluster in
+            let lat = afterCluster.latitude
+            let lng = afterCluster.longitude
+            let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
+            marker.iconImage = NMF_MARKER_IMAGE_BLACK
+            if afterCluster.places.count == 1 {
+                marker.iconTintColor = .systemGreen
+            } else {
+                marker.iconTintColor = .systemRed
+            }
+            marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: mapView, placeCount: afterCluster.places.count)
+            marker.zIndex = 1
+            marker.mapView = self.mapView
+            marker.touchHandler = self.handler
+            self.clusterMarkers.append(marker)
+        }
+    }
+    
     @objc private func longPressed(sender: UILongPressGestureRecognizer) {
         if sender.state == UIGestureRecognizer.State.began {
             let currentPoint: CGPoint = sender.location(in: mapView)
