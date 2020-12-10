@@ -23,6 +23,7 @@ class MainViewController: UIViewController {
     }()
     var pullUpVC: DetailPullUpViewController?
     var animator: MoveAnimator1!
+    @Unit(wrappedValue: 18, threshold: 0.5) var zoomLevelCheck
 
     @IBOutlet weak var settingButton: UIButton!
     
@@ -34,7 +35,7 @@ class MainViewController: UIViewController {
         setUpCoreData()
         setUpOtherViews()
         
-        animator = MoveAnimator1(mapView: self.naverMapView, completionHandler: self.naverMapView.configureNewMarker)
+        animator = MoveAnimator1(mapView: self.naverMapView, appearCompletionHandler: self.naverMapView.configureNewMarker, moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:))
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -99,10 +100,22 @@ class MainViewController: UIViewController {
         guard let viewModel = viewModel else { return }
         viewModel.animationMarkers.bind { (beforeClusters, afterClusters) in
             DispatchQueue.main.async {
-                self.naverMapView.deleteBeforeMarkers()
-                self.naverMapView.clusterObjects = afterClusters
-           
-                self.animator.animate(before: beforeClusters, after: afterClusters, type: .move)
+                if self.animator.isAnimating { // 애니메이션중일때
+                    print("애니메이션중..")
+                    // 1. 애니메이션중인 레이어 모두 지우기
+                    self.animator.isAnimating = false // 새로운 마커를 그리지 않음
+                    self.animationLayer.sublayers?.removeAll()
+                    // 2. 맵뷰에 있는 모든 마커 삭제
+                    self.naverMapView.clusterMarkers.forEach {
+                        $0.mapView = nil
+                    }
+                    // 3. 현재 바운드에 맞는 마커 바로 맵뷰에 추가
+                    self.naverMapView.configureNewMarkers(afterClusters: afterClusters)
+                } else { // 애니메이션중이 아닐때
+                    self.naverMapView.deleteBeforeMarkers()
+                    self.naverMapView.clusterObjects = afterClusters
+                    self.animator.animate(before: beforeClusters, after: afterClusters, type: .move)
+                }
             }
         }
 
@@ -146,11 +159,11 @@ class MainViewController: UIViewController {
 
 extension MainViewController {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        animationLayer.sublayers?.forEach {
-//            $0.removeFromSuperlayer()
-//        }
-//        viewModel?.queue.cancelAllOperations()
-//        viewModel?.animationQueue.cancelAllOperations()
+        animationLayer.sublayers?.forEach {
+            $0.removeFromSuperlayer()
+        }
+        viewModel?.queue.cancelAllOperations()
+        viewModel?.animationQueue.cancelAllOperations()
     }
 }
 
