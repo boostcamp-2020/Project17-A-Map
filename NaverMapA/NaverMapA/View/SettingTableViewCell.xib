@@ -23,7 +23,20 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gcX-n0-NNC">
+                        <rect key="frame" x="89" y="12" width="30" height="20"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="30" id="6r7-jF-ztm"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="30" id="OB6-Qy-kN2"/>
+                            <constraint firstAttribute="height" constant="20" id="eQ6-bK-hdL"/>
+                        </constraints>
+                    </view>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="gcX-n0-NNC" firstAttribute="centerY" secondItem="nXC-JX-tff" secondAttribute="centerY" id="tyS-MB-kFf"/>
+                    <constraint firstItem="gcX-n0-NNC" firstAttribute="leading" secondItem="nXC-JX-tff" secondAttribute="trailing" constant="20" id="zzD-Q2-7xk"/>
+                </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
@@ -32,14 +45,18 @@
                 <constraint firstItem="nXC-JX-tff" firstAttribute="leading" secondItem="njF-e1-oar" secondAttribute="leading" constant="10" id="lD2-2d-uRo"/>
             </constraints>
             <connections>
+                <outlet property="colorView" destination="gcX-n0-NNC" id="T2C-zF-Vb9"/>
                 <outlet property="titleLabel" destination="nXC-JX-tff" id="v2Z-EU-XP4"/>
             </connections>
-            <point key="canvasLocation" x="34.782608695652179" y="61.607142857142854"/>
+            <point key="canvasLocation" x="33.644859813084111" y="61.555075593952488"/>
         </tableViewCell>
     </objects>
     <resources>
         <systemColor name="secondarySystemBackgroundColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>
