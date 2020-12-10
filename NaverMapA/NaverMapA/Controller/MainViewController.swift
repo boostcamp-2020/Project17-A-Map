@@ -24,7 +24,8 @@ class MainViewController: UIViewController {
     var pullUpVC: DetailPullUpViewController?
     var animator: MoveAnimator1!
     @Unit(wrappedValue: 18, threshold: 0.5) var zoomLevelCheck
-
+    var places: [Place] = []
+    
     @IBOutlet weak var settingButton: UIButton!
     
     // MARK: - ViewLifeCycle
@@ -36,6 +37,21 @@ class MainViewController: UIViewController {
         setUpOtherViews()
         
         animator = MoveAnimator1(mapView: self.naverMapView, appearCompletionHandler: self.naverMapView.configureNewMarker, moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:))
+        let btn = UIButton(frame: CGRect(x: 50, y: 50, width: 50, height: 30))
+        btn.backgroundColor = .systemBlue
+        view.addSubview(btn)
+        btn.addTarget(self, action: #selector(test), for: .touchDown)
+    }
+    
+    @objc func test() {
+        let coordBounds = self.mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
+
+        let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
+                                      northEastLng: coordBounds.northEastLng,
+                                      southWestLat: coordBounds.southWestLat,
+                                      northEastLat: coordBounds.northEastLat)
+        places = self.dataProvider.fetch(bounds: bounds)
+
     }
     
     override func viewDidAppear(_ animated: Bool) {

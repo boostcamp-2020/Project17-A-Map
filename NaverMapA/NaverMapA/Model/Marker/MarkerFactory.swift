@@ -45,18 +45,18 @@ class MarkerFactory {
         let markerLayer = CAShapeLayer()
         markerLayer.path = path.cgPath
         markerLayer.fillColor = color.cgColor
-        markerLayer.shadowOffset = CGSize(width: 2, height: 2)
-        markerLayer.shadowColor = UIColor.black.cgColor
-        markerLayer.shadowOpacity = 0.4
+//        markerLayer.shadowOffset = CGSize(width: 2, height: 2)
+//        markerLayer.shadowColor = UIColor.black.cgColor
+//        markerLayer.shadowOpacity = 0.4
 
         let circleLayer = CALayer()
         circleLayer.frame = CGRect(x: centerX - radius * 0.7, y: centerY - radius * 0.7, width: radius * 1.4, height: radius * 1.4)
         circleLayer.cornerRadius = radius * 0.7
         circleLayer.backgroundColor = UIColor.white.cgColor
-        circleLayer.shadowColor = UIColor.black.cgColor
-        circleLayer.shadowOpacity = 0.4
-        circleLayer.shadowOffset = CGSize(width: 2, height: 2)
-        
+//        circleLayer.shadowColor = UIColor.black.cgColor
+//        circleLayer.shadowOpacity = 0.4
+//        circleLayer.shadowOffset = CGSize(width: 2, height: 2)
+//        
         markerLayer.addSublayer(circleLayer)
         
         let tempFrame = CGRect(x: centerX - radius * 0.5, y: centerY - radius * 0.5, width: radius, height: radius)
