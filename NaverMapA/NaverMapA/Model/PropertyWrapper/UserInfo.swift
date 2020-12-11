@@ -25,4 +25,5 @@ struct UserInfo {
 struct InfoSetting {
     @UserInfo(key: "algorithm") static var algorithm: String
     @UserInfo(key: "animation") static var animation: String
+    @UserInfo(key: "markerColor") static var markerColor: String
 }

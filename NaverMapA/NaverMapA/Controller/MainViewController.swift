@@ -35,18 +35,27 @@ class MainViewController: UIViewController {
         setUpMapView()
         setUpCoreData()
         setUpOtherViews()
-        animator = MoveAnimator1(mapView: self.naverMapView,
-                                 appearCompletionHandler: self.naverMapView.configureNewMarker, moveCompletionHandler: self.naverMapView.configureNewMarkers)
+        
+        let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
+        animator = MoveAnimator1(
+            mapView: self.naverMapView,
+            markerColor: markerColor,
+            appearCompletionHandler: self.naverMapView.configureNewMarker(afterCluster:markerColor:),
+            moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:markerColor:)
+        )
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.view.bringSubviewToFront(settingButton)
+        self.navigationController?.isNavigationBarHidden = true
+    }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         guard let _ = NMFAuthManager.shared().clientId else {
             AlertManager.shared.clientIdIsNil(controller: self)
             return
         }
-        self.navigationController?.isNavigationBarHidden = true
-        self.view.bringSubviewToFront(settingButton)
         switch InfoSetting.algorithm {
         case Setting.Algorithm.kims.rawValue:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
@@ -57,13 +66,9 @@ class MainViewController: UIViewController {
         default:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         }
+        animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         bindViewModel()
         updateMapView()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.navigationController?.isNavigationBarHidden = false
     }
     
     // MARK: - Initailize
@@ -95,7 +100,7 @@ class MainViewController: UIViewController {
             fetchBtn.widthAnchor.constraint(equalToConstant: 160),
             fetchBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fetchBtn.heightAnchor.constraint(equalToConstant: 40),
-            fetchBtn.topAnchor.constraint(equalTo: view.topAnchor, constant: 60)
+            fetchBtn.topAnchor.constraint(equalTo: view.topAnchor, constant: 30)
 
         ])
     }
@@ -122,7 +127,7 @@ class MainViewController: UIViewController {
                         $0.mapView = nil
                     }
                     // 3. 현재 바운드에 맞는 마커 바로 맵뷰에 추가
-                    self.naverMapView.configureNewMarkers(afterClusters: afterClusters)
+                    self.naverMapView.configureNewMarkers(afterClusters: afterClusters, markerColor: self.animator.markerColor)
                 } else { // 애니메이션중이 아닐때
                     self.naverMapView.deleteBeforeMarkers()
                     self.naverMapView.clusterObjects = afterClusters
@@ -200,7 +205,7 @@ extension MainViewController: NaverMapViewDelegate {
             guard let self = self else { return }
             self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
         }
-        AlertManager.shared.okCancle(controller: self, title: title, message: message, okHandler: okHandler, cancleHandler: nil)
+        AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
     
     func naverMapView(_ mapView: NaverMapView, markerWillDeleted place: Place) {
@@ -210,6 +215,6 @@ extension MainViewController: NaverMapViewDelegate {
             guard let self = self else { return }
             self.dataProvider.delete(object: place, completionHandler: self.coreDataUpdateHandler)
         }
-        AlertManager.shared.okCancle(controller: self, title: title, message: message, okHandler: okHandler, cancleHandler: nil)
+        AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
 }

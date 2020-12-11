@@ -97,7 +97,7 @@ class NaverMapView: NMFNaverMapView {
         mapView.moveCamera(camUpdate)
     }
     
-    func configureNewMarker(afterCluster: Cluster) {
+    func configureNewMarker(afterCluster: Cluster, markerColor: UIColor) {
         let lat = afterCluster.latitude
         let lng = afterCluster.longitude
         let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
@@ -114,7 +114,7 @@ class NaverMapView: NMFNaverMapView {
         self.clusterMarkers.append(marker)
     }
     
-    func configureNewMarkers(afterClusters: [Cluster]) {
+    func configureNewMarkers(afterClusters: [Cluster], markerColor: UIColor) {
         afterClusters.forEach {afterCluster in
             let lat = afterCluster.latitude
             let lng = afterCluster.longitude
