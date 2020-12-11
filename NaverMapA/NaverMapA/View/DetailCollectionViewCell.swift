@@ -25,7 +25,7 @@ class DetailCollectionViewCell: UICollectionViewCell {
         addressLabel = self.viewWithTag(2) as? UILabel
         imageView = self.viewWithTag(3) as? UIImageView
 
-    }    
+    }
     override func prepareForReuse() {
         super.prepareForReuse()
         nameLabel?.text = "불러오는 중"
@@ -47,7 +47,7 @@ class DetailCollectionViewCell: UICollectionViewCell {
             DispatchQueue.main.async {
                 self.addressLabel?.text = (address as String?) ?? "도로명 주소가 없습니다."
             }
-            guard let url = viewModel.item.value.url else {
+            guard let url = viewModel.url.value else {
                 DispatchQueue.main.async {
                     self.imageView?.image = UIImage(systemName: "xmark.circle")!
                 }

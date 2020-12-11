@@ -34,8 +34,6 @@
 		D499BFD42575C41400EF369E /* DetailCollectionViewDetailCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */; };
 		D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */; };
 		D4C2F82B2575193D00F784CE /* DetailPullUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */; };
-		D4C8115225812CDD0097A3FA /* AsyncFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C8115125812CDD0097A3FA /* AsyncFetcher.swift */; };
-		D4C8115F2581DC790097A3FA /* AsyncFetcherOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C8115E2581DC790097A3FA /* AsyncFetcherOperation.swift */; };
 		D4C811652581ECA50097A3FA /* CacheData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C811642581ECA50097A3FA /* CacheData.swift */; };
 		D4FB056625808A220078EE09 /* AppearAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FB056525808A220078EE09 /* AppearAnimator.swift */; };
 		D4FB056B25808A3C0078EE09 /* Animatorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FB056A25808A3C0078EE09 /* Animatorable.swift */; };
@@ -130,8 +128,6 @@
 		D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailCollectionViewDetailCell.xib; sourceTree = "<group>"; };
 		D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPullUpViewController.swift; sourceTree = "<group>"; };
-		D4C8115125812CDD0097A3FA /* AsyncFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetcher.swift; sourceTree = "<group>"; };
-		D4C8115E2581DC790097A3FA /* AsyncFetcherOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetcherOperation.swift; sourceTree = "<group>"; };
 		D4C811642581ECA50097A3FA /* CacheData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheData.swift; sourceTree = "<group>"; };
 		D4FB056525808A220078EE09 /* AppearAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearAnimator.swift; sourceTree = "<group>"; };
 		D4FB056A25808A3C0078EE09 /* Animatorable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animatorable.swift; sourceTree = "<group>"; };
@@ -267,8 +263,6 @@
 		D4C8115025812CBD0097A3FA /* AsyncFetcher */ = {
 			isa = PBXGroup;
 			children = (
-				D4C8115125812CDD0097A3FA /* AsyncFetcher.swift */,
-				D4C8115E2581DC790097A3FA /* AsyncFetcherOperation.swift */,
 				D4C811642581ECA50097A3FA /* CacheData.swift */,
 			);
 			path = AsyncFetcher;
@@ -714,8 +708,6 @@
 				88A67A02257E73AF004CA6C7 /* Geocoding.swift in Sources */,
 				E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */,
 				D499BFCC2575C40700EF369E /* DetailCollectionViewListCell.swift in Sources */,
-				D4C8115F2581DC790097A3FA /* AsyncFetcherOperation.swift in Sources */,
-				D4C8115225812CDD0097A3FA /* AsyncFetcher.swift in Sources */,
 				C8D647D8256F66FB00E3BB14 /* MainViewController+NaverMap.swift in Sources */,
 				D44558E525661638006D9D66 /* NaverMapA.xcdatamodeld in Sources */,
 				D41830D6257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift in Sources */,
