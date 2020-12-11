@@ -22,13 +22,25 @@ class NaverMapView: NMFNaverMapView {
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
     var prevZoomLevel: Double = 18
+    var selectedAnimationLayer: CALayer?
+    var selectedAnimationLayerPosition = CGPoint()
+    var selectedAnimationStartCameraPosition = NMGLatLng()
+    var selectedLeapMarker: NMFMarker?
     weak var naverMapDelegate: NaverMapViewDelegate?
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
             for cluster in self.clusterObjects {
                 if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng {
-                    self.moveCamera(to: cluster)
-                    self.naverMapDelegate?.naverMapView(self, markerDidSelected: cluster)
+                    if cluster.places.count == 1 {
+                        self.selectedLeapMarker = marker
+                    } else {
+                        self.selectedLeapMarker = nil
+                    }
+                    self.moveCamera(to: cluster) { [weak self] in
+                        guard let self = self else { return }
+                        self.selectedAnimationStartCameraPosition = self.mapView.cameraPosition.target
+                        self.naverMapDelegate?.naverMapView(self, markerDidSelected: cluster)
+                    }
                     break
                 }
             }
@@ -72,7 +84,7 @@ class NaverMapView: NMFNaverMapView {
         mapView.addGestureRecognizer(longPressGesture)
     }
     
-    func moveCamera(to cluster: Cluster) {
+    func moveCamera(to cluster: Cluster, completionHandler: @escaping () -> Void) {
         var minLatitude = Double.greatestFiniteMagnitude
         var maxLatitude = Double.leastNormalMagnitude
         var minLongitude = Double.greatestFiniteMagnitude
@@ -94,7 +106,9 @@ class NaverMapView: NMFNaverMapView {
         let camUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50)
         camUpdate.animation = .fly
         camUpdate.animationDuration = 1
-        mapView.moveCamera(camUpdate)
+        mapView.moveCamera(camUpdate) { _ in
+            completionHandler()
+        }
     }
     
     func configureNewMarker(afterCluster: Cluster, markerColor: UIColor) {
