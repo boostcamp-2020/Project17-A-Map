@@ -34,7 +34,7 @@
 		D4C2F82B2575193D00F784CE /* DetailPullUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */; };
 		D4C8115225812CDD0097A3FA /* AsyncFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C8115125812CDD0097A3FA /* AsyncFetcher.swift */; };
 		D4C8115F2581DC790097A3FA /* AsyncFetcherOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C8115E2581DC790097A3FA /* AsyncFetcherOperation.swift */; };
-		D4C811652581ECA50097A3FA /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C811642581ECA50097A3FA /* ImageCache.swift */; };
+		D4C811652581ECA50097A3FA /* CacheData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C811642581ECA50097A3FA /* CacheData.swift */; };
 		D4FB056625808A220078EE09 /* AppearAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FB056525808A220078EE09 /* AppearAnimator.swift */; };
 		D4FB056B25808A3C0078EE09 /* Animatorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FB056A25808A3C0078EE09 /* Animatorable.swift */; };
 		D506A0E6CC326EDBF1BE4462 /* Pods_NaverMapA_NaverMapAUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE572E6A770EBAC94B87E86 /* Pods_NaverMapA_NaverMapAUITests.framework */; };
@@ -124,7 +124,7 @@
 		D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPullUpViewController.swift; sourceTree = "<group>"; };
 		D4C8115125812CDD0097A3FA /* AsyncFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetcher.swift; sourceTree = "<group>"; };
 		D4C8115E2581DC790097A3FA /* AsyncFetcherOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetcherOperation.swift; sourceTree = "<group>"; };
-		D4C811642581ECA50097A3FA /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		D4C811642581ECA50097A3FA /* CacheData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheData.swift; sourceTree = "<group>"; };
 		D4FB056525808A220078EE09 /* AppearAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearAnimator.swift; sourceTree = "<group>"; };
 		D4FB056A25808A3C0078EE09 /* Animatorable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animatorable.swift; sourceTree = "<group>"; };
 		E0059FA12563726900CE6BD7 /* NaverMapA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaverMapA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -253,7 +253,7 @@
 			children = (
 				D4C8115125812CDD0097A3FA /* AsyncFetcher.swift */,
 				D4C8115E2581DC790097A3FA /* AsyncFetcherOperation.swift */,
-				D4C811642581ECA50097A3FA /* ImageCache.swift */,
+				D4C811642581ECA50097A3FA /* CacheData.swift */,
 			);
 			path = AsyncFetcher;
 			sourceTree = "<group>";
@@ -668,7 +668,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C8C1FB4A257F6D4200D98A92 /* UIView+Rendering.swift in Sources */,
-				D4C811652581ECA50097A3FA /* ImageCache.swift in Sources */,
+				D4C811652581ECA50097A3FA /* CacheData.swift in Sources */,
 				D44558CA25660D79006D9D66 /* JsonPlace.swift in Sources */,
 				D430320E2570663200BCEB54 /* KMeansClustering.swift in Sources */,
 				88937866257D3BC000A5B5C5 /* SettingTableViewController.swift in Sources */,

@@ -10,9 +10,9 @@ import Network
 
 final class NaverMapAPI {
     private static let baseURL = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc"
-    static func getData(lng: Double, lat: Double, completion: ((Result<Data, Error>) -> Void)?) {
+    static func getData(lng: Double, lat: Double, completion: ((Result<Data, Error>) -> Void)?) -> URLSessionTask? {
         guard let url = URL(string: "\(baseURL)?coords=\(lng),\(lat)&output=json&orders=roadaddr") else {
-            return
+            return nil
         }
         let session = URLSession.shared
         var request = URLRequest(url: url)
@@ -33,6 +33,7 @@ final class NaverMapAPI {
             completion?(.success(data))
         })
         task.resume()
+        return task
     }
 }
 

@@ -13,10 +13,10 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
     
     private var viewModels: [DetailViewModel] = []
     private let asyncFetcher = AsyncFetcher()
-    private let imageCacher = ImageCache()
+    private let imageCacher = CacheData()
     
     // MARK: UICollectionViewDataSource
-
+    
     func setUpViewModels(cluster: Cluster, completion: @escaping () -> Void) {
         viewModels = cluster.places.map { DetailViewModel(place: $0) }
         completion()
@@ -25,62 +25,64 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModels.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let placeCount = viewModels.count
         guard placeCount > indexPath.item && placeCount > 0 else {
             return UICollectionViewCell()
         }
         let viewModel = viewModels[indexPath.item]
-        viewModel.loadAddress {
-            DispatchQueue.main.async {
-                guard collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else { return }
-            }
-        }
-        viewModel.loadImage(imageCacher: imageCacher) {
-            DispatchQueue.main.async {
-                guard collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else { return }
-                collectionView.reloadItems(at: [indexPath])
-            }
-        }
-        
-        let identifier = viewModel.identifier
+        //        viewModel.loadAddress {
+        //            DispatchQueue.main.async {
+        //                guard collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else { return }
+        //            }
+        //        }
+        //        viewModel.loadImage(imageCacher: imageCacher) {
+        //            DispatchQueue.main.async {
+        //                guard collectionView.numberOfItems(inSection: indexPath.section) > indexPath.item else { return }
+        //                collectionView.reloadItems(at: [indexPath])
+        //            }
+        //        }
+        //
+//        let identifier = viewModel.identifier
         if placeCount == 1,
            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewDetailCell.identifier, for: indexPath) as? DetailCollectionViewDetailCell {
-            cell.representedIdentifier = identifier
-            if let fetchedData = asyncFetcher.fetchedData(for: viewModel.identifier) {
-                bindDetailCell(cell: cell, viewModel: fetchedData)
-            } else {
-                bindDetailCell(cell: cell, viewModel: nil)
-                asyncFetcher.fetchAsync(viewModel) { [weak self] fetchedData in
-                    DispatchQueue.main.async {
-                        guard cell.representedIdentifier == identifier else { return }
-                        self?.bindDetailCell(cell: cell, viewModel: fetchedData)
-                        collectionView.reloadItems(at: [indexPath])
-                    }
-                }
-            }
+            cell.configure(viewModel: viewModel)
+//            cell.representedIdentifier = identifier
+//            if let fetchedData = asyncFetcher.fetchedData(for: viewModel.identifier) {
+//                bindDetailCell(cell: cell, viewModel: fetchedData)
+//            } else {
+//                bindDetailCell(cell: cell, viewModel: nil)
+//                self.asyncFetcher.fetchAsync(viewModel) { [weak self] fetchedData in
+//                    DispatchQueue.main.async {
+//                        guard cell.representedIdentifier == identifier else { return }
+//                        self?.bindDetailCell(cell: cell, viewModel: fetchedData)
+//                        collectionView.reloadItems(at: [indexPath])
+//                    }
+//                }
+//            }
             return cell
         } else if
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewListCell.identifier, for: indexPath) as? DetailCollectionViewListCell {
-            cell.representedIdentifier = identifier
-            if let fetchedData = asyncFetcher.fetchedData(for: viewModel.identifier) {
-                bindListCell(cell: cell, viewModel: fetchedData)
-            } else {
-                bindListCell(cell: cell, viewModel: nil)
-                asyncFetcher.fetchAsync(viewModel) { [weak self] fetchedData in
-                    DispatchQueue.main.async {
-                        guard cell.representedIdentifier == identifier else { return }
-                        self?.bindListCell(cell: cell, viewModel: fetchedData)
-                        collectionView.reloadItems(at: [indexPath])
-                    }
-                }
-            }
+            cell.configure(viewModel: viewModel)
+//            cell.representedIdentifier = identifier
+//            if let fetchedData = asyncFetcher.fetchedData(for: viewModel.identifier) {
+//                bindListCell(cell: cell, viewModel: fetchedData)
+//            } else {
+//                bindListCell(cell: cell, viewModel: nil)
+//                self.asyncFetcher.fetchAsync(viewModel) { [weak self] fetchedData in
+//                    DispatchQueue.main.async {
+//                        guard cell.representedIdentifier == identifier else { return }
+//                        self?.bindListCell(cell: cell, viewModel: fetchedData)
+//                        collectionView.reloadItems(at: [indexPath])
+//                    }
+//                }
+//            }
             return cell
         } else {
             return UICollectionViewCell()
         }
-            
+        
     }
     
     // MARK: UICollectionViewDataSourcePrefetching
@@ -98,7 +100,7 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
             asyncFetcher.cancelFetch(viewModel)
         }
     }
-
+    
     // MARK: ViewModel Bind Methods
     
     private func bindDetailCell(cell: DetailCollectionViewDetailCell, viewModel: DetailViewModel?) {
@@ -142,5 +144,5 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
             }
         }
     }
-
+    
 }

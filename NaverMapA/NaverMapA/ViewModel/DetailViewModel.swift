@@ -50,7 +50,7 @@ final class DetailViewModel: NSObject {
         }
     }
     
-    func loadImage(imageCacher: ImageCache, completion: @escaping () -> Void) {
+    func loadImage(imageCacher: CacheData, completion: @escaping () -> Void) {
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             guard let self = self else { return }
             guard let url = self.item.value.url else { return }
