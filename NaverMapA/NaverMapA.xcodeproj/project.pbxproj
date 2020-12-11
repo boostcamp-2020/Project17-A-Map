@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		61901DB53EE8A32FCC52335C /* Pods_NaverMapA.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40CAD620339B506C86FDA0AC /* Pods_NaverMapA.framework */; };
+		881F0E4E25840B5C00D346A9 /* FlashAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 881F0E4D25840B5C00D346A9 /* FlashAnimator.swift */; };
 		88937866257D3BC000A5B5C5 /* SettingTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88937865257D3BC000A5B5C5 /* SettingTableViewController.swift */; };
 		8893786C257D415400A5B5C5 /* SettingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8893786A257D415400A5B5C5 /* SettingTableViewCell.swift */; };
 		8893786D257D415400A5B5C5 /* SettingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8893786B257D415400A5B5C5 /* SettingTableViewCell.xib */; };
@@ -100,6 +101,7 @@
 		40CAD620339B506C86FDA0AC /* Pods_NaverMapA.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NaverMapA.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		50126CE14920B1F628C98711 /* Pods-NaverMapA-NaverMapAUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapA-NaverMapAUITests.debug.xcconfig"; path = "Target Support Files/Pods-NaverMapA-NaverMapAUITests/Pods-NaverMapA-NaverMapAUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		87992EA48C88244E5F3BD1C3 /* Pods_NaverMapATests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NaverMapATests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		881F0E4D25840B5C00D346A9 /* FlashAnimator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashAnimator.swift; sourceTree = "<group>"; };
 		88937865257D3BC000A5B5C5 /* SettingTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewController.swift; sourceTree = "<group>"; };
 		8893786A257D415400A5B5C5 /* SettingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingTableViewCell.swift; sourceTree = "<group>"; };
 		8893786B257D415400A5B5C5 /* SettingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SettingTableViewCell.xib; sourceTree = "<group>"; };
@@ -274,6 +276,7 @@
 		D4FB0564258089F80078EE09 /* Animator */ = {
 			isa = PBXGroup;
 			children = (
+				881F0E4D25840B5C00D346A9 /* FlashAnimator.swift */,
 				D4FB056A25808A3C0078EE09 /* Animatorable.swift */,
 				D45B7D33257F7590009208D9 /* MoveAnimator.swift */,
 				D4FB056525808A220078EE09 /* AppearAnimator.swift */,
@@ -727,6 +730,7 @@
 				E0825C5A258230D4001F0569 /* FetchButton.swift in Sources */,
 				E07AD7FD2581DF3F00D07EAF /* VHCTextLayer.swift in Sources */,
 				E0BCC6C625638972005AD87F /* Environment.swift in Sources */,
+				881F0E4E25840B5C00D346A9 /* FlashAnimator.swift in Sources */,
 				E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */,
 				E07AD780257F728700D07EAF /* UserInfo.swift in Sources */,
 				D4C2F82B2575193D00F784CE /* DetailPullUpViewController.swift in Sources */,
