@@ -47,6 +47,17 @@ class VHCTextLayer: CATextLayer {
         string = text
     }
     
+    convenience init(frame: CGRect, text: String, fontSize: CGFloat) {
+        self.init()
+        self.frame = frame
+        self.text = text
+        self.font = UIFont.systemFont(ofSize: fontSize)
+        self.fontSize = fontSize
+        self.foregroundColor = UIColor.black.cgColor
+        contentsScale = UIScreen.main.scale
+        string = text
+    }
+    
     override func draw(in context: CGContext) {
         let height = self.bounds.size.height
         let width = self.bounds.size.width
