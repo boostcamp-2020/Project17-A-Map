@@ -48,7 +48,7 @@ class MainViewModel {
         }
     }
     
-    func updatePlacesAndAnimation(places: [Place], bounds: CoordinateBounds) {
+    func updatePlacesAndAnimation(places: [Place], bounds: CoordinateBounds, completionHandler: @escaping () -> Void) {
         let clusteringAlgorithm = self.clusteringAlgorithm.copy()
         guard let cluster = clusteringAlgorithm as? Clusterable else {
             return
@@ -71,6 +71,7 @@ class MainViewModel {
             guard !operation.isCancelled else { return }
             self.animationMarkers.value = (self.beforeMarkers, newClusters)
             self.beforeMarkers = newClusters
+            completionHandler()
         }
     }
 }
