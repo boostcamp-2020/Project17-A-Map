@@ -106,7 +106,7 @@ class NaverMapView: NMFNaverMapView {
         let h = marker.iconImage.imageHeight * 1.2
         let tframe = CGRect(x: 0, y: 0, width: w, height: h)
         let text = "\(afterCluster.places.count)"
-        let tview = markerFactory.makeCmarkerView(frame: tframe, color: .systemTeal, text: text, isShawdow: true)
+        let tview = markerFactory.makeCmarkerView(frame: tframe, color: markerColor, text: text, isShawdow: true)
         marker.iconImage = NMFOverlayImage(image: tview.getImage())
         marker.zIndex = 1
         marker.mapView = self.mapView
@@ -124,7 +124,7 @@ class NaverMapView: NMFNaverMapView {
             let h = marker.iconImage.imageHeight * 1.2
             let tframe = CGRect(x: 0, y: 0, width: w, height: h)
             let text = "\(afterCluster.places.count)"
-            let tview = markerFactory.makeCmarkerView(frame: tframe, color: .systemTeal, text: text, isShawdow: true)
+            let tview = markerFactory.makeCmarkerView(frame: tframe, color: markerColor, text: text, isShawdow: true)
             marker.iconImage = NMFOverlayImage(image: tview.getImage())
             marker.zIndex = 1
             marker.mapView = self.mapView
