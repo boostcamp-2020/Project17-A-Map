@@ -44,5 +44,4 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
         }
         
     }
-    
 }

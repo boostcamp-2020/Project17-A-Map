@@ -14,6 +14,7 @@
 		8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8898E854256D914C00CFE5B4 /* ScaleBasedClustering.swift */; };
 		88A679FD257E7317004CA6C7 /* NaverMapAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88A679FC257E7317004CA6C7 /* NaverMapAPI.swift */; };
 		88A67A02257E73AF004CA6C7 /* Geocoding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88A67A01257E73AF004CA6C7 /* Geocoding.swift */; };
+		88F1F54F258398EA001A7056 /* DetailCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F1F54E258398EA001A7056 /* DetailCollectionViewCell.swift */; };
 		997FE8701C4893C3A09145F8 /* Pods_NaverMapATests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 87992EA48C88244E5F3BD1C3 /* Pods_NaverMapATests.framework */; };
 		C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C816202625789C8A00DF61C4 /* MarkerFactory.swift */; };
 		C87AE2B22582602400017EA5 /* GetMarkerColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C87AE2B12582602400017EA5 /* GetMarkerColor.swift */; };
@@ -106,6 +107,7 @@
 		8898E854256D914C00CFE5B4 /* ScaleBasedClustering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleBasedClustering.swift; sourceTree = "<group>"; };
 		88A679FC257E7317004CA6C7 /* NaverMapAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverMapAPI.swift; sourceTree = "<group>"; };
 		88A67A01257E73AF004CA6C7 /* Geocoding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geocoding.swift; sourceTree = "<group>"; };
+		88F1F54E258398EA001A7056 /* DetailCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewCell.swift; sourceTree = "<group>"; };
 		96397F64EEFE1BC37729CE98 /* Pods-NaverMapA.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapA.release.xcconfig"; path = "Target Support Files/Pods-NaverMapA/Pods-NaverMapA.release.xcconfig"; sourceTree = "<group>"; };
 		BEE572E6A770EBAC94B87E86 /* Pods_NaverMapA_NaverMapAUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NaverMapA_NaverMapAUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C216106B7FE5408B63595379 /* Pods-NaverMapATests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NaverMapATests.debug.xcconfig"; path = "Target Support Files/Pods-NaverMapATests/Pods-NaverMapATests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				8893786A257D415400A5B5C5 /* SettingTableViewCell.swift */,
 				8893786B257D415400A5B5C5 /* SettingTableViewCell.xib */,
 				E0825C59258230D4001F0569 /* FetchButton.swift */,
+				88F1F54E258398EA001A7056 /* DetailCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -696,6 +699,7 @@
 				E0EFA23D25754F0D00995B0C /* PenaltyCluster.swift in Sources */,
 				E0825C64258266D3001F0569 /* AnimationKeyPath.swift in Sources */,
 				C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */,
+				88F1F54F258398EA001A7056 /* DetailCollectionViewCell.swift in Sources */,
 				E07AD7B82580F64800D07EAF /* NaverMapView.swift in Sources */,
 				D45B7D34257F7590009208D9 /* MoveAnimator.swift in Sources */,
 				E07AD79C2580592900D07EAF /* Unit.swift in Sources */,

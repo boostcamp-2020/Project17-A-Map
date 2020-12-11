@@ -10,7 +10,7 @@ import NMapsMap
 import CoreData
 
 class MainViewController: UIViewController {
-
+    
     // MARK: - Properties
     
     var naverMapView: NaverMapView!
@@ -72,7 +72,7 @@ class MainViewController: UIViewController {
     }
     
     // MARK: - Initailize
-
+    
     private func setUpMapView() {
         naverMapView = NaverMapView(frame: view.frame)
         naverMapView.mapView.addCameraDelegate(delegate: self)
@@ -112,13 +112,13 @@ class MainViewController: UIViewController {
             updateMapView()
         }
     }
-
+    
     func bindViewModel() {
         guard let viewModel = viewModel else { return }
         viewModel.animationMarkers.bind { (beforeClusters, afterClusters) in
             DispatchQueue.main.async {
                 if self.animator.isAnimating { // 애니메이션중일때
-//                    print("애니메이션중..")
+                    //                    print("애니메이션중..")
                     // 1. 애니메이션중인 레이어 모두 지우기
                     self.animator.isAnimating = false // 새로운 마커를 그리지 않음
                     self.animationLayer.sublayers?.removeAll()
@@ -135,7 +135,7 @@ class MainViewController: UIViewController {
                 }
             }
         }
-
+        
         viewModel.markers.bind { afterClusters in
             DispatchQueue.main.async {
                 self.naverMapView.deleteBeforeMarkers()
@@ -149,8 +149,8 @@ class MainViewController: UIViewController {
         let places = fetchPlaceInScreen()
         viewModel?.fetchedPlaces = places
         viewModel?.updatePlaces(places: places, bounds: naverMapView.coordBounds)
-//        fetchBtn.prepareAnimation()
-//        fetchBtn.animation()
+        //        fetchBtn.prepareAnimation()
+        //        fetchBtn.animation()
     }
     
     func fetchPlaceInScreen() -> [Place] {
