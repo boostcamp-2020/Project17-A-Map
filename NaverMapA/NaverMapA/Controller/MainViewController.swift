@@ -22,7 +22,10 @@ class MainViewController: UIViewController {
         return provider
     }()
     var pullUpVC: DetailPullUpViewController?
-
+    var animator: MoveAnimator1!
+    @Unit(wrappedValue: 18, threshold: 0.5) var zoomLevelCheck
+    var places: [Place] = []
+    
     @IBOutlet weak var settingButton: UIButton!
     
     // MARK: - ViewLifeCycle
@@ -32,7 +35,31 @@ class MainViewController: UIViewController {
         setUpMapView()
         setUpCoreData()
         setUpOtherViews()
+        
+        let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
+        animator = MoveAnimator1(
+            mapView: self.naverMapView,
+            markerColor: markerColor,
+            appearCompletionHandler: self.naverMapView.configureNewMarker(afterCluster:markerColor:),
+            moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:markerColor:)
+        )
+        let btn = UIButton(frame: CGRect(x: 50, y: 50, width: 50, height: 30))
+        btn.backgroundColor = .systemBlue
+        view.addSubview(btn)
+        btn.addTarget(self, action: #selector(test), for: .touchDown)
     }
+    
+    @objc func test() {
+        let coordBounds = self.mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
+
+        let bounds = CoordinateBounds(southWestLng: coordBounds.southWestLng,
+                                      northEastLng: coordBounds.northEastLng,
+                                      southWestLat: coordBounds.southWestLat,
+                                      northEastLat: coordBounds.northEastLat)
+        places = self.dataProvider.fetch(bounds: bounds)
+
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.view.bringSubviewToFront(settingButton)
@@ -44,7 +71,7 @@ class MainViewController: UIViewController {
             AlertManager.shared.clientIdIsNil(controller: self)
             return
         }
-        switch UserDefaults.standard.value(forKey: Setting.State.Algorithm.rawValue) as? String ?? "" {
+        switch InfoSetting.algorithm {
         case Setting.Algorithm.kims.rawValue:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         case Setting.Algorithm.kmeansElbow.rawValue:
@@ -54,6 +81,7 @@ class MainViewController: UIViewController {
         default:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         }
+        animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         bindViewModel()
         updateMapView()
     }
@@ -92,20 +120,33 @@ class MainViewController: UIViewController {
     func bindViewModel() {
         guard let viewModel = viewModel else { return }
         viewModel.animationMarkers.bind { (beforeClusters, afterClusters) in
-            viewModel.animationQueue.addOperation {
-                self.naverMapView.deleteBeforeMarkers()
-                self.naverMapView.clusterObjects = afterClusters
+            DispatchQueue.main.async {
+                if self.animator.isAnimating { // 애니메이션중일때
+                    print("애니메이션중..")
+                    // 1. 애니메이션중인 레이어 모두 지우기
+                    self.animator.isAnimating = false // 새로운 마커를 그리지 않음
+                    self.animationLayer.sublayers?.removeAll()
+                    // 2. 맵뷰에 있는 모든 마커 삭제
+                    self.naverMapView.clusterMarkers.forEach {
+                        $0.mapView = nil
+                    }
+                    // 3. 현재 바운드에 맞는 마커 바로 맵뷰에 추가
+                    self.naverMapView.configureNewMarkers(afterClusters: afterClusters, markerColor: self.animator.markerColor)
+                } else { // 애니메이션중이 아닐때
+                    self.naverMapView.deleteBeforeMarkers()
+                    self.naverMapView.clusterObjects = afterClusters
+                    self.animator.animate(before: beforeClusters, after: afterClusters, type: .move)
+                }
             }
-            viewModel.animationQueue.addOperation(MoveAnimator(mapView: self.mapView, animationLayer: self.animationLayer, beforeClusters: beforeClusters, afterClusters: afterClusters, handler: self.naverMapView.configureNewMarker))
         }
 
         viewModel.markers.bind { afterClusters in
-            viewModel.animationQueue.addOperation {
+       
+            DispatchQueue.main.async {
                 self.naverMapView.deleteBeforeMarkers()
                 self.naverMapView.clusterObjects = afterClusters
+                self.animator.animate(before: [], after: afterClusters, type: .appear)
             }
-
-            viewModel.animationQueue.addOperation(AppearAnimator(mapView: self.mapView, animationLayer: self.animationLayer, clusters: afterClusters, handler: self.naverMapView.configureNewMarker))
         }
     }
     

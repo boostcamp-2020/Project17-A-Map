@@ -8,18 +8,36 @@
 import UIKit
 
 struct Setting {
+    
     enum State: String, CaseIterable {
         case Algorithm = "알고리즘"
         case Animation = "애니메이션"
+        case MarkerColor = "마커색상"
     }
+    
     enum Algorithm: String, CaseIterable {
         case kims = "Kim's Algorithm"
         case kmeansElbow = "K-means with Elbow"
         case kmeansPenalty = "Penalty K-means"
     }
+    
     enum Animation: String, CaseIterable {
         case appleStyle = "Apple Style"
         case shootingStart = "ShootingStar"
+    }
+    
+    enum MarkerColor: String, CaseIterable {
+        case red = "빨강색"
+        case yellow = "노랑색"
+        case blue = "파랑색"
+        case green = "초록색"
+        case purple = "보라색"
+        case gray = "회색"
+        case teal = "하늘색"
+        case color1 = "color1"
+        case color2 = "color2"
+        case color3 = "color3"
+        case color4 = "color4"
     }
 }
 
@@ -45,6 +63,8 @@ class SettingTableViewController: UITableViewController {
             return Setting.Algorithm.allCases.count
         case 1:
             return Setting.Animation.allCases.count
+        case 2:
+            return Setting.MarkerColor.allCases.count
         default:
             return 0
         }

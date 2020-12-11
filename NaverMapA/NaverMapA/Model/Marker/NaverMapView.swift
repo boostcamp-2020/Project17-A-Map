@@ -90,21 +90,36 @@ class NaverMapView: NMFNaverMapView {
         mapView.moveCamera(camUpdate)
     }
     
-    func configureNewMarker(afterCluster: Cluster) {
+    func configureNewMarker(afterCluster: Cluster, markerColor: UIColor) {
         let lat = afterCluster.latitude
         let lng = afterCluster.longitude
         let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
         marker.iconImage = NMF_MARKER_IMAGE_BLACK
-        if afterCluster.places.count == 1 {
-            marker.iconTintColor = .systemGreen
-        } else {
-            marker.iconTintColor = .systemRed
-        }
-        marker.iconImage = markerFactory.makeMarker(markerOverlay: marker, mapView: mapView, placeCount: afterCluster.places.count)
+        let w = marker.iconImage.imageWidth * 1.2
+        let h = marker.iconImage.imageHeight * 1.2
+        let tview = markerFactory.makeCmarkerView(frame: CGRect(x: 0, y: 0, width: w, height: h), color: markerColor, text: "\(afterCluster.places.count)")
+        marker.iconImage = NMFOverlayImage(image: tview.getImage())
         marker.zIndex = 1
         marker.mapView = self.mapView
         marker.touchHandler = self.handler
         self.clusterMarkers.append(marker)
+    }
+    
+    func configureNewMarkers(afterClusters: [Cluster], markerColor: UIColor) {
+        afterClusters.forEach {afterCluster in
+            let lat = afterCluster.latitude
+            let lng = afterCluster.longitude
+            let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
+            marker.iconImage = NMF_MARKER_IMAGE_BLACK
+            let w = marker.iconImage.imageWidth * 1.2
+            let h = marker.iconImage.imageHeight * 1.2
+            let tview = markerFactory.makeCmarkerView(frame: CGRect(x: 0, y: 0, width: w, height: h), color: markerColor, text: "\(afterCluster.places.count)")
+            marker.iconImage = NMFOverlayImage(image: tview.getImage())
+            marker.zIndex = 1
+            marker.mapView = self.mapView
+            marker.touchHandler = self.handler
+            self.clusterMarkers.append(marker)
+        }
     }
     
     @objc private func longPressed(sender: UILongPressGestureRecognizer) {
