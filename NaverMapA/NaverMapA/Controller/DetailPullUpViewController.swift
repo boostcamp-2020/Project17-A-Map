@@ -109,7 +109,6 @@ class DetailPullUpViewController: UIViewController {
     private func setUpCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = dataSource
-        collectionView.prefetchDataSource = dataSource
         collectionView.backgroundColor = .systemGray6
         collectionView.register(UINib(nibName: DetailCollectionViewListCell.identifier, bundle: .main), forCellWithReuseIdentifier: DetailCollectionViewListCell.identifier)
         collectionView.register(UINib(nibName: DetailCollectionViewDetailCell.identifier, bundle: .main), forCellWithReuseIdentifier: DetailCollectionViewDetailCell.identifier)

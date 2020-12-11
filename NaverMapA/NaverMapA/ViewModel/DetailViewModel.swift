@@ -34,34 +34,6 @@ final class DetailViewModel: NSObject {
         }
     }
     
-    func loadAddress(completion: @escaping () -> Void) {
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            guard let self = self else { return }
-            NaverMapAPI.getData(lng: self.longitude.value, lat: self.latitude.value) { response in
-                do {
-                    let data = try response.get()
-                    let address = NaverMapAPI.getAddress(address: data)
-                    self.address.value = address ?? "도로명 주소가 없습니다."
-                    completion()
-                } catch {
-                    print(error)
-                }
-            }
-        }
-    }
-    
-    func loadImage(imageCacher: CacheData, completion: @escaping () -> Void) {
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            guard let self = self else { return }
-            guard let url = self.item.value.url else { return }
-            imageCacher.load(url: url, item: self.item.value) { (fetchedItem, image) in
-                if let img = image, img != fetchedItem.image {
-                    self.item.value.image = img
-                    completion()
-                }
-            }
-        }
-    }
 }
 
 class Item {
