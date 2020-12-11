@@ -24,7 +24,6 @@ class DetailCollectionViewCell: UICollectionViewCell {
         nameLabel = self.viewWithTag(1) as? UILabel
         addressLabel = self.viewWithTag(2) as? UILabel
         imageView = self.viewWithTag(3) as? UIImageView
-
     }
     override func prepareForReuse() {
         super.prepareForReuse()
