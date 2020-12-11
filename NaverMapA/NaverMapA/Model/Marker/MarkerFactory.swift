@@ -19,15 +19,15 @@ class MarkerFactory {
         label.bottomAnchor.constraint(equalTo: markerImageView.bottomAnchor, constant: -18).isActive = true
     }
     
-    func makeCmarkerView(frame: CGRect, color: UIColor, text: String = "8") -> UIView {
+    func makeCmarkerView(frame: CGRect, color: UIColor, text: String = "", isShawdow: Bool = false) -> UIView {
         let mRect = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
-        let mlayer = makeCMarkerLayer(rect: mRect, color: color, text: text)
+        let mlayer = makeCMarkerLayer(rect: mRect, color: color, text: text, isShawdow: isShawdow)
         let mView = UIView(frame: frame)
         mView.layer.addSublayer(mlayer)
         return mView
     }
     
-    func makeCMarkerLayer(rect: CGRect, color: UIColor, text: String = "8") -> CALayer {
+    func makeCMarkerLayer(rect: CGRect, color: UIColor, text: String = "", isShawdow: Bool = false) -> CALayer {
         let centerX = rect.midX
         let centerY = rect.midY
         let radius = rect.width / 3
@@ -45,24 +45,26 @@ class MarkerFactory {
         let markerLayer = CAShapeLayer()
         markerLayer.path = path.cgPath
         markerLayer.fillColor = color.cgColor
-//        markerLayer.shadowOffset = CGSize(width: 2, height: 2)
-//        markerLayer.shadowColor = UIColor.black.cgColor
-//        markerLayer.shadowOpacity = 0.4
 
         let circleLayer = CALayer()
         circleLayer.frame = CGRect(x: centerX - radius * 0.7, y: centerY - radius * 0.7, width: radius * 1.4, height: radius * 1.4)
         circleLayer.cornerRadius = radius * 0.7
         circleLayer.backgroundColor = UIColor.white.cgColor
-//        circleLayer.shadowColor = UIColor.black.cgColor
-//        circleLayer.shadowOpacity = 0.4
-//        circleLayer.shadowOffset = CGSize(width: 2, height: 2)
-//        
-        markerLayer.addSublayer(circleLayer)
+        if isShawdow {
+            markerLayer.shadowOffset = CGSize(width: 2, height: 2)
+            markerLayer.shadowColor = UIColor.black.cgColor
+            markerLayer.shadowOpacity = 0.4
+            circleLayer.shadowColor = UIColor.black.cgColor
+            circleLayer.shadowOpacity = 0.4
+            circleLayer.shadowOffset = CGSize(width: 2, height: 2)
+        }
         
         let tempFrame = CGRect(x: centerX - radius * 0.5, y: centerY - radius * 0.5, width: radius, height: radius)
         let textLayer = VHCTextLayer(frame: tempFrame, text: text)
         
+        markerLayer.addSublayer(circleLayer)
         markerLayer.addSublayer(textLayer)
+        
         return markerLayer
     }
 }

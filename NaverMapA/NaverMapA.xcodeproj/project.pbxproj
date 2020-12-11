@@ -55,6 +55,9 @@
 		E07AD7C32581087100D07EAF /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7C22581087100D07EAF /* AlertManager.swift */; };
 		E07AD7CE25812C5000D07EAF /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7CD25812C5000D07EAF /* Animator.swift */; };
 		E07AD7FD2581DF3F00D07EAF /* VHCTextLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7FC2581DF3F00D07EAF /* VHCTextLayer.swift */; };
+		E0825C5A258230D4001F0569 /* FetchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0825C59258230D4001F0569 /* FetchButton.swift */; };
+		E0825C5F25824F7F001F0569 /* CABasicAnimation+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */; };
+		E0825C64258266D3001F0569 /* AnimationKeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0825C63258266D3001F0569 /* AnimationKeyPath.swift */; };
 		E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5424256F4AA700F799E1 /* MainViewModel.swift */; };
 		E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE542C256F4BC800F799E1 /* Dynamic.swift */; };
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
@@ -152,6 +155,9 @@
 		E07AD7C22581087100D07EAF /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
 		E07AD7CD25812C5000D07EAF /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		E07AD7FC2581DF3F00D07EAF /* VHCTextLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VHCTextLayer.swift; sourceTree = "<group>"; };
+		E0825C59258230D4001F0569 /* FetchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchButton.swift; sourceTree = "<group>"; };
+		E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CABasicAnimation+.swift"; sourceTree = "<group>"; };
+		E0825C63258266D3001F0569 /* AnimationKeyPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationKeyPath.swift; sourceTree = "<group>"; };
 		E0AE5424256F4AA700F799E1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0AE542C256F4BC800F799E1 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
@@ -250,6 +256,7 @@
 				D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */,
 				8893786A257D415400A5B5C5 /* SettingTableViewCell.swift */,
 				8893786B257D415400A5B5C5 /* SettingTableViewCell.xib */,
+				E0825C59258230D4001F0569 /* FetchButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -375,6 +382,8 @@
 				E0BCC6C525638972005AD87F /* Environment.swift */,
 				C8C1FB49257F6D4200D98A92 /* UIView+Rendering.swift */,
 				E07AD7C22581087100D07EAF /* AlertManager.swift */,
+				E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */,
+				E0825C63258266D3001F0569 /* AnimationKeyPath.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -673,6 +682,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0825C5F25824F7F001F0569 /* CABasicAnimation+.swift in Sources */,
 				C8C1FB4A257F6D4200D98A92 /* UIView+Rendering.swift in Sources */,
 				D4C811652581ECA50097A3FA /* CacheData.swift in Sources */,
 				D44558CA25660D79006D9D66 /* JsonPlace.swift in Sources */,
@@ -684,6 +694,7 @@
 				E0059FA92563726900CE6BD7 /* MainViewController.swift in Sources */,
 				8893786C257D415400A5B5C5 /* SettingTableViewCell.swift in Sources */,
 				E0EFA23D25754F0D00995B0C /* PenaltyCluster.swift in Sources */,
+				E0825C64258266D3001F0569 /* AnimationKeyPath.swift in Sources */,
 				C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */,
 				E07AD7B82580F64800D07EAF /* NaverMapView.swift in Sources */,
 				D45B7D34257F7590009208D9 /* MoveAnimator.swift in Sources */,
@@ -713,6 +724,7 @@
 				D44558DB256615CF006D9D66 /* Place.swift in Sources */,
 				D44B6FCA25783BD700E912BB /* DetailViewModel.swift in Sources */,
 				D44558CF256611DF006D9D66 /* PlaceProvider.swift in Sources */,
+				E0825C5A258230D4001F0569 /* FetchButton.swift in Sources */,
 				E07AD7FD2581DF3F00D07EAF /* VHCTextLayer.swift in Sources */,
 				E0BCC6C625638972005AD87F /* Environment.swift in Sources */,
 				E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */,

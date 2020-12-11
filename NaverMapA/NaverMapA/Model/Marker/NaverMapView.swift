@@ -23,7 +23,6 @@ class NaverMapView: NMFNaverMapView {
     var clusterObjects = [Cluster]()
     var prevZoomLevel: Double = 18
     weak var naverMapDelegate: NaverMapViewDelegate?
-    
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
             for cluster in self.clusterObjects {
@@ -35,6 +34,14 @@ class NaverMapView: NMFNaverMapView {
             }
         }
         return true
+    }
+    var coordBounds: CoordinateBounds {
+        let cbounds = mapView.projection.latlngBounds(fromViewBounds: UIScreen.main.bounds)
+        let bounds = CoordinateBounds(southWestLng: cbounds.southWestLng,
+                                      northEastLng: cbounds.northEastLng,
+                                      southWestLat: cbounds.southWestLat,
+                                      northEastLat: cbounds.northEastLat)
+        return bounds
     }
     
     override init(frame: CGRect) {
@@ -97,7 +104,9 @@ class NaverMapView: NMFNaverMapView {
         marker.iconImage = NMF_MARKER_IMAGE_BLACK
         let w = marker.iconImage.imageWidth * 1.2
         let h = marker.iconImage.imageHeight * 1.2
-        let tview = markerFactory.makeCmarkerView(frame: CGRect(x: 0, y: 0, width: w, height: h), color: markerColor, text: "\(afterCluster.places.count)")
+        let tframe = CGRect(x: 0, y: 0, width: w, height: h)
+        let text = "\(afterCluster.places.count)"
+        let tview = markerFactory.makeCmarkerView(frame: tframe, color: .systemTeal, text: text, isShawdow: true)
         marker.iconImage = NMFOverlayImage(image: tview.getImage())
         marker.zIndex = 1
         marker.mapView = self.mapView
@@ -113,7 +122,9 @@ class NaverMapView: NMFNaverMapView {
             marker.iconImage = NMF_MARKER_IMAGE_BLACK
             let w = marker.iconImage.imageWidth * 1.2
             let h = marker.iconImage.imageHeight * 1.2
-            let tview = markerFactory.makeCmarkerView(frame: CGRect(x: 0, y: 0, width: w, height: h), color: markerColor, text: "\(afterCluster.places.count)")
+            let tframe = CGRect(x: 0, y: 0, width: w, height: h)
+            let text = "\(afterCluster.places.count)"
+            let tview = markerFactory.makeCmarkerView(frame: tframe, color: .systemTeal, text: text, isShawdow: true)
             marker.iconImage = NMFOverlayImage(image: tview.getImage())
             marker.zIndex = 1
             marker.mapView = self.mapView

@@ -13,11 +13,21 @@ class MainViewModel {
     var animationMarkers: Dynamic<([Cluster], [Cluster])> = Dynamic(([], []))
     var clusteringAlgorithm: Clusterable
     var beforeMarkers: [Cluster] = []
+    var fetchedPlaces: [Place] = []
     let queue = OperationQueue()
     let animationQueue = OperationQueue.main
     
     init(algorithm: Clusterable) {
         clusteringAlgorithm = algorithm
+    }
+    
+    func fetchedPlaces(with bounds: CoordinateBounds) -> [Place] {
+        return fetchedPlaces.filter {
+            $0.longitude > bounds.southWestLng
+            && $0.longitude < bounds.northEastLng
+            && $0.latitude > bounds.southWestLat
+            && $0.latitude < bounds.northEastLat
+        }
     }
     
     func updatePlaces(places: [Place], bounds: CoordinateBounds) {
