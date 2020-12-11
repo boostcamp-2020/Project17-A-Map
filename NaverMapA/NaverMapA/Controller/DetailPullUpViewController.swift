@@ -28,7 +28,7 @@ class DetailPullUpViewController: UIViewController {
     // MARK: - Properties
     
     private var fullViewPosition: CGFloat {
-        return UIScreen.main.bounds.height - self.view.frame.height
+        return UIScreen.main.bounds.height - self.view.frame.height + bottomMargin.constant
     }
     
     private var halfViewPosition: CGFloat {
@@ -49,10 +49,13 @@ class DetailPullUpViewController: UIViewController {
     
     weak var delegate: PullUpViewDelegate?
     
+    private var gesture: UIPanGestureRecognizer?
+    
     // MARK: - Views
     
     @IBOutlet private weak var collectionView: UICollectionView!
     @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet weak var bottomMargin: NSLayoutConstraint!
     
     // MARK: - View Life Cycle
     
@@ -65,10 +68,7 @@ class DetailPullUpViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        UIView.animate(withDuration: animationDuration, animations: { [weak self] in
-            guard let self = self else { return }
-            self.moveView(state: .short)
-        })
+        shortenView()
     }
     
     // MARK: - Initialize
@@ -99,23 +99,29 @@ class DetailPullUpViewController: UIViewController {
     }
     
     private func setUpGesture() {
-        let gesture = UIPanGestureRecognizer.init(target: self, action: #selector(panGesture))
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(panGesture))
         gesture.delegate = self
         view.addGestureRecognizer(gesture)
+        parent?.view.addGestureRecognizer(gesture)
+        self.gesture = gesture
     }
     
     private func setUpCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = dataSource
+        collectionView.backgroundColor = .systemGray6
         collectionView.register(UINib(nibName: DetailCollectionViewListCell.identifier, bundle: .main), forCellWithReuseIdentifier: DetailCollectionViewListCell.identifier)
         collectionView.register(UINib(nibName: DetailCollectionViewDetailCell.identifier, bundle: .main), forCellWithReuseIdentifier: DetailCollectionViewDetailCell.identifier)
-        collectionView.layoutIfNeeded()
-        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
-        let insets = (collectionView.contentInset.left + collectionView.contentInset.right)
-        layout?.estimatedItemSize = CGSize(width: collectionView.bounds.width - insets, height: 100)
     }
     
     // MARK: - Methods
+    
+    func shortenView() {
+        UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut) { [weak self] in
+            guard let self = self else { return }
+            self.moveView(state: .short)
+        }
+    }
     
     private func moveView(state: State) {
         if state == .full {
@@ -130,6 +136,15 @@ class DetailPullUpViewController: UIViewController {
     private func moveView(panGestureRecognizer recognizer: UIPanGestureRecognizer) {
         let transition = recognizer.translation(in: view)
         let minY = view.frame.minY
+        let yLocation = recognizer.location(in: view).y
+        let velocity = recognizer.velocity(in: view)
+        if yLocation <= -100 {
+            recognizer.setTranslation(CGPoint.zero, in: view)
+            return
+        } else if yLocation < 0 && abs(velocity.y) > abs(velocity.x) && velocity.y > self.panGestureVelocityThreshold {
+            shortenView()
+            return
+        }
         guard minY + transition.y <= shortViewPosition else { return }
         guard minY + transition.y >= fullViewPosition else {
             moveView(state: .full)
@@ -158,9 +173,11 @@ class DetailPullUpViewController: UIViewController {
         } else if placeCount > 1 {
             titleLabel.text = "\(cluster.places.count)개의 장소"
         }
+        let newDataSource = DetailCollectionViewDataSource()
+        dataSource = newDataSource
+        collectionView.dataSource = dataSource
         dataSource.setUpViewModels(cluster: cluster, completion: {
             self.collectionView.reloadData()
-            self.collectionView.layoutIfNeeded()
         })
     }
     
@@ -168,8 +185,8 @@ class DetailPullUpViewController: UIViewController {
     
     @objc private func panGesture(_ recognizer: UIPanGestureRecognizer) {
         moveView(panGestureRecognizer: recognizer)
-        guard recognizer.state == .ended else { return }
-        UIView.animate(withDuration: animationDuration, animations: { [weak self] in
+        guard recognizer.state == .ended && recognizer.location(in: view).y >= 0 else { return }
+        UIView.animate(withDuration: animationDuration, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseInOut) { [weak self] in
             guard let self = self else { return }
             let maxY = UIScreen.main.bounds.height
             let yPosition = self.view.frame.minY
@@ -199,13 +216,15 @@ class DetailPullUpViewController: UIViewController {
             } else {
                 self.moveView(state: .short)
             }
-        })
+        }
     }
 
     // MARK: IBActions
     
     @IBAction private func touchedCloseButton(_ sender: Any) {
         delegate?.dismissPullUpVC()
+        guard let gesture = gesture else { return }
+        parent?.view.removeGestureRecognizer(gesture)
     }
     
 }
@@ -218,9 +237,8 @@ class DetailPullUpViewController: UIViewController {
 extension DetailPullUpViewController: UICollectionViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView.contentOffset.y <= 0 {
+        if scrollView.contentOffset.y < 0 {
             scrollView.contentOffset.y = 0
-            scrollView.isScrollEnabled = false
         }
     }
     
@@ -243,6 +261,12 @@ extension DetailPullUpViewController: UICollectionViewDelegate {
     
 }
 
+extension DetailPullUpViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.width, height: 130)
+    }
+}
+
 // MARK: GestureRecognizerDelegate
 /**
  CollectionView의 스크롤 PanGesture와 PullUpVC Custom PanGesture 동시 인식 처리
@@ -255,7 +279,7 @@ extension DetailPullUpViewController: UIGestureRecognizerDelegate {
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        guard otherGestureRecognizer == collectionView.panGestureRecognizer else {
+        guard otherGestureRecognizer == collectionView.panGestureRecognizer && collectionView.contentOffset.y > 0 else {
             return false
         }
         return true
