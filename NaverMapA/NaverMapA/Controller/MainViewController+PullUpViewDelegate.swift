@@ -10,10 +10,16 @@ import NMapsMap
 extension MainViewController: PullUpViewDelegate {
     
     func move(toLat lat: Double, lng: Double) {
-        let camUpdate = NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: lat - 0.00001, lng: lng), zoom: 20))
-        camUpdate.animation = .fly
-        camUpdate.animationDuration = 2
-        mapView.moveCamera(camUpdate)
+        self.naverMapView.selectedLeapMarker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
+        naverMapView.moveCamera(to: BasicCluster(latitude: lat, longitude: lng, places: [], placesDictionary: [:])) {
+        }
+        DispatchQueue.main.async {
+            if self.naverMapView.selectedLeapMarker != nil {
+                self.flashAnimator.run()
+            } else {
+                self.flashAnimator.stop()
+            }
+        }
     }
     
     func dismissPullUpVC() {
