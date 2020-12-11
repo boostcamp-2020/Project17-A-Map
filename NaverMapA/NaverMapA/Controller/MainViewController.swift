@@ -10,7 +10,7 @@ import NMapsMap
 import CoreData
 
 class MainViewController: UIViewController {
-
+    
     // MARK: - Properties
     
     var naverMapView: NaverMapView!
@@ -24,6 +24,7 @@ class MainViewController: UIViewController {
     var pullUpVC: DetailPullUpViewController?
     var fetchBtn: FetchButton!
     var animator: MoveAnimator1!
+    var flashAnimator: FlashAnimator!
     @Unit(wrappedValue: 18, threshold: 0.5) var zoomLevelCheck
     
     @IBOutlet weak var settingButton: UIButton!
@@ -43,6 +44,7 @@ class MainViewController: UIViewController {
             appearCompletionHandler: self.naverMapView.configureNewMarker(afterCluster:markerColor:),
             moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:markerColor:)
         )
+        flashAnimator = FlashAnimator(mapView: self.naverMapView, markerColor: markerColor)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -67,12 +69,13 @@ class MainViewController: UIViewController {
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         }
         animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
+        flashAnimator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         bindViewModel()
         updateMapView()
     }
     
     // MARK: - Initailize
-
+    
     private func setUpMapView() {
         naverMapView = NaverMapView(frame: view.frame)
         naverMapView.mapView.addCameraDelegate(delegate: self)
@@ -112,13 +115,13 @@ class MainViewController: UIViewController {
             updateMapView()
         }
     }
-
+    
     func bindViewModel() {
         guard let viewModel = viewModel else { return }
         viewModel.animationMarkers.bind { (beforeClusters, afterClusters) in
             DispatchQueue.main.async {
                 if self.animator.isAnimating { // 애니메이션중일때
-//                    print("애니메이션중..")
+                    //                    print("애니메이션중..")
                     // 1. 애니메이션중인 레이어 모두 지우기
                     self.animator.isAnimating = false // 새로운 마커를 그리지 않음
                     self.animationLayer.sublayers?.removeAll()
@@ -135,7 +138,7 @@ class MainViewController: UIViewController {
                 }
             }
         }
-
+        
         viewModel.markers.bind { afterClusters in
             DispatchQueue.main.async {
                 self.naverMapView.deleteBeforeMarkers()
@@ -149,8 +152,8 @@ class MainViewController: UIViewController {
         let places = fetchPlaceInScreen()
         viewModel?.fetchedPlaces = places
         viewModel?.updatePlaces(places: places, bounds: naverMapView.coordBounds)
-//        fetchBtn.prepareAnimation()
-//        fetchBtn.animation()
+        //        fetchBtn.prepareAnimation()
+        //        fetchBtn.animation()
     }
     
     func fetchPlaceInScreen() -> [Place] {
@@ -196,6 +199,13 @@ extension MainViewController {
 extension MainViewController: NaverMapViewDelegate {
     func naverMapView(_ mapView: NaverMapView, markerDidSelected cluster: Cluster) {
         self.showPullUpVC(with: cluster)
+        DispatchQueue.main.async {
+            if self.naverMapView.selectedLeapMarker != nil {
+                self.flashAnimator.run()
+            } else {
+                self.flashAnimator.stop()
+            }
+        }
     }
     
     func naverMapView(_ mapView: NaverMapView, markerWillAdded latlng: NMGLatLng) {
