@@ -90,6 +90,14 @@ class MainViewController: UIViewController {
         fetchBtn = FetchButton(frame: CGRect(x: 80, y: 100, width: 160, height: 40))
         view.addSubview(fetchBtn)
         fetchBtn.addTarget(self, action: #selector(fetchDidTouched), for: .touchDown)
+        fetchBtn.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            fetchBtn.widthAnchor.constraint(equalToConstant: 160),
+            fetchBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            fetchBtn.heightAnchor.constraint(equalToConstant: 40),
+            fetchBtn.topAnchor.constraint(equalTo: view.topAnchor, constant: 60)
+
+        ])
     }
     
     // MARK: - Methods
@@ -136,6 +144,8 @@ class MainViewController: UIViewController {
         let places = fetchPlaceInScreen()
         viewModel?.fetchedPlaces = places
         viewModel?.updatePlaces(places: places, bounds: naverMapView.coordBounds)
+//        fetchBtn.prepareAnimation()
+//        fetchBtn.animation()
     }
     
     func fetchPlaceInScreen() -> [Place] {
