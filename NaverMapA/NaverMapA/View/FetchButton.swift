@@ -43,7 +43,7 @@ class FetchButton: UIButton {
         layer.addSublayer(containerLayer)
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOpacity = 0.6
-        layer.shadowOffset = CGSize(width: 1, height: 1)
+        layer.shadowOffset = CGSize(width: 0, height: 2)
     }
     
     func setupLabels(frame: CGRect) {
