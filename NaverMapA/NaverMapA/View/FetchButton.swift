@@ -63,7 +63,7 @@ class FetchButton: UIButton {
         success.font = tfont
     }
     
-    private func slideUp(from: Double, to: Double, duration: Double = 0.4, delay: Double) -> CAAnimation {
+    private func slideUp(from: Double, to: Double, duration: Double = 0.3, delay: Double) -> CAAnimation {
         let ani = CABasicAnimation.transform(fromValue: from, toValue: to, valueFunctionName: .translateY, duration: duration)
         ani.timingFunction = CAMediaTimingFunction(name: .easeOut)
         ani.beginTime = CACurrentMediaTime() + delay
@@ -107,7 +107,7 @@ class FetchButton: UIButton {
         btnUpAnimation.values = [0, 20, -100]
         btnUpAnimation.duration = 0.3
         btnUpAnimation.timingFunctions = [CAMediaTimingFunction(name: .easeOut)]
-        btnUpAnimation.beginTime = CACurrentMediaTime() + 2.1
+        btnUpAnimation.beginTime = CACurrentMediaTime() + 1.4
         btnUpAnimation.isRemovedOnCompletion = false
         btnUpAnimation.fillMode = .forwards
         btnUpAnimation.delegate = self
