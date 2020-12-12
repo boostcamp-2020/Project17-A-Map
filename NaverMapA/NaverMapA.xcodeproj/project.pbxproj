@@ -387,7 +387,6 @@
 			isa = PBXGroup;
 			children = (
 				E0AE5424256F4AA700F799E1 /* MainViewModel.swift */,
-				E0AE542C256F4BC800F799E1 /* Dynamic.swift */,
 				D44B6FC925783BD700E912BB /* DetailViewModel.swift */,
 				D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */,
 			);
@@ -409,6 +408,7 @@
 		E0AE541A256F48F100F799E1 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				E0AE542C256F4BC800F799E1 /* Dynamic.swift */,
 				88A679FC257E7317004CA6C7 /* NaverMapAPI.swift */,
 				E0BCC6C525638972005AD87F /* Environment.swift */,
 				E07AD7C22581087100D07EAF /* AlertManager.swift */,
