@@ -39,8 +39,8 @@ class MoveAnimator1: Animator {
     var moveCompletionHandler: ([Cluster], UIColor) -> Void
     var naverMapView: NaverMapView
     var animationCount: Int = 0
-    var width = NMFMarker().iconImage.imageWidth * 1.2
-    var height = NMFMarker().iconImage.imageHeight * 1.2
+    var width = NMFMarker().iconImage.imageWidth * 1.4
+    var height = NMFMarker().iconImage.imageHeight * 1.4
     var markerFactory: MarkerFactory
     var markerColor: UIColor
     @Atomic(value: 0) var count
