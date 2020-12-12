@@ -102,8 +102,8 @@ class NaverMapView: NMFNaverMapView {
         let lng = afterCluster.longitude
         let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
         marker.iconImage = NMF_MARKER_IMAGE_BLACK
-        let w = marker.iconImage.imageWidth * 1.2
-        let h = marker.iconImage.imageHeight * 1.2
+        let w = marker.iconImage.imageWidth * 1.4
+        let h = marker.iconImage.imageHeight * 1.4
         let tframe = CGRect(x: 0, y: 0, width: w, height: h)
         let text = "\(afterCluster.places.count)"
         let tview = markerFactory.makeCmarkerView(frame: tframe, color: markerColor, text: text, isShawdow: true)
@@ -123,8 +123,8 @@ class NaverMapView: NMFNaverMapView {
             let lng = afterCluster.longitude
             let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
             marker.iconImage = NMF_MARKER_IMAGE_BLACK
-            let w = marker.iconImage.imageWidth * 1.2
-            let h = marker.iconImage.imageHeight * 1.2
+            let w = marker.iconImage.imageWidth * 1.4
+            let h = marker.iconImage.imageHeight * 1.4
             let tframe = CGRect(x: 0, y: 0, width: w, height: h)
             let text = "\(afterCluster.places.count)"
             let tview = markerFactory.makeCmarkerView(frame: tframe, color: markerColor, text: text, isShawdow: true)
