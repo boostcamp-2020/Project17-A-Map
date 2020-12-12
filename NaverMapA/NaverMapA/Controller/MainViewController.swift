@@ -97,14 +97,16 @@ class MainViewController: UIViewController {
     }
     
     func setupFetchButton() {
-        fetchBtn = FetchButton(frame: CGRect(x: 80, y: 100, width: 140, height: 40))
+        let fetchWidth: CGFloat = 140
+        let fetchHeight: CGFloat = 40
+        fetchBtn = FetchButton(frame: CGRect(x: 0, y: 0, width: fetchWidth, height: fetchHeight))
         view.addSubview(fetchBtn)
         fetchBtn.addTarget(self, action: #selector(fetchDidTouched), for: .touchDown)
         fetchBtn.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            fetchBtn.widthAnchor.constraint(equalToConstant: 140),
+            fetchBtn.widthAnchor.constraint(equalToConstant: fetchWidth),
             fetchBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            fetchBtn.heightAnchor.constraint(equalToConstant: 40),
+            fetchBtn.heightAnchor.constraint(equalToConstant: fetchHeight),
             fetchBtn.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12)
         ])
     }
