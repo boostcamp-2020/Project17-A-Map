@@ -115,6 +115,9 @@ class NaverMapView: NMFNaverMapView {
     }
     
     func configureNewMarkers(afterClusters: [Cluster], markerColor: UIColor) {
+        clusterMarkers.forEach {
+            $0.mapView = nil
+        }
         afterClusters.forEach {afterCluster in
             let lat = afterCluster.latitude
             let lng = afterCluster.longitude
