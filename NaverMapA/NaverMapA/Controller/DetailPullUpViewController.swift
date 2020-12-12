@@ -13,7 +13,8 @@ protocol PullUpViewDelegate: class {
 }
 
 class DetailPullUpViewController: UIViewController {
-    
+    static let detailCollectionViewListCell = "DetailCollectionViewListCell"
+    static let detailCollectionViewDetailCell = "DetailCollectionViewDetailCell"
     static let identifier: String = String(describing: DetailPullUpViewController.self)
     
     private enum State {
@@ -110,8 +111,8 @@ class DetailPullUpViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = dataSource
         collectionView.backgroundColor = .systemGray6
-        collectionView.register(UINib(nibName: "DetailCollectionViewListCell", bundle: .main), forCellWithReuseIdentifier: "DetailCollectionViewListCell")
-        collectionView.register(UINib(nibName: "DetailCollectionViewDetailCell", bundle: .main), forCellWithReuseIdentifier: "DetailCollectionViewDetailCell")
+        collectionView.register(UINib(nibName: DetailPullUpViewController.detailCollectionViewListCell, bundle: .main), forCellWithReuseIdentifier: DetailPullUpViewController.detailCollectionViewListCell)
+        collectionView.register(UINib(nibName: DetailPullUpViewController.detailCollectionViewDetailCell, bundle: .main), forCellWithReuseIdentifier: DetailPullUpViewController.detailCollectionViewDetailCell)
     }
     
     // MARK: - Methods
