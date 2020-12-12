@@ -107,7 +107,7 @@ class MainViewController: UIViewController {
             fetchBtn.widthAnchor.constraint(equalToConstant: fetchWidth),
             fetchBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fetchBtn.heightAnchor.constraint(equalToConstant: fetchHeight),
-            fetchBtn.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12)
+            fetchBtn.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
         ])
     }
     
@@ -140,9 +140,6 @@ class MainViewController: UIViewController {
                     self.animator.animate(before: beforeClusters, after: afterClusters, type: .move)
                 }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: {
-                self.fetchBtn.endAnimation()
-            })
         }
 
         viewModel.markers.bind { afterClusters in
@@ -151,9 +148,6 @@ class MainViewController: UIViewController {
                 self.naverMapView.clusterObjects = afterClusters
                 self.animator.animate(before: [], after: afterClusters, type: .appear)
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: {
-                self.fetchBtn.endAnimation()
-            })
         }
     }
     
@@ -164,6 +158,9 @@ class MainViewController: UIViewController {
             let places = self.fetchPlaceInScreen()
             self.viewModel?.fetchedPlaces = places
             self.viewModel?.updatePlaces(places: places, bounds: self.naverMapView.coordBounds)
+        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: {
+            self.fetchBtn.endAnimation()
         })
     }
     
