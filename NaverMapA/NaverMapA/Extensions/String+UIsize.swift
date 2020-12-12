@@ -1,20 +1,11 @@
 //
-//  UIView+Rendering.swift
+//  String+UIsize.swift
 //  NaverMapA
 //
-//  Created by 박태희 on 2020/12/08.
+//  Created by 채훈기 on 2020/12/12.
 //
 
 import UIKit
-
-extension UIView {
-    func getImage() -> UIImage {
-        let renderer = UIGraphicsImageRenderer(bounds: bounds)
-        return renderer.image { rendererContext in
-            layer.render(in: rendererContext.cgContext)
-        }
-    }
-}
 
 extension String {
 

@@ -35,7 +35,6 @@ class MainViewController: UIViewController {
         setUpMapView()
         setUpCoreData()
         setUpOtherViews()
-        
         let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         animator = MoveAnimator1(
             mapView: self.naverMapView,
@@ -88,20 +87,27 @@ class MainViewController: UIViewController {
     
     private func setUpOtherViews() {
         settingButton.layer.cornerRadius = settingButton.bounds.size.width / 2.0
-        settingButton.clipsToBounds = true
+        settingButton.layer.shadowColor = UIColor.black.cgColor
+        settingButton.layer.shadowOpacity = 0.4
+        settingButton.layer.shadowOffset = CGSize(width: 1, height: 1)
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         backBarButtonItem.tintColor = .black
         self.navigationItem.backBarButtonItem = backBarButtonItem
-        fetchBtn = FetchButton(frame: CGRect(x: 80, y: 100, width: 160, height: 40))
+        setupFetchButton()
+    }
+    
+    func setupFetchButton() {
+        let fetchWidth: CGFloat = 140
+        let fetchHeight: CGFloat = 40
+        fetchBtn = FetchButton(frame: CGRect(x: 0, y: 0, width: fetchWidth, height: fetchHeight))
         view.addSubview(fetchBtn)
         fetchBtn.addTarget(self, action: #selector(fetchDidTouched), for: .touchDown)
         fetchBtn.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            fetchBtn.widthAnchor.constraint(equalToConstant: 160),
+            fetchBtn.widthAnchor.constraint(equalToConstant: fetchWidth),
             fetchBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            fetchBtn.heightAnchor.constraint(equalToConstant: 40),
-            fetchBtn.topAnchor.constraint(equalTo: view.topAnchor, constant: 30)
-
+            fetchBtn.heightAnchor.constraint(equalToConstant: fetchHeight),
+            fetchBtn.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
         ])
     }
     
@@ -166,11 +172,16 @@ class MainViewController: UIViewController {
     }
     
     @objc func fetchDidTouched() {
-        let places = fetchPlaceInScreen()
-        viewModel?.fetchedPlaces = places
-        viewModel?.updatePlaces(places: places, bounds: naverMapView.coordBounds)
-        //        fetchBtn.prepareAnimation()
-        //        fetchBtn.animation()
+        guard !fetchBtn.isAnimating else { return }
+        fetchBtn.animation()
+        DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
+            let places = self.fetchPlaceInScreen()
+            self.viewModel?.fetchedPlaces = places
+            self.viewModel?.updatePlaces(places: places, bounds: self.naverMapView.coordBounds)
+        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: {
+            self.fetchBtn.endAnimation()
+        })
     }
     
     func fetchPlaceInScreen() -> [Place] {
@@ -210,6 +221,11 @@ extension MainViewController {
         }
         viewModel?.queue.cancelAllOperations()
         viewModel?.animationQueue.cancelAllOperations()
+        
+        guard !fetchBtn.isAnimating else { return }
+        fetchBtn.removeFromSuperview()
+        fetchBtn = nil
+        setupFetchButton()
     }
 }
 

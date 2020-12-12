@@ -131,11 +131,11 @@ class NaverMapView: NMFNaverMapView {
         let lng = afterCluster.longitude
         let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
         marker.iconImage = NMF_MARKER_IMAGE_BLACK
-        let w = marker.iconImage.imageWidth * 1.2
-        let h = marker.iconImage.imageHeight * 1.2
+        let w = marker.iconImage.imageWidth * 1.4
+        let h = marker.iconImage.imageHeight * 1.4
         let tframe = CGRect(x: 0, y: 0, width: w, height: h)
         let text = "\(afterCluster.places.count)"
-        let tview = markerFactory.makeCmarkerView(frame: tframe, color: .systemTeal, text: text, isShawdow: true)
+        let tview = markerFactory.makeCmarkerView(frame: tframe, color: markerColor, text: text, isShawdow: true)
         marker.iconImage = NMFOverlayImage(image: tview.getImage())
         marker.zIndex = 1
         marker.mapView = self.mapView
@@ -145,7 +145,20 @@ class NaverMapView: NMFNaverMapView {
     
     func configureNewMarkers(afterClusters: [Cluster], markerColor: UIColor) {
         afterClusters.forEach {afterCluster in
-            configureNewMarker(afterCluster: afterCluster, markerColor: markerColor)
+            let lat = afterCluster.latitude
+            let lng = afterCluster.longitude
+            let marker = NMFMarker(position: NMGLatLng(lat: lat, lng: lng))
+            marker.iconImage = NMF_MARKER_IMAGE_BLACK
+            let w = marker.iconImage.imageWidth * 1.4
+            let h = marker.iconImage.imageHeight * 1.4
+            let tframe = CGRect(x: 0, y: 0, width: w, height: h)
+            let text = "\(afterCluster.places.count)"
+            let tview = markerFactory.makeCmarkerView(frame: tframe, color: markerColor, text: text, isShawdow: true)
+            marker.iconImage = NMFOverlayImage(image: tview.getImage())
+            marker.zIndex = 1
+            marker.mapView = self.mapView
+            marker.touchHandler = self.handler
+            self.clusterMarkers.append(marker)
         }
         var findLeap = false
         for marker in self.clusterMarkers {
