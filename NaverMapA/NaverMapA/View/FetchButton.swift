@@ -9,21 +9,11 @@ import UIKit
 
 class FetchButton: UIButton {
     
-    let temp: VHCTextLayer = {
-        let t = VHCTextLayer(frame: CGRect(x: 0, y: 0, width: 160, height: 40), text: "Search", fontSize: 17)
-        t.foregroundColor = UIColor.white.cgColor
-        t.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        t.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        return t
-    }()
-    
-    let temp1: VHCTextLayer = {
-        let t = VHCTextLayer(frame: CGRect(x: 0, y: 40, width: 160, height: 40), text: "Searching...", fontSize: 17)
-        t.foregroundColor = UIColor.white.cgColor
-        t.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        t.font = UIFont.systemFont(ofSize: 17, weight: .bold)
-        return t
-    }()
+    var search: VHCTextLayer!
+    var searching: AniTextLayer!
+    var searching2: AniTextLayer!
+    var success: VHCTextLayer!
+    var isAnimating = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -38,34 +28,99 @@ class FetchButton: UIButton {
     func commonInit(frame: CGRect) {
         layer.cornerRadius = 20
         backgroundColor = .systemBlue
-        layer.addSublayer(temp1)
-        layer.addSublayer(temp)
+        setupLabels(frame: frame)
+        layer.addSublayer(search)
+        layer.addSublayer(searching)
+        layer.addSublayer(searching2)
+        layer.addSublayer(success)
         self.clipsToBounds = true
     }
     
-    func animation() {
-
-        let animator = CABasicAnimation.transform(fromValue: 0, toValue: -140, valueFunctionName: .translateY, duration: 2)
-        animator.timingFunction = CAMediaTimingFunction(name: .easeOut)
-
-        let animator1 = CABasicAnimation.transform(fromValue: 0, toValue: -40, valueFunctionName: .translateY, duration: 0.4)
-        animator1.timingFunction = CAMediaTimingFunction(name: .easeOut)
-        animator1.beginTime = CACurrentMediaTime() + 0.1
+    func setupLabels(frame: CGRect) {
+        let w = frame.width
+        let h = frame.height
+        let tfont = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        let currentFrame = CGRect(x: 0, y: 0, width: w, height: h)
+        let belowFrame = CGRect(x: 0, y: 40, width: w, height: h)
         
-        let animator2 = CABasicAnimation.transform(fromValue: 1, toValue: 0, valueFunctionName: .scaleX, duration: 0.4)
-        animator2.timingFunction = CAMediaTimingFunction(name: .easeOut)
-        animator2.beginTime = CACurrentMediaTime() + 1
+        search = VHCTextLayer(frame: currentFrame, text: "Search", fontSize: 17)
+        search.foregroundColor = UIColor.white.cgColor
+        search.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        search.font = tfont
         
-        CATransaction.begin()
-        temp.add(animator, forKey: "d")
-        temp1.add(animator1, forKey: "d")
-        layer.add(animator2, forKey: "2")
-
-        CATransaction.commit()
+        searching = AniTextLayer(frame: belowFrame, text: "Searching...", charFont: tfont)
+        searching.foregroundColor = UIColor.white.cgColor
+        searching.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
+        searching2 = AniTextLayer(frame: currentFrame, text: "Searching...", charFont: tfont)
+        searching2.foregroundColor = UIColor.white.cgColor
+        searching2.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        searching2.isHidden = true
+        
+        success = VHCTextLayer(frame: belowFrame, text: "Success😄", fontSize: 17)
+        success.foregroundColor = UIColor.white.cgColor
+        success.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        success.font = tfont
     }
     
-    func prepareAnimation() {
-//        self.temp.frame = CGRect(x: 0, y: 0, width: 160, height: 40)
-//        self.temp1.frame = CGRect(x: 0, y: 40, width: 160, height: 40)
+    private func slideUp(from: Double, to: Double, duration: Double = 0.4, delay: Double) -> CAAnimation {
+        let ani = CABasicAnimation.transform(fromValue: from, toValue: to, valueFunctionName: .translateY, duration: duration)
+        ani.timingFunction = CAMediaTimingFunction(name: .easeOut)
+        ani.beginTime = CACurrentMediaTime() + delay
+        ani.isRemovedOnCompletion = false
+        ani.fillMode = .forwards
+        return ani
+    }
+    
+    func animation() {
+        guard !isAnimating else { return }
+        isAnimating = true
+        let slideAnimation = slideUp(from: 0, to: -40, delay: 0)
+        search.add(slideAnimation, forKey: nil)
+        searching.add(slideAnimation, forKey: nil)
+        self.searching.animating(delay: 1)
+    }
+    
+    func endAnimation() {
+        guard isAnimating else { return }
+
+        searching.cancelAnimation()
+        searching2.isHidden = false
+        searching.removeFromSuperlayer()
+        
+        let searchUp = slideUp(from: 0, to: -40, delay: 0.5)
+        let searchingUp = slideUp(from: 0, to: -40, delay: 0.5)
+
+        let colorAnimation = CABasicAnimation()
+        colorAnimation.keyPath = AnimationKeyPath.backgroundColor.rawValue
+        colorAnimation.fromValue = UIColor.systemBlue.cgColor
+        colorAnimation.toValue = UIColor.systemGreen.cgColor
+        colorAnimation.duration = 0.2
+        colorAnimation.beginTime = CACurrentMediaTime() + 0.9
+        colorAnimation.isRemovedOnCompletion = false
+        colorAnimation.fillMode = .forwards
+        
+        let btnUpAnimation = CAKeyframeAnimation()
+        btnUpAnimation.keyPath = AnimationKeyPath.transform.rawValue
+        btnUpAnimation.valueFunction = CAValueFunction(name: .translateY)
+        btnUpAnimation.keyTimes = [0, 0.2, 1]
+        btnUpAnimation.values = [0, 20, -100]
+        btnUpAnimation.duration = 0.3
+        btnUpAnimation.timingFunctions = [CAMediaTimingFunction(name: .easeOut)]
+        btnUpAnimation.beginTime = CACurrentMediaTime() + 2.1
+        btnUpAnimation.isRemovedOnCompletion = false
+        btnUpAnimation.fillMode = .forwards
+        btnUpAnimation.delegate = self
+        
+        searching2.add(searchUp, forKey: "")
+        success.add(searchingUp, forKey: "")
+        layer.add(colorAnimation, forKey: "")
+        layer.add(btnUpAnimation, forKey: "")
+    }
+}
+
+extension FetchButton: CAAnimationDelegate {
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        isAnimating = false
     }
 }
