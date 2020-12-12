@@ -138,6 +138,9 @@ class MainViewController: UIViewController {
                     self.animator.animate(before: beforeClusters, after: afterClusters, type: .move)
                 }
             }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: {
+                self.fetchBtn.endAnimation()
+            })
         }
 
         viewModel.markers.bind { afterClusters in
@@ -146,16 +149,15 @@ class MainViewController: UIViewController {
                 self.naverMapView.clusterObjects = afterClusters
                 self.animator.animate(before: [], after: afterClusters, type: .appear)
             }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: {
+                self.fetchBtn.endAnimation()
+            })
         }
     }
     
     @objc func fetchDidTouched() {
         guard !fetchBtn.isAnimating else { return }
         fetchBtn.animation()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: {
-            self.fetchBtn.endAnimation()
-        })
-        
         DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
             let places = self.fetchPlaceInScreen()
             self.viewModel?.fetchedPlaces = places
