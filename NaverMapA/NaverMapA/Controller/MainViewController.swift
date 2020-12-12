@@ -24,7 +24,6 @@ class MainViewController: UIViewController {
     var pullUpVC: DetailPullUpViewController?
     var fetchBtn: FetchButton!
     var animator: MoveAnimator1!
-    var flashAnimator: FlashAnimator!
     @Unit(wrappedValue: 18, threshold: 0.5) var zoomLevelCheck
     
     @IBOutlet weak var settingButton: UIButton!
@@ -44,7 +43,6 @@ class MainViewController: UIViewController {
             appearCompletionHandler: self.naverMapView.configureNewMarker(afterCluster:markerColor:),
             moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:markerColor:)
         )
-        flashAnimator = FlashAnimator(mapView: self.naverMapView, markerColor: markerColor)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -69,7 +67,6 @@ class MainViewController: UIViewController {
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         }
         animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
-        flashAnimator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         bindViewModel()
         updateMapView()
     }
@@ -134,6 +131,16 @@ class MainViewController: UIViewController {
                 } else { // 애니메이션중이 아닐때
                     self.naverMapView.deleteBeforeMarkers()
                     self.naverMapView.clusterObjects = afterClusters
+                    var findLeap = false
+                    for cluster in afterClusters {
+                        if cluster.latitude == self.naverMapView.selectedLeapMarker?.position.lat && cluster.longitude == self.naverMapView.selectedLeapMarker?.position.lng {
+                            findLeap = true
+                            break
+                        }
+                    }
+                    if !findLeap {
+                        self.naverMapView.selectedLeapMarker = nil
+                    }
                     self.animator.animate(before: beforeClusters, after: afterClusters, type: .move)
                 }
             }
@@ -144,6 +151,16 @@ class MainViewController: UIViewController {
                 self.naverMapView.deleteBeforeMarkers()
                 self.naverMapView.clusterObjects = afterClusters
                 self.animator.animate(before: [], after: afterClusters, type: .appear)
+                var findLeap = false
+                for cluster in afterClusters {
+                    if cluster.latitude == self.naverMapView.selectedLeapMarker?.position.lat && cluster.longitude == self.naverMapView.selectedLeapMarker?.position.lng {
+                        findLeap = true
+                        break
+                    }
+                }
+                if !findLeap {
+                    self.naverMapView.selectedLeapMarker = nil
+                }
             }
         }
     }
@@ -199,13 +216,6 @@ extension MainViewController {
 extension MainViewController: NaverMapViewDelegate {
     func naverMapView(_ mapView: NaverMapView, markerDidSelected cluster: Cluster) {
         self.showPullUpVC(with: cluster)
-        DispatchQueue.main.async {
-            if self.naverMapView.selectedLeapMarker != nil {
-                self.flashAnimator.run()
-            } else {
-                self.flashAnimator.stop()
-            }
-        }
     }
     
     func naverMapView(_ mapView: NaverMapView, markerWillAdded latlng: NMGLatLng) {

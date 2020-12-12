@@ -22,23 +22,38 @@ class NaverMapView: NMFNaverMapView {
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
     var prevZoomLevel: Double = 18
-    var selectedAnimationLayer: CALayer?
-    var selectedAnimationLayerPosition = CGPoint()
-    var selectedAnimationStartCameraPosition = NMGLatLng()
-    var selectedLeapMarker: NMFMarker?
+    var selectedLeapMarker: NMFMarker? {
+        didSet {
+            if oldValue != selectedLeapMarker {
+                self.stopAnimation()
+            }
+            guard selectedLeapMarker != nil else {
+                self.stopAnimation()
+                return
+            }
+            if self.mainAnimationTimer != nil {
+                if !self.mainAnimationTimer!.isValid {
+                    self.fadeAnimation()
+                }
+            } else {
+                self.fadeAnimation()
+            }
+        }
+    }
+    var mainAnimationTimer: Timer?
+    var isSelectedFadeInAnimation = false
     weak var naverMapDelegate: NaverMapViewDelegate?
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
             for cluster in self.clusterObjects {
                 if cluster.latitude == marker.position.lat && cluster.longitude == marker.position.lng {
-                    if cluster.places.count == 1 {
-                        self.selectedLeapMarker = marker
-                    } else {
-                        self.selectedLeapMarker = nil
-                    }
                     self.moveCamera(to: cluster) { [weak self] in
                         guard let self = self else { return }
-                        self.selectedAnimationStartCameraPosition = self.mapView.cameraPosition.target
+                        if cluster.places.count == 1 {
+                            self.selectedLeapMarker = marker
+                        } else {
+                            self.selectedLeapMarker = nil
+                        }
                         self.naverMapDelegate?.naverMapView(self, markerDidSelected: cluster)
                     }
                     break
@@ -132,6 +147,17 @@ class NaverMapView: NMFNaverMapView {
         afterClusters.forEach {afterCluster in
             configureNewMarker(afterCluster: afterCluster, markerColor: markerColor)
         }
+        var findLeap = false
+        for marker in self.clusterMarkers {
+            if marker.position.lat == selectedLeapMarker?.position.lat && marker.position.lng == selectedLeapMarker?.position.lng {
+                self.selectedLeapMarker = marker
+                findLeap = true
+                break
+            }
+        }
+        if !findLeap {
+            self.selectedLeapMarker = nil
+        }
     }
     
     @objc private func longPressed(sender: UILongPressGestureRecognizer) {
@@ -167,4 +193,28 @@ class NaverMapView: NMFNaverMapView {
         clusterObjects.removeAll()
     }
     
+    func fadeAnimation() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self, let select = self.selectedLeapMarker else { return }
+            self.mainAnimationTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+                if !self.isSelectedFadeInAnimation {
+                    select.alpha -= 0.1
+                    if select.alpha <= 0.2 {
+                        select.alpha = 0
+                        self.isSelectedFadeInAnimation = true
+                    }
+                } else {
+                    select.alpha += 0.1
+                    if select.alpha >= 0.8 {
+                        select.alpha = 1
+                        self.isSelectedFadeInAnimation = false
+                    }
+                }
+            }
+        }
+    }
+    func stopAnimation() {
+        mainAnimationTimer?.invalidate()
+        mainAnimationTimer = nil
+    }
 }
