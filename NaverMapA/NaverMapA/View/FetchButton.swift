@@ -14,6 +14,7 @@ class FetchButton: UIButton {
     var searching2: AniTextLayer!
     var success: VHCTextLayer!
     var isAnimating = false
+    let containerLayer = CALayer()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,14 +27,23 @@ class FetchButton: UIButton {
     }
     
     func commonInit(frame: CGRect) {
+        let w = frame.width
+        let h = frame.height
+        containerLayer.frame = CGRect(x: 0, y: 0, width: w, height: h)
+        containerLayer.cornerRadius = 20
         layer.cornerRadius = 20
         backgroundColor = .systemBlue
         setupLabels(frame: frame)
-        layer.addSublayer(search)
-        layer.addSublayer(searching)
-        layer.addSublayer(searching2)
-        layer.addSublayer(success)
-        self.clipsToBounds = true
+        
+        containerLayer.addSublayer(search)
+        containerLayer.addSublayer(searching)
+        containerLayer.addSublayer(searching2)
+        containerLayer.addSublayer(success)
+        containerLayer.masksToBounds = true
+        layer.addSublayer(containerLayer)
+        layer.shadowColor = UIColor.black.cgColor
+        layer.shadowOpacity = 0.6
+        layer.shadowOffset = CGSize(width: 1, height: 1)
     }
     
     func setupLabels(frame: CGRect) {
