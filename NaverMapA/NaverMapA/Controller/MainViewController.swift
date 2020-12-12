@@ -32,9 +32,14 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let _ = NMFAuthManager.shared().clientId else {
+            AlertManager.shared.clientIdIsNil(controller: self)
+            return
+        }
         setUpMapView()
         setUpCoreData()
         setUpOtherViews()
+        setupViewModel()
         
         let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         animator = MoveAnimator1(
@@ -43,6 +48,7 @@ class MainViewController: UIViewController {
             appearCompletionHandler: self.naverMapView.configureNewMarker(afterCluster:markerColor:),
             moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:markerColor:)
         )
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,12 +56,26 @@ class MainViewController: UIViewController {
         self.view.bringSubviewToFront(settingButton)
         self.navigationController?.isNavigationBarHidden = true
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard let _ = NMFAuthManager.shared().clientId else {
-            AlertManager.shared.clientIdIsNil(controller: self)
-            return
+        switch InfoSetting.algorithm {
+        case Setting.Algorithm.kims.rawValue:
+            viewModel?.clusteringAlgorithm = ScaleBasedClustering()
+        case Setting.Algorithm.kmeansElbow.rawValue:
+            viewModel?.clusteringAlgorithm = KMeansClustering()
+        case Setting.Algorithm.kmeansPenalty.rawValue:
+            viewModel?.clusteringAlgorithm = PenaltyKmeans()
+        default:
+            viewModel?.clusteringAlgorithm = ScaleBasedClustering()
         }
+        
+        animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
+        bindViewModel()
+        updateMapView()
+    }
+    
+    func setupViewModel() {
         switch InfoSetting.algorithm {
         case Setting.Algorithm.kims.rawValue:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
@@ -66,9 +86,6 @@ class MainViewController: UIViewController {
         default:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         }
-        animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
-        bindViewModel()
-        updateMapView()
     }
     
     // MARK: - Initailize
