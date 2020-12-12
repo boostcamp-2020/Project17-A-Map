@@ -107,8 +107,15 @@ class MainViewController: UIViewController {
     
     // MARK: - Methods
     
-    private func coreDataUpdateHandler(result: Error?) {
+    private func coreDataDeleteHandler(result: Error?) {
         if result == nil {
+            updateMapView()
+        }
+    }
+    
+    private func coreDataInsertHandler(result: Place?) {
+        if let place = result {
+            self.viewModel?.fetchedPlaces.append(place)
             updateMapView()
         }
     }
@@ -202,7 +209,7 @@ extension MainViewController: NaverMapViewDelegate {
         let message = "마커를 추가하시겠습니까"
         let okHandler: (UIAlertAction) -> Void = { [weak self] _ in
             guard let self = self else { return }
-            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
+            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataInsertHandler)
         }
         AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
@@ -212,7 +219,7 @@ extension MainViewController: NaverMapViewDelegate {
         let message = "마커를 삭제하시겠습니까"
         let okHandler: (UIAlertAction) -> Void = { [weak self] _ in
             guard let self = self else { return }
-            self.dataProvider.delete(object: place, completionHandler: self.coreDataUpdateHandler)
+            self.dataProvider.delete(object: place, completionHandler: self.coreDataDeleteHandler)
         }
         AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
