@@ -31,13 +31,16 @@ class NaverMapView: NMFNaverMapView {
                 self.stopAnimation()
                 return
             }
-            if self.mainAnimationTimer != nil {
-                if !self.mainAnimationTimer!.isValid {
-                    self.fadeAnimation()
-                }
-            } else {
-                self.fadeAnimation()
+            if self.mainAnimationTimer != nil && !self.mainAnimationTimer!.isValid {
+                    return
             }
+            selectedLeapMarker!.iconImage = NMF_MARKER_IMAGE_BLACK
+            let w = selectedLeapMarker!.iconImage.imageWidth * 1.4
+            let h = selectedLeapMarker!.iconImage.imageHeight * 1.4
+            let tframe = CGRect(x: 0, y: 0, width: w, height: h)
+            let tview = markerFactory.makeCmarkerView(frame: tframe, color: .systemRed, text: "1", isShawdow: true)
+            selectedLeapMarker!.iconImage = NMFOverlayImage(image: tview.getImage())
+            self.fadeAnimation()
         }
     }
     var mainAnimationTimer: Timer?
