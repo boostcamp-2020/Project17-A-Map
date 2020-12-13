@@ -32,9 +32,15 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let _ = NMFAuthManager.shared().clientId else {
+            AlertManager.shared.clientIdIsNil(controller: self)
+            return
+        }
         setUpMapView()
         setUpCoreData()
         setUpOtherViews()
+        setupViewModel()
+        
         let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         animator = MoveAnimator1(
             mapView: self.naverMapView,
@@ -42,6 +48,7 @@ class MainViewController: UIViewController {
             appearCompletionHandler: self.naverMapView.configureNewMarker(afterCluster:markerColor:),
             moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:markerColor:)
         )
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,12 +56,26 @@ class MainViewController: UIViewController {
         self.view.bringSubviewToFront(settingButton)
         self.navigationController?.isNavigationBarHidden = true
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard let _ = NMFAuthManager.shared().clientId else {
-            AlertManager.shared.clientIdIsNil(controller: self)
-            return
+        switch InfoSetting.algorithm {
+        case Setting.Algorithm.kims.rawValue:
+            viewModel?.clusteringAlgorithm = ScaleBasedClustering()
+        case Setting.Algorithm.kmeansElbow.rawValue:
+            viewModel?.clusteringAlgorithm = KMeansClustering()
+        case Setting.Algorithm.kmeansPenalty.rawValue:
+            viewModel?.clusteringAlgorithm = PenaltyKmeans()
+        default:
+            viewModel?.clusteringAlgorithm = ScaleBasedClustering()
         }
+        
+        animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
+        bindViewModel()
+        updateMapView()
+    }
+    
+    func setupViewModel() {
         switch InfoSetting.algorithm {
         case Setting.Algorithm.kims.rawValue:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
@@ -65,9 +86,6 @@ class MainViewController: UIViewController {
         default:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         }
-        animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
-        bindViewModel()
-        updateMapView()
     }
     
     // MARK: - Initailize
@@ -113,18 +131,24 @@ class MainViewController: UIViewController {
     
     // MARK: - Methods
     
-    private func coreDataUpdateHandler(result: Error?) {
+    private func coreDataDeleteHandler(result: Error?) {
         if result == nil {
             updateMapView()
         }
     }
     
+    private func coreDataInsertHandler(result: Place?) {
+        if let place = result {
+            self.viewModel?.fetchedPlaces.append(place)
+            updateMapView()
+        }
+    }
+
     func bindViewModel() {
         guard let viewModel = viewModel else { return }
         viewModel.animationMarkers.bind { (beforeClusters, afterClusters) in
             DispatchQueue.main.async {
                 if self.animator.isAnimating { // 애니메이션중일때
-                    //                    print("애니메이션중..")
                     // 1. 애니메이션중인 레이어 모두 지우기
                     self.animator.isAnimating = false // 새로운 마커를 그리지 않음
                     self.animationLayer.sublayers?.removeAll()
@@ -239,7 +263,7 @@ extension MainViewController: NaverMapViewDelegate {
         let message = "마커를 추가하시겠습니까"
         let okHandler: (UIAlertAction) -> Void = { [weak self] _ in
             guard let self = self else { return }
-            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
+            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataInsertHandler)
         }
         AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
@@ -249,7 +273,7 @@ extension MainViewController: NaverMapViewDelegate {
         let message = "마커를 삭제하시겠습니까"
         let okHandler: (UIAlertAction) -> Void = { [weak self] _ in
             guard let self = self else { return }
-            self.dataProvider.delete(object: place, completionHandler: self.coreDataUpdateHandler)
+            self.dataProvider.delete(object: place, completionHandler: self.coreDataDeleteHandler)
         }
         AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
