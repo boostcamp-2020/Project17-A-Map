@@ -47,12 +47,13 @@ extension MainViewController: NMFMapViewCameraDelegate {
             }
         }
     }
+    
     func updateMapView() {
         DispatchQueue.main.async {
             guard let viewModel = self.viewModel else { return }
             let coordBounds = self.naverMapView.coordBounds
             let filtedPlaces = viewModel.fetchedPlaces(with: coordBounds)
-            viewModel.updatePlaces(places: filtedPlaces, bounds: coordBounds)
+            viewModel.updatePlaces(places: filtedPlaces, bounds: coordBounds) {}
         }
     }
 }

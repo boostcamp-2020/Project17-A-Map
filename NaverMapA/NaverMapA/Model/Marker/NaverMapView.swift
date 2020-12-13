@@ -24,15 +24,12 @@ class NaverMapView: NMFNaverMapView {
     var prevZoomLevel: Double = 18
     var selectedLeapMarker: NMFMarker? {
         didSet {
-            if oldValue != selectedLeapMarker {
-                self.stopAnimation()
-            }
             guard selectedLeapMarker != nil else {
-                self.stopAnimation()
+                isAnimation = false
                 return
             }
-            if self.mainAnimationTimer != nil && !self.mainAnimationTimer!.isValid {
-                    return
+            if oldValue == selectedLeapMarker {
+                return
             }
             selectedLeapMarker!.iconImage = NMF_MARKER_IMAGE_BLACK
             let w = selectedLeapMarker!.iconImage.imageWidth * 1.4
@@ -40,11 +37,12 @@ class NaverMapView: NMFNaverMapView {
             let tframe = CGRect(x: 0, y: 0, width: w, height: h)
             let tview = markerFactory.makeCmarkerView(frame: tframe, color: .systemRed, text: "1", isShawdow: true)
             selectedLeapMarker!.iconImage = NMFOverlayImage(image: tview.getImage())
-            self.fadeAnimation()
+            isAnimation = true
         }
     }
-    var mainAnimationTimer: Timer?
+    var isAnimation = false
     var isSelectedFadeInAnimation = false
+    var mainAnimationTimer: Timer?
     weak var naverMapDelegate: NaverMapViewDelegate?
     lazy var handler = { (overlay: NMFOverlay?) -> Bool in
         if let marker = overlay as? NMFMarker {
@@ -100,6 +98,29 @@ class NaverMapView: NMFNaverMapView {
         mapView.layer.addSublayer(animationLayer)
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
         mapView.addGestureRecognizer(longPressGesture)
+        mainAnimationTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+            DispatchQueue.main.async {
+                guard let self = self, let select = self.selectedLeapMarker else {
+                    return
+                }
+                if !self.isAnimation {
+                    return
+                }
+                if !self.isSelectedFadeInAnimation {
+                    select.alpha -= 0.1
+                    if select.alpha <= 0.2 {
+                        select.alpha = 0
+                        self.isSelectedFadeInAnimation = true
+                    }
+                } else {
+                    select.alpha += 0.1
+                    if select.alpha >= 0.8 {
+                        select.alpha = 1
+                        self.isSelectedFadeInAnimation = false
+                    }
+                }
+            }
+        }
     }
     
     func moveCamera(to cluster: Cluster, completionHandler: @escaping () -> Void) {
@@ -144,6 +165,9 @@ class NaverMapView: NMFNaverMapView {
         marker.mapView = self.mapView
         marker.touchHandler = self.handler
         self.clusterMarkers.append(marker)
+        if marker.position.lat == selectedLeapMarker?.position.lat && marker.position.lng == selectedLeapMarker?.position.lng {
+            self.selectedLeapMarker = marker
+        }
     }
     
     func configureNewMarkers(afterClusters: [Cluster], markerColor: UIColor) {
@@ -156,7 +180,6 @@ class NaverMapView: NMFNaverMapView {
         var findLeap = false
         for marker in self.clusterMarkers {
             if marker.position.lat == selectedLeapMarker?.position.lat && marker.position.lng == selectedLeapMarker?.position.lng {
-                self.selectedLeapMarker = marker
                 findLeap = true
                 break
             }
@@ -197,30 +220,5 @@ class NaverMapView: NMFNaverMapView {
         }
         clusterMarkers.removeAll()
         clusterObjects.removeAll()
-    }
-    
-    func fadeAnimation() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self, let select = self.selectedLeapMarker else { return }
-            self.mainAnimationTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (_) in
-                if !self.isSelectedFadeInAnimation {
-                    select.alpha -= 0.1
-                    if select.alpha <= 0.2 {
-                        select.alpha = 0
-                        self.isSelectedFadeInAnimation = true
-                    }
-                } else {
-                    select.alpha += 0.1
-                    if select.alpha >= 0.8 {
-                        select.alpha = 1
-                        self.isSelectedFadeInAnimation = false
-                    }
-                }
-            }
-        }
-    }
-    func stopAnimation() {
-        mainAnimationTimer?.invalidate()
-        mainAnimationTimer = nil
     }
 }

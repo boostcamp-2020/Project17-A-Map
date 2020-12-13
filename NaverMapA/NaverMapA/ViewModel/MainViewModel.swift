@@ -30,7 +30,7 @@ class MainViewModel {
         }
     }
     
-    func updatePlaces(places: [Place], bounds: CoordinateBounds) {
+    func updatePlaces(places: [Place], bounds: CoordinateBounds, completionHandler: @escaping () -> Void) {
         let clusteringAlgorithm = self.clusteringAlgorithm.copy()
         guard let cluster = clusteringAlgorithm as? Clusterable else {
             return
@@ -45,6 +45,7 @@ class MainViewModel {
             guard !operation.isCancelled else { return }
             self.beforeMarkers = cluster.clusters
             self.markers.value = cluster.clusters
+            completionHandler()
         }
     }
     

@@ -143,7 +143,7 @@ class MainViewController: UIViewController {
             updateMapView()
         }
     }
-
+    
     func bindViewModel() {
         guard let viewModel = viewModel else { return }
         viewModel.animationMarkers.bind { (beforeClusters, afterClusters) in
@@ -201,7 +201,24 @@ class MainViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
             let places = self.fetchPlaceInScreen()
             self.viewModel?.fetchedPlaces = places
-            self.viewModel?.updatePlaces(places: places, bounds: self.naverMapView.coordBounds)
+            self.viewModel?.updatePlaces(places: places, bounds: self.naverMapView.coordBounds) {
+                DispatchQueue.main.async {
+                    if self.naverMapView.selectedLeapMarker == nil {
+                        return
+                    }
+                    var findLeap = false
+                    for marker in self.naverMapView.clusterMarkers {
+                        if marker.position.lat == self.naverMapView.selectedLeapMarker?.position.lat && marker.position.lng == self.naverMapView.selectedLeapMarker?.position.lng {
+                            self.naverMapView.selectedLeapMarker = marker
+                            findLeap = true
+                            break
+                        }
+                    }
+                    if !findLeap {
+                        self.naverMapView.selectedLeapMarker = nil
+                    }
+                }
+            }
         })
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: {
             self.fetchBtn.endAnimation()
