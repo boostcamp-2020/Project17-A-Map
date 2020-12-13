@@ -91,7 +91,7 @@ class NaverMapView: NMFNaverMapView {
                 maxLongitude = place.longitude
             }
         }
-        let camUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50)
+        let camUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 10)
         camUpdate.animation = .fly
         camUpdate.animationDuration = 1
         mapView.moveCamera(camUpdate)
@@ -165,5 +165,4 @@ class NaverMapView: NMFNaverMapView {
         clusterMarkers.removeAll()
         clusterObjects.removeAll()
     }
-    
 }
