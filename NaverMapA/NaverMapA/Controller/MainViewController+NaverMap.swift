@@ -26,7 +26,6 @@ extension MainViewController: NMFMapViewCameraDelegate {
             let coordBounds = self.naverMapView.coordBounds
             let filtedPlaces = viewModel.fetchedPlaces(with: coordBounds)
             self.zoomLevelCheck = mapView.zoomLevel
-            self.naverMapView.prevZoomLevel = mapView.zoomLevel
             if self.$zoomLevelCheck {
                 viewModel.updatePlacesAndAnimation(places: filtedPlaces, bounds: self.naverMapView.coordBounds)
             }
@@ -38,12 +37,7 @@ extension MainViewController: NMFMapViewCameraDelegate {
             guard let viewModel = self.viewModel else { return }
             let coordBounds = self.naverMapView.coordBounds
             let filtedPlaces = viewModel.fetchedPlaces(with: coordBounds)
-            if self.naverMapView.prevZoomLevel != self.mapView.zoomLevel {
-                self.naverMapView.prevZoomLevel = self.mapView.zoomLevel
-                viewModel.updatePlacesAndAnimation(places: filtedPlaces, bounds: coordBounds)
-            } else {
-                viewModel.updatePlaces(places: filtedPlaces, bounds: coordBounds)
-            }
+            viewModel.updatePlaces(places: filtedPlaces, bounds: coordBounds)
         }
     }
 }
