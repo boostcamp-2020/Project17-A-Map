@@ -212,7 +212,7 @@ class NaverMapView: NMFNaverMapView {
     func fadeAnimation() {
         DispatchQueue.main.async { [weak self] in
             guard let self = self, let select = self.selectedLeapMarker else { return }
-            self.mainAnimationTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+            self.mainAnimationTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (_) in
                 if !self.isSelectedFadeInAnimation {
                     select.alpha -= 0.1
                     if select.alpha <= 0.2 {
