@@ -35,13 +35,6 @@ class MainViewController: UIViewController {
         setUpMapView()
         setUpCoreData()
         setUpOtherViews()
-        let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
-        animator = MoveAnimator1(
-            mapView: self.naverMapView,
-            markerColor: markerColor,
-            appearCompletionHandler: self.naverMapView.configureNewMarker(afterCluster:markerColor:),
-            moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:markerColor:)
-        )
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,17 +48,41 @@ class MainViewController: UIViewController {
             AlertManager.shared.clientIdIsNil(controller: self)
             return
         }
-        switch InfoSetting.algorithm {
-        case Setting.Algorithm.kims.rawValue:
+        switch Setting.Algorithm(rawValue: InfoSetting.algorithm) {
+        case .kims:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
-        case Setting.Algorithm.kmeansElbow.rawValue:
+        case .kmeansElbow:
             viewModel = MainViewModel(algorithm: KMeansClustering())
-        case Setting.Algorithm.kmeansPenalty.rawValue:
+        case .kmeansPenalty:
             viewModel = MainViewModel(algorithm: PenaltyKmeans())
         default:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         }
-        animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
+        let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
+        
+        switch Setting.Animation(rawValue: InfoSetting.animation) {
+        case .appleStyle:
+            animator = MoveAnimator1(
+                mapView: self.naverMapView,
+                markerColor: markerColor,
+                appearCompletionHandler: self.naverMapView.configureNewMarker,
+                moveCompletionHandler: self.naverMapView.configureNewMarkers
+            )
+        case .shootingStart:
+            animator = StarAnimation(
+                mapView: self.naverMapView,
+                markerColor: markerColor,
+                appearCompletionHandler: self.naverMapView.configureNewMarker,
+                moveCompletionHandler: self.naverMapView.configureNewMarkers
+            )
+        default:
+            animator = MoveAnimator1(
+                mapView: self.naverMapView,
+                markerColor: markerColor,
+                appearCompletionHandler: self.naverMapView.configureNewMarker,
+                moveCompletionHandler: self.naverMapView.configureNewMarkers
+            )
+        }
         bindViewModel()
         updateMapView()
     }
