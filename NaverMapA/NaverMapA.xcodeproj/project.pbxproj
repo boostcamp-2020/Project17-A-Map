@@ -62,6 +62,7 @@
 		E08C28E82584C05700CC0259 /* String+UIsize.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28E72584C05700CC0259 /* String+UIsize.swift */; };
 		E08C28ED2584C07F00CC0259 /* String+subscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28EC2584C07F00CC0259 /* String+subscript.swift */; };
 		E08C28F22584C0AD00CC0259 /* CAKeyframeAnimation+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */; };
+		E08C291A2584FCDC00CC0259 /* StarAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29192584FCDB00CC0259 /* StarAnimator.swift */; };
 		E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5424256F4AA700F799E1 /* MainViewModel.swift */; };
 		E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE542C256F4BC800F799E1 /* Dynamic.swift */; };
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
@@ -166,6 +167,7 @@
 		E08C28E72584C05700CC0259 /* String+UIsize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+UIsize.swift"; sourceTree = "<group>"; };
 		E08C28EC2584C07F00CC0259 /* String+subscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+subscript.swift"; sourceTree = "<group>"; };
 		E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAKeyframeAnimation+.swift"; sourceTree = "<group>"; };
+		E08C29192584FCDB00CC0259 /* StarAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarAnimator.swift; sourceTree = "<group>"; };
 		E0AE5424256F4AA700F799E1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0AE542C256F4BC800F799E1 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
@@ -285,6 +287,7 @@
 				D45B7D33257F7590009208D9 /* MoveAnimator.swift */,
 				D4FB056525808A220078EE09 /* AppearAnimator.swift */,
 				E07AD7CD25812C5000D07EAF /* Animator.swift */,
+				E08C29192584FCDB00CC0259 /* StarAnimator.swift */,
 			);
 			path = Animator;
 			sourceTree = "<group>";
@@ -727,6 +730,7 @@
 				C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */,
 				E07AD7B82580F64800D07EAF /* NaverMapView.swift in Sources */,
 				D45B7D34257F7590009208D9 /* MoveAnimator.swift in Sources */,
+				E08C291A2584FCDC00CC0259 /* StarAnimator.swift in Sources */,
 				E07AD79C2580592900D07EAF /* Unit.swift in Sources */,
 				E0AE5437256F50D900F799E1 /* Clusterable.swift in Sources */,
 				E0AE5492257128A700F799E1 /* penaltyKmeans.swift in Sources */,
