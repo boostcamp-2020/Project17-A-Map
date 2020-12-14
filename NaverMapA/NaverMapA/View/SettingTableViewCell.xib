@@ -17,8 +17,8 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="알고리즘" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nXC-JX-tff">
-                        <rect key="frame" x="10" y="12" width="59" height="20"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="알고리즘" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nXC-JX-tff">
+                        <rect key="frame" x="10" y="12" width="59" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -34,8 +34,11 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="gcX-n0-NNC" firstAttribute="centerY" secondItem="nXC-JX-tff" secondAttribute="centerY" id="tyS-MB-kFf"/>
-                    <constraint firstItem="gcX-n0-NNC" firstAttribute="leading" secondItem="nXC-JX-tff" secondAttribute="trailing" constant="20" id="zzD-Q2-7xk"/>
+                    <constraint firstItem="gcX-n0-NNC" firstAttribute="leading" secondItem="nXC-JX-tff" secondAttribute="trailing" constant="20" id="aAW-wf-4uA"/>
+                    <constraint firstItem="gcX-n0-NNC" firstAttribute="top" secondItem="nXC-JX-tff" secondAttribute="top" id="bIY-53-UiE"/>
+                    <constraint firstItem="gcX-n0-NNC" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="leading" priority="750" constant="80" id="hkZ-Qt-T8G"/>
+                    <constraint firstItem="nXC-JX-tff" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="10" id="wXT-2j-0Ej"/>
+                    <constraint firstItem="gcX-n0-NNC" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="xcV-Df-Dtu"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

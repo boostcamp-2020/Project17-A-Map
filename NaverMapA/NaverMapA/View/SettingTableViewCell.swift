@@ -16,6 +16,11 @@ class SettingTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
     }
+    
+    override func prepareForReuse() {
+        titleLabel.textColor = .black
+        colorView.isHidden = false
+    }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
@@ -52,9 +57,6 @@ class SettingTableViewCell: UITableViewCell {
                 colorString: Setting.MarkerColor.allCases[indexPath.row].rawValue
             )
             colorView.layer.cornerRadius = 10
-            colorView.translatesAutoresizingMaskIntoConstraints = false
-            self.titleLabel.translatesAutoresizingMaskIntoConstraints = false
-            self.titleLabel.widthAnchor.constraint(equalToConstant: 60).isActive = true
             self.titleLabel.text = Setting.MarkerColor.allCases[indexPath.row].rawValue
             self.titleLabel.textColor = GetMarkerColor.getColor(
                 colorString: Setting.MarkerColor.allCases[indexPath.row].rawValue
