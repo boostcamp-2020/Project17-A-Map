@@ -42,13 +42,13 @@ class ScaleBasedClustering: Operation, Clusterable {
             clusterArray.removeAll()
             tempClusterArray.sort()
             while tempClusterArray.count != 0 && !isCancelled {
-                var curPlace = tempClusterArray.removeFirst()
+                var curCluster = tempClusterArray.removeFirst()
                 var clusterCount = tempClusterArray.count
                 var index = 0
                 while index < clusterCount && !isCancelled {
-                    if curPlace.distanceTo(tempClusterArray[index]) <= mapScale {
+                    if curCluster.distanceTo(tempClusterArray[index]) <= mapScale {
                         for tempPlace in tempClusterArray[index].places {
-                            curPlace.places.append(tempPlace)
+                            curCluster.places.append(tempPlace)
                         }
                         tempClusterArray.remove(at: index)
                         isUpdate = true
@@ -58,7 +58,7 @@ class ScaleBasedClustering: Operation, Clusterable {
                         index += 1
                     }
                 }
-                clusterArray.append(curPlace)
+                clusterArray.append(curCluster)
             }
         }
         return isCancelled ? [] : clusterArray
