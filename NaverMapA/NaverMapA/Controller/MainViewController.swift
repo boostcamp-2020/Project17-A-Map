@@ -163,13 +163,13 @@ class MainViewController: UIViewController {
                     self.naverMapView.clusterObjects = afterClusters
                     var findLeap = false
                     for cluster in afterClusters {
-                        if cluster.latitude == self.naverMapView.selectedLeapMarker?.position.lat && cluster.longitude == self.naverMapView.selectedLeapMarker?.position.lng {
+                        if cluster.latitude == self.naverMapView.selectedLeafMarker?.position.lat && cluster.longitude == self.naverMapView.selectedLeafMarker?.position.lng {
                             findLeap = true
                             break
                         }
                     }
                     if !findLeap {
-                        self.naverMapView.selectedLeapMarker = nil
+                        self.naverMapView.selectedLeafMarker = nil
                     }
                     self.animator.animate(before: beforeClusters, after: afterClusters, type: .move)
                 }
@@ -183,13 +183,13 @@ class MainViewController: UIViewController {
                 self.animator.animate(before: [], after: afterClusters, type: .appear)
                 var findLeap = false
                 for cluster in afterClusters {
-                    if cluster.latitude == self.naverMapView.selectedLeapMarker?.position.lat && cluster.longitude == self.naverMapView.selectedLeapMarker?.position.lng {
+                    if cluster.latitude == self.naverMapView.selectedLeafMarker?.position.lat && cluster.longitude == self.naverMapView.selectedLeafMarker?.position.lng {
                         findLeap = true
                         break
                     }
                 }
                 if !findLeap {
-                    self.naverMapView.selectedLeapMarker = nil
+                    self.naverMapView.selectedLeafMarker = nil
                 }
             }
         }
@@ -203,19 +203,19 @@ class MainViewController: UIViewController {
             self.viewModel?.fetchedPlaces = places
             self.viewModel?.updatePlaces(places: places, bounds: self.naverMapView.coordBounds) {
                 DispatchQueue.main.async {
-                    if self.naverMapView.selectedLeapMarker == nil {
+                    if self.naverMapView.selectedLeafMarker == nil {
                         return
                     }
                     var findLeap = false
                     for marker in self.naverMapView.clusterMarkers {
-                        if marker.position.lat == self.naverMapView.selectedLeapMarker?.position.lat && marker.position.lng == self.naverMapView.selectedLeapMarker?.position.lng {
-                            self.naverMapView.selectedLeapMarker = marker
+                        if marker.position.lat == self.naverMapView.selectedLeafMarker?.position.lat && marker.position.lng == self.naverMapView.selectedLeafMarker?.position.lng {
+                            self.naverMapView.selectedLeafMarker = marker
                             findLeap = true
                             break
                         }
                     }
                     if !findLeap {
-                        self.naverMapView.selectedLeapMarker = nil
+                        self.naverMapView.selectedLeafMarker = nil
                     }
                 }
             }

@@ -18,13 +18,13 @@ extension MainViewController: PullUpViewDelegate {
             var findLeap = false
             for marker in self.naverMapView.clusterMarkers {
                 if marker.position.lat == lat && marker.position.lng == lng {
-                    self.naverMapView.selectedLeapMarker = marker
+                    self.naverMapView.selectedLeafMarker = marker
                     findLeap = true
                     break
                 }
             }
             if !findLeap {
-                self.naverMapView.selectedLeapMarker = nil
+                self.naverMapView.selectedLeafMarker = nil
             }
             
         }

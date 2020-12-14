@@ -22,21 +22,21 @@ class NaverMapView: NMFNaverMapView {
     var clusterMarkers = [NMFMarker]()
     var clusterObjects = [Cluster]()
     var prevZoomLevel: Double = 18
-    var selectedLeapMarker: NMFMarker? {
+    var selectedLeafMarker: NMFMarker? {
         didSet {
-            guard selectedLeapMarker != nil else {
+            guard selectedLeafMarker != nil else {
                 isAnimation = false
                 return
             }
-            if oldValue == selectedLeapMarker {
+            if oldValue == selectedLeafMarker {
                 return
             }
-            selectedLeapMarker!.iconImage = NMF_MARKER_IMAGE_BLACK
-            let w = selectedLeapMarker!.iconImage.imageWidth * 1.4
-            let h = selectedLeapMarker!.iconImage.imageHeight * 1.4
+            selectedLeafMarker!.iconImage = NMF_MARKER_IMAGE_BLACK
+            let w = selectedLeafMarker!.iconImage.imageWidth * 1.4
+            let h = selectedLeafMarker!.iconImage.imageHeight * 1.4
             let tframe = CGRect(x: 0, y: 0, width: w, height: h)
             let tview = markerFactory.makeCmarkerView(frame: tframe, color: .systemRed, text: "1", isShawdow: true)
-            selectedLeapMarker!.iconImage = NMFOverlayImage(image: tview.getImage())
+            selectedLeafMarker!.iconImage = NMFOverlayImage(image: tview.getImage())
             isAnimation = true
         }
     }
@@ -51,9 +51,9 @@ class NaverMapView: NMFNaverMapView {
                     self.moveCamera(to: cluster) { [weak self] in
                         guard let self = self else { return }
                         if cluster.places.count == 1 {
-                            self.selectedLeapMarker = marker
+                            self.selectedLeafMarker = marker
                         } else {
-                            self.selectedLeapMarker = nil
+                            self.selectedLeafMarker = nil
                         }
                         self.naverMapDelegate?.naverMapView(self, markerDidSelected: cluster)
                     }
@@ -100,7 +100,7 @@ class NaverMapView: NMFNaverMapView {
         mapView.addGestureRecognizer(longPressGesture)
         mainAnimationTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
             DispatchQueue.main.async {
-                guard let self = self, let select = self.selectedLeapMarker else {
+                guard let self = self, let select = self.selectedLeafMarker else {
                     return
                 }
                 if !self.isAnimation {
@@ -165,8 +165,8 @@ class NaverMapView: NMFNaverMapView {
         marker.mapView = self.mapView
         marker.touchHandler = self.handler
         self.clusterMarkers.append(marker)
-        if marker.position.lat == selectedLeapMarker?.position.lat && marker.position.lng == selectedLeapMarker?.position.lng {
-            self.selectedLeapMarker = marker
+        if marker.position.lat == selectedLeafMarker?.position.lat && marker.position.lng == selectedLeafMarker?.position.lng {
+            self.selectedLeafMarker = marker
         }
     }
     
@@ -179,13 +179,13 @@ class NaverMapView: NMFNaverMapView {
         }
         var findLeap = false
         for marker in self.clusterMarkers {
-            if marker.position.lat == selectedLeapMarker?.position.lat && marker.position.lng == selectedLeapMarker?.position.lng {
+            if marker.position.lat == selectedLeafMarker?.position.lat && marker.position.lng == selectedLeafMarker?.position.lng {
                 findLeap = true
                 break
             }
         }
         if !findLeap {
-            self.selectedLeapMarker = nil
+            self.selectedLeafMarker = nil
         }
     }
     
