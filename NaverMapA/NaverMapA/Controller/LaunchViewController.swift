@@ -26,6 +26,11 @@ class LaunchViewController: UIViewController {
         circle1.zPosition = 1
         circle2.transform = CATransform3DMakeRotation(-(2/8) * .pi, 0, 0, 1)
         
+        circle1.shadowOpacity = 1
+        circle2.shadowOpacity = 1
+        circle1.shadowColor = UIColor.systemGray3.cgColor
+        circle2.shadowColor = UIColor.systemGray.cgColor
+        
         let group = CAAnimationGroup()
         let group2 = CAAnimationGroup()
         
@@ -89,6 +94,8 @@ class LaunchViewController: UIViewController {
             positionAnimation
         ]
         group.duration = 0.6
+        group.isRemovedOnCompletion = false
+        group.fillMode = .forwards
         
         group2.animations = [
             scaleDownAnimation2,
@@ -96,12 +103,14 @@ class LaunchViewController: UIViewController {
             positionAnimation2
         ]
         group2.duration = 0.6
+        group2.isRemovedOnCompletion = false
+        group2.fillMode = .forwards
         
         CATransaction.begin()
         CATransaction.setCompletionBlock({
             circle1.removeFromSuperlayer()
             circle2.removeFromSuperlayer()
-            //self.changeScene()
+            self.changeScene()
         })
         circle1.add(group, forKey: nil)
         circle2.add(group2, forKey: nil)
@@ -140,9 +149,11 @@ class LaunchViewController: UIViewController {
         self.view.layer.addSublayer(circle)
         let innerCircle = configureInnerCircle(center: center2)
         circle.addSublayer(innerCircle)
+        innerCircle.shadowOpacity = 1
+        innerCircle.shadowColor = UIColor.systemGray.cgColor
         return circle
     }
-    
+
     func configureInnerCircle(center: CGPoint) -> CAShapeLayer {
         let radius: CGFloat = self.view.frame.width / 8
         let bezierPath = UIBezierPath()
@@ -165,7 +176,7 @@ class LaunchViewController: UIViewController {
         let MainViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainScene")
         MainViewController.modalPresentationStyle = .fullScreen
         let window = self.view.window
-        self.dismiss(animated: true) {
+        self.dismiss(animated: false) {
             window?.rootViewController = MainViewController
             window?.makeKeyAndVisible()
         }
