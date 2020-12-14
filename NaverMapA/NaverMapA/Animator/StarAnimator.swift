@@ -10,7 +10,7 @@ import NMapsMap
 
 class StarAnimation: BasicAnimator {
 
-    override func animateOneView(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster]) {
+    override func movingAnimation(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster]) {
         let layerWidth = NMFMarker().iconImage.imageWidth
         let layerHeight = NMFMarker().iconImage.imageHeight
         let animation = animationMaker.pathScale(start: startPoint, end: endPoint, duration: 0.6, repeatCount: 1, delay: 0)

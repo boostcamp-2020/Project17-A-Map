@@ -21,8 +21,8 @@ protocol AnimatorManager {
     var animationLayer: CALayer { get }
     var appearCompletionHandler: (Cluster, UIColor) -> Void { get }
     var moveCompletionHandler: ([Cluster], UIColor) -> Void { get }
-    func animateOneView(startPoint: CGPoint, cluster: Cluster)
-    func animateOneView(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster])
+    func appearAnimation(startPoint: CGPoint, cluster: Cluster)
+    func movingAnimation(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster])
     func animateAllMove(before: [Cluster], after: [Cluster])
     func animateAllAppear(after: [Cluster])
     func animate(before: [Cluster], after: [Cluster], type: AnimationType)
@@ -77,7 +77,7 @@ class BasicAnimator: AnimatorManager {
                     if startPoint == endPoint {
                         appearCompletionHandler(afterCluster, markerColor)
                     } else {
-                        animateOneView(startPoint: startPoint, endPoint: endPoint, beforeCluster: beforeCluster, afterClusters: after)
+                        movingAnimation(startPoint: startPoint, endPoint: endPoint, beforeCluster: beforeCluster, afterClusters: after)
                     }
                     break
                 }
@@ -88,12 +88,12 @@ class BasicAnimator: AnimatorManager {
     func animateAllAppear(after: [Cluster]) {
         for cluster in after {
             let point = mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longitude))
-            animateOneView(startPoint: point, cluster: cluster)
+            appearAnimation(startPoint: point, cluster: cluster)
         }
 
     }
     
-    func animateOneView(startPoint: CGPoint, cluster: Cluster) {
+    func appearAnimation(startPoint: CGPoint, cluster: Cluster) {
         let markerLayer = markerFactory.makeCmarkerView(frame: CGRect(x: -100, y: -100, width: width, height: height), color: markerColor, text: "\(cluster.places.count)")
         let scaleUpAnimation = self.animationMaker.scaleY()
 
@@ -113,7 +113,7 @@ class BasicAnimator: AnimatorManager {
         }
     }
         
-    func animateOneView(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster]) {
+    func movingAnimation(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster]) {
         let markerLayer = markerFactory.makeCmarkerView(frame: CGRect(x: -100, y: -100, width: width, height: height), color: markerColor, text: "\(beforeCluster.places.count)")
         let markerAnimation = animationMaker.position(start: startPoint, end: endPoint)
         animationLayer.addSublayer(markerLayer.layer)
