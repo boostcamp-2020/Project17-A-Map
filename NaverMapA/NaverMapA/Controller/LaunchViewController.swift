@@ -40,7 +40,26 @@ class LaunchViewController: UIViewController {
         circle.path = bezierPath.cgPath
         circle.fillColor = color
         self.view.layer.addSublayer(circle)
-        
+        let innerCircle = configureInnerCircle(center: center2)
+        circle.addSublayer(innerCircle)
         return circle
+    }
+    
+    func configureInnerCircle(center: CGPoint) -> CAShapeLayer {
+        let radius: CGFloat = self.view.frame.width / 10
+        let bezierPath = UIBezierPath()
+        bezierPath.move(to: center)
+        bezierPath.addArc(
+            withCenter: center,
+            radius: radius,
+            startAngle: 0,
+            endAngle: 2 * .pi,
+            clockwise: true
+        )
+        bezierPath.close()
+        let innerCircle = CAShapeLayer()
+        innerCircle.path = bezierPath.cgPath
+        innerCircle.fillColor = UIColor.white.cgColor
+        return innerCircle
     }
 }
