@@ -61,16 +61,6 @@ extension CABasicAnimation {
         animation.duration = duration
         return animation
     }
-    
-    static func transform(fromValue: (Double, Double, Double), toValue: (Double, Double, Double), valueFunctionName: CAValueFunctionName, duration: Double) -> CABasicAnimation {
-        let animation = CABasicAnimation()
-        animation.keyPath = AnimationKeyPath.transform.rawValue
-        animation.valueFunction = CAValueFunction(name: valueFunctionName)
-        animation.fromValue = [fromValue.0, fromValue.1, fromValue.2]
-        animation.toValue = [toValue.0, toValue.1, toValue.2]
-        animation.duration = duration
-        return animation
-    }
 
     static func transform(fromValue: CATransform3D, toValue: CATransform3D, duration: Double) -> CABasicAnimation {
         let animation = CABasicAnimation()
