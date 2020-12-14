@@ -9,7 +9,7 @@ import UIKit
 
 class PathMaker {
     
-    static func parabola(start: CGPoint, end: CGPoint) -> UIBezierPath {
+    func parabola(start: CGPoint, end: CGPoint) -> UIBezierPath {
         let bpath = UIBezierPath()
         let centerX = Double((start.x + end.x) / 2)
         let centerY = Double((start.y + end.y) / 2)
@@ -38,7 +38,7 @@ class PathMaker {
         return bpath
     }
 
-    static func linear(start: CGPoint, end: CGPoint) -> UIBezierPath {
+    func linear(start: CGPoint, end: CGPoint) -> UIBezierPath {
         let bpath = UIBezierPath()
         bpath.move(to: start)
         bpath.addLine(to: end)
