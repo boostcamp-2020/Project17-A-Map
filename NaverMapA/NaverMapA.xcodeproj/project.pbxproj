@@ -55,6 +55,10 @@
 		E0825C5A258230D4001F0569 /* FetchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0825C59258230D4001F0569 /* FetchButton.swift */; };
 		E0825C5F25824F7F001F0569 /* CABasicAnimation+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */; };
 		E0825C64258266D3001F0569 /* AnimationKeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0825C63258266D3001F0569 /* AnimationKeyPath.swift */; };
+		E08C28E22584BFE000CC0259 /* AniTextLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28E12584BFE000CC0259 /* AniTextLayer.swift */; };
+		E08C28E82584C05700CC0259 /* String+UIsize.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28E72584C05700CC0259 /* String+UIsize.swift */; };
+		E08C28ED2584C07F00CC0259 /* String+subscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28EC2584C07F00CC0259 /* String+subscript.swift */; };
+		E08C28F22584C0AD00CC0259 /* CAKeyframeAnimation+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */; };
 		E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5424256F4AA700F799E1 /* MainViewModel.swift */; };
 		E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE542C256F4BC800F799E1 /* Dynamic.swift */; };
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
@@ -152,6 +156,10 @@
 		E0825C59258230D4001F0569 /* FetchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchButton.swift; sourceTree = "<group>"; };
 		E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CABasicAnimation+.swift"; sourceTree = "<group>"; };
 		E0825C63258266D3001F0569 /* AnimationKeyPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationKeyPath.swift; sourceTree = "<group>"; };
+		E08C28E12584BFE000CC0259 /* AniTextLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AniTextLayer.swift; sourceTree = "<group>"; };
+		E08C28E72584C05700CC0259 /* String+UIsize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+UIsize.swift"; sourceTree = "<group>"; };
+		E08C28EC2584C07F00CC0259 /* String+subscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+subscript.swift"; sourceTree = "<group>"; };
+		E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAKeyframeAnimation+.swift"; sourceTree = "<group>"; };
 		E0AE5424256F4AA700F799E1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0AE542C256F4BC800F799E1 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
@@ -221,7 +229,6 @@
 			children = (
 				C816202625789C8A00DF61C4 /* MarkerFactory.swift */,
 				E07AD7B72580F64800D07EAF /* NaverMapView.swift */,
-				E07AD7FC2581DF3F00D07EAF /* VHCTextLayer.swift */,
 				C87AE2B12582602400017EA5 /* GetMarkerColor.swift */,
 			);
 			path = Marker;
@@ -235,7 +242,6 @@
 				E0EFA25325754F6200995B0C /* Algorithm */,
 				E0EFA25225754F4000995B0C /* Place */,
 				E0EFA23B25754EFD00995B0C /* Cluster */,
-				D4FB0564258089F80078EE09 /* Animator */,
 				D4C8115025812CBD0097A3FA /* AsyncFetcher */,
 			);
 			path = Model;
@@ -244,6 +250,7 @@
 		D4C2F82F257573F900F784CE /* View */ = {
 			isa = PBXGroup;
 			children = (
+				E08C28F62584C0F000CC0259 /* Layer */,
 				D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */,
 				D499BFD22575C41400EF369E /* DetailCollectionViewDetailCell.xib */,
 				8893786A257D415400A5B5C5 /* SettingTableViewCell.swift */,
@@ -304,6 +311,8 @@
 				D4C2F82F257573F900F784CE /* View */,
 				D429CFDF2565828B00B1EECA /* Model */,
 				E0AE541A256F48F100F799E1 /* Util */,
+				D4FB0564258089F80078EE09 /* Animator */,
+				E08C28E62584C00D00CC0259 /* Extensions */,
 				E0059FA42563726900CE6BD7 /* AppDelegate.swift */,
 				E0059FA62563726900CE6BD7 /* SceneDelegate.swift */,
 				E0059FAA2563726900CE6BD7 /* Main.storyboard */,
@@ -343,11 +352,32 @@
 			path = PropertyWrapper;
 			sourceTree = "<group>";
 		};
+		E08C28E62584C00D00CC0259 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				C8C1FB49257F6D4200D98A92 /* UIView+Rendering.swift */,
+				E0825C63258266D3001F0569 /* AnimationKeyPath.swift */,
+				E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */,
+				E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */,
+				E08C28E72584C05700CC0259 /* String+UIsize.swift */,
+				E08C28EC2584C07F00CC0259 /* String+subscript.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		E08C28F62584C0F000CC0259 /* Layer */ = {
+			isa = PBXGroup;
+			children = (
+				E07AD7FC2581DF3F00D07EAF /* VHCTextLayer.swift */,
+				E08C28E12584BFE000CC0259 /* AniTextLayer.swift */,
+			);
+			path = Layer;
+			sourceTree = "<group>";
+		};
 		E0AE5418256F48CE00F799E1 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
 				E0AE5424256F4AA700F799E1 /* MainViewModel.swift */,
-				E0AE542C256F4BC800F799E1 /* Dynamic.swift */,
 				D44B6FC925783BD700E912BB /* DetailViewModel.swift */,
 				D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */,
 			);
@@ -369,12 +399,10 @@
 		E0AE541A256F48F100F799E1 /* Util */ = {
 			isa = PBXGroup;
 			children = (
+				E0AE542C256F4BC800F799E1 /* Dynamic.swift */,
 				88A679FC257E7317004CA6C7 /* NaverMapAPI.swift */,
 				E0BCC6C525638972005AD87F /* Environment.swift */,
-				C8C1FB49257F6D4200D98A92 /* UIView+Rendering.swift */,
 				E07AD7C22581087100D07EAF /* AlertManager.swift */,
-				E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */,
-				E0825C63258266D3001F0569 /* AnimationKeyPath.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -682,6 +710,7 @@
 				E07AD788257F7FD100D07EAF /* AtomicArray.swift in Sources */,
 				E07AD7C32581087100D07EAF /* AlertManager.swift in Sources */,
 				E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */,
+				E08C28E22584BFE000CC0259 /* AniTextLayer.swift in Sources */,
 				E0059FA92563726900CE6BD7 /* MainViewController.swift in Sources */,
 				8893786C257D415400A5B5C5 /* SettingTableViewCell.swift in Sources */,
 				E0EFA23D25754F0D00995B0C /* PenaltyCluster.swift in Sources */,
@@ -700,13 +729,16 @@
 				D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */,
 				E07AD7CE25812C5000D07EAF /* Animator.swift in Sources */,
 				88A67A02257E73AF004CA6C7 /* Geocoding.swift in Sources */,
+				E08C28ED2584C07F00CC0259 /* String+subscript.swift in Sources */,
 				E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */,
 				C8D647D8256F66FB00E3BB14 /* MainViewController+NaverMap.swift in Sources */,
 				D44558E525661638006D9D66 /* NaverMapA.xcdatamodeld in Sources */,
 				D41830D6257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift in Sources */,
 				E0059FA72563726900CE6BD7 /* SceneDelegate.swift in Sources */,
 				E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */,
+				E08C28E82584C05700CC0259 /* String+UIsize.swift in Sources */,
 				E0AE5442256F859B00F799E1 /* CoordinateBounds.swift in Sources */,
+				E08C28F22584C0AD00CC0259 /* CAKeyframeAnimation+.swift in Sources */,
 				D4FB056625808A220078EE09 /* AppearAnimator.swift in Sources */,
 				88A679FD257E7317004CA6C7 /* NaverMapAPI.swift in Sources */,
 				D44558DB256615CF006D9D66 /* Place.swift in Sources */,

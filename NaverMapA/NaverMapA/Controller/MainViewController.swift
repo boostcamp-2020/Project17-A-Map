@@ -32,9 +32,14 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let _ = NMFAuthManager.shared().clientId else {
+            AlertManager.shared.clientIdIsNil(controller: self)
+            return
+        }
         setUpMapView()
         setUpCoreData()
         setUpOtherViews()
+        setupViewModel()
         
         let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         animator = MoveAnimator1(
@@ -43,6 +48,7 @@ class MainViewController: UIViewController {
             appearCompletionHandler: self.naverMapView.configureNewMarker(afterCluster:markerColor:),
             moveCompletionHandler: self.naverMapView.configureNewMarkers(afterClusters:markerColor:)
         )
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -50,12 +56,26 @@ class MainViewController: UIViewController {
         self.view.bringSubviewToFront(settingButton)
         self.navigationController?.isNavigationBarHidden = true
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        guard let _ = NMFAuthManager.shared().clientId else {
-            AlertManager.shared.clientIdIsNil(controller: self)
-            return
+        switch InfoSetting.algorithm {
+        case Setting.Algorithm.kims.rawValue:
+            viewModel?.clusteringAlgorithm = ScaleBasedClustering()
+        case Setting.Algorithm.kmeansElbow.rawValue:
+            viewModel?.clusteringAlgorithm = KMeansClustering()
+        case Setting.Algorithm.kmeansPenalty.rawValue:
+            viewModel?.clusteringAlgorithm = PenaltyKmeans()
+        default:
+            viewModel?.clusteringAlgorithm = ScaleBasedClustering()
         }
+        
+        animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
+        bindViewModel()
+        updateMapView()
+    }
+    
+    func setupViewModel() {
         switch InfoSetting.algorithm {
         case Setting.Algorithm.kims.rawValue:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
@@ -66,9 +86,6 @@ class MainViewController: UIViewController {
         default:
             viewModel = MainViewModel(algorithm: ScaleBasedClustering())
         }
-        animator.markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
-        bindViewModel()
-        updateMapView()
     }
     
     // MARK: - Initailize
@@ -88,37 +105,50 @@ class MainViewController: UIViewController {
     
     private func setUpOtherViews() {
         settingButton.layer.cornerRadius = settingButton.bounds.size.width / 2.0
-        settingButton.clipsToBounds = true
+        settingButton.layer.shadowColor = UIColor.black.cgColor
+        settingButton.layer.shadowOpacity = 0.4
+        settingButton.layer.shadowOffset = CGSize(width: 1, height: 1)
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
         backBarButtonItem.tintColor = .black
         self.navigationItem.backBarButtonItem = backBarButtonItem
-        fetchBtn = FetchButton(frame: CGRect(x: 80, y: 100, width: 160, height: 40))
+        setupFetchButton()
+    }
+    
+    func setupFetchButton() {
+        let fetchWidth: CGFloat = 140
+        let fetchHeight: CGFloat = 40
+        fetchBtn = FetchButton(frame: CGRect(x: 0, y: 0, width: fetchWidth, height: fetchHeight))
         view.addSubview(fetchBtn)
         fetchBtn.addTarget(self, action: #selector(fetchDidTouched), for: .touchDown)
         fetchBtn.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            fetchBtn.widthAnchor.constraint(equalToConstant: 160),
+            fetchBtn.widthAnchor.constraint(equalToConstant: fetchWidth),
             fetchBtn.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            fetchBtn.heightAnchor.constraint(equalToConstant: 40),
-            fetchBtn.topAnchor.constraint(equalTo: view.topAnchor, constant: 30)
-
+            fetchBtn.heightAnchor.constraint(equalToConstant: fetchHeight),
+            fetchBtn.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10)
         ])
     }
     
     // MARK: - Methods
     
-    private func coreDataUpdateHandler(result: Error?) {
+    private func coreDataDeleteHandler(result: Error?) {
         if result == nil {
             updateMapView()
         }
     }
     
+    private func coreDataInsertHandler(result: Place?) {
+        if let place = result {
+            self.viewModel?.fetchedPlaces.append(place)
+            updateMapView()
+        }
+    }
+
     func bindViewModel() {
         guard let viewModel = viewModel else { return }
         viewModel.animationMarkers.bind { (beforeClusters, afterClusters) in
             DispatchQueue.main.async {
                 if self.animator.isAnimating { // 애니메이션중일때
-                    //                    print("애니메이션중..")
                     // 1. 애니메이션중인 레이어 모두 지우기
                     self.animator.isAnimating = false // 새로운 마커를 그리지 않음
                     self.animationLayer.sublayers?.removeAll()
@@ -146,11 +176,16 @@ class MainViewController: UIViewController {
     }
     
     @objc func fetchDidTouched() {
-        let places = fetchPlaceInScreen()
-        viewModel?.fetchedPlaces = places
-        viewModel?.updatePlaces(places: places, bounds: naverMapView.coordBounds)
-        //        fetchBtn.prepareAnimation()
-        //        fetchBtn.animation()
+        guard !fetchBtn.isAnimating else { return }
+        fetchBtn.animation()
+        DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
+            let places = self.fetchPlaceInScreen()
+            self.viewModel?.fetchedPlaces = places
+            self.viewModel?.updatePlaces(places: places, bounds: self.naverMapView.coordBounds)
+        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: {
+            self.fetchBtn.endAnimation()
+        })
     }
     
     func fetchPlaceInScreen() -> [Place] {
@@ -190,6 +225,11 @@ extension MainViewController {
         }
         viewModel?.queue.cancelAllOperations()
         viewModel?.animationQueue.cancelAllOperations()
+        
+        guard !fetchBtn.isAnimating else { return }
+        fetchBtn.removeFromSuperview()
+        fetchBtn = nil
+        setupFetchButton()
     }
 }
 
@@ -203,7 +243,7 @@ extension MainViewController: NaverMapViewDelegate {
         let message = "마커를 추가하시겠습니까"
         let okHandler: (UIAlertAction) -> Void = { [weak self] _ in
             guard let self = self else { return }
-            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataUpdateHandler)
+            self.dataProvider.insertPlace(latitide: latlng.lat, longitude: latlng.lng, completionHandler: self.coreDataInsertHandler)
         }
         AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }
@@ -213,7 +253,7 @@ extension MainViewController: NaverMapViewDelegate {
         let message = "마커를 삭제하시겠습니까"
         let okHandler: (UIAlertAction) -> Void = { [weak self] _ in
             guard let self = self else { return }
-            self.dataProvider.delete(object: place, completionHandler: self.coreDataUpdateHandler)
+            self.dataProvider.delete(object: place, completionHandler: self.coreDataDeleteHandler)
         }
         AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
     }

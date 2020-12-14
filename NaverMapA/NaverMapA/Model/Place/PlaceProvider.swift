@@ -69,17 +69,32 @@ class PlaceProvider {
         }
     }
     
-    func insertPlace(latitide: Double, longitude: Double, completionHandler: @escaping (Error?) -> Void) {
-        DispatchQueue.global().async {
-            let taskContext = self.newTaskContext()
-            let object = Place(context: taskContext)
-            object.configure(latitude: latitide, longitude: longitude)
-            do {
-                try taskContext.save()
-                completionHandler(nil)
-            } catch {
-                completionHandler(PlaceError.saveError)
-            }
+    func insertPlace(latitide: Double, longitude: Double, completionHandler: @escaping (Place?) -> Void) {
+        let taskContext = self.newTaskContext()
+        let object = Place(context: taskContext)
+        object.configure(latitude: latitide, longitude: longitude)
+        do {
+            try taskContext.save()
+            let place = placeFetch(place: object)
+            completionHandler(place)
+        } catch {
+            completionHandler(nil)
+        }
+    }
+    
+    func placeFetch(place: Place) -> Place? {
+        let fetchRequest: NSFetchRequest<Place> = Place.fetchRequest()
+        let lat = place.latitude
+        let lng = place.longitude
+        let latlngPredict = NSPredicate(format: "latitude == %lf && longitude == %lf", lat, lng)
+        fetchRequest.predicate = latlngPredict
+        fetchRequest.fetchLimit = 1
+        fetchRequest.returnsObjectsAsFaults = false
+        let place = try? mainContext.fetch(fetchRequest)
+        if let place = place {
+            return place[0]
+        } else {
+            return nil
         }
     }
     

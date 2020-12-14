@@ -11,8 +11,10 @@ import UIKit
 class GetMarkerColor {
     static func getColor(colorString: String) -> UIColor {
         switch colorString {
-        case Setting.MarkerColor.red.rawValue:
-            return .systemRed
+        case Setting.MarkerColor.indigo.rawValue:
+            return .systemIndigo
+        case Setting.MarkerColor.pink.rawValue:
+            return .systemPink
         case Setting.MarkerColor.blue.rawValue:
             return .systemBlue
         case Setting.MarkerColor.yellow.rawValue:
