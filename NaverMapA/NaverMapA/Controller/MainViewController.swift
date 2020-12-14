@@ -24,7 +24,6 @@ class MainViewController: UIViewController {
     var pullUpVC: DetailPullUpViewController?
     var fetchBtn: FetchButton!
     var animator: BasicAnimator!
-    @Unit(wrappedValue: 18, threshold: 0.5) var zoomLevelCheck
     
     @IBOutlet weak var settingButton: UIButton!
     
