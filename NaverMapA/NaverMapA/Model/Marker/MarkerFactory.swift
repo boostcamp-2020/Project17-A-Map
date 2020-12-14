@@ -82,7 +82,6 @@ class MarkerFactory {
         
         markerLayer.addSublayer(circleLayer)
         markerLayer.addSublayer(textLayer)
-        
         return markerLayer
     }
     

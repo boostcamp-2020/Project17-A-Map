@@ -61,6 +61,7 @@
 		E08C28F22584C0AD00CC0259 /* CAKeyframeAnimation+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */; };
 		E08C291A2584FCDC00CC0259 /* StarAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29192584FCDB00CC0259 /* StarAnimator.swift */; };
 		E08C29B925872DEA00CC0259 /* PathMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29B825872DEA00CC0259 /* PathMaker.swift */; };
+		E08C29C12587311100CC0259 /* AnimationMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29C02587311100CC0259 /* AnimationMaker.swift */; };
 		E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5424256F4AA700F799E1 /* MainViewModel.swift */; };
 		E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE542C256F4BC800F799E1 /* Dynamic.swift */; };
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
@@ -164,6 +165,7 @@
 		E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAKeyframeAnimation+.swift"; sourceTree = "<group>"; };
 		E08C29192584FCDB00CC0259 /* StarAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarAnimator.swift; sourceTree = "<group>"; };
 		E08C29B825872DEA00CC0259 /* PathMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathMaker.swift; sourceTree = "<group>"; };
+		E08C29C02587311100CC0259 /* AnimationMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationMaker.swift; sourceTree = "<group>"; };
 		E0AE5424256F4AA700F799E1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0AE542C256F4BC800F799E1 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 				E07AD7CD25812C5000D07EAF /* Animator.swift */,
 				E08C29192584FCDB00CC0259 /* StarAnimator.swift */,
 				E08C29B825872DEA00CC0259 /* PathMaker.swift */,
+				E08C29C02587311100CC0259 /* AnimationMaker.swift */,
 			);
 			path = Animator;
 			sourceTree = "<group>";
@@ -718,6 +721,7 @@
 				E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */,
 				E08C28E22584BFE000CC0259 /* AniTextLayer.swift in Sources */,
 				E0059FA92563726900CE6BD7 /* MainViewController.swift in Sources */,
+				E08C29C12587311100CC0259 /* AnimationMaker.swift in Sources */,
 				8893786C257D415400A5B5C5 /* SettingTableViewCell.swift in Sources */,
 				E0EFA23D25754F0D00995B0C /* PenaltyCluster.swift in Sources */,
 				E0825C64258266D3001F0569 /* AnimationKeyPath.swift in Sources */,

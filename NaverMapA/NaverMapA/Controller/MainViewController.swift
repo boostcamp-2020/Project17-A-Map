@@ -68,21 +68,26 @@ class MainViewController: UIViewController {
                 mapView: self.naverMapView,
                 markerColor: markerColor,
                 appearCompletionHandler: self.naverMapView.configureNewMarker,
-                moveCompletionHandler: self.naverMapView.configureNewMarkers
+                moveCompletionHandler: self.naverMapView.configureNewMarkers,
+                animationMaker: AnimationMaker(pathMaker: PathMaker())
             )
         case .shootingStart:
             animator = StarAnimation(
                 mapView: self.naverMapView,
                 markerColor: markerColor,
                 appearCompletionHandler: self.naverMapView.configureNewMarker,
-                moveCompletionHandler: self.naverMapView.configureNewMarkers
+                moveCompletionHandler: self.naverMapView.configureNewMarkers,
+                animationMaker: AnimationMaker(pathMaker: PathMaker())
+
             )
         default:
             animator = BasicAnimator(
                 mapView: self.naverMapView,
                 markerColor: markerColor,
                 appearCompletionHandler: self.naverMapView.configureNewMarker,
-                moveCompletionHandler: self.naverMapView.configureNewMarkers
+                moveCompletionHandler: self.naverMapView.configureNewMarkers,
+                animationMaker: AnimationMaker(pathMaker: PathMaker())
+
             )
         }
         bindViewModel()

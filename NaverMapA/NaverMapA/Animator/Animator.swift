@@ -43,9 +43,11 @@ class BasicAnimator: AnimatorManager {
     var height = NMFMarker().iconImage.imageHeight * 1.4
     var markerFactory: MarkerFactory
     var markerColor: UIColor
+    let animationMaker: AnimationMaker
     @Atomic(value: 0) var count
     
-    init(mapView: NaverMapView, markerColor: UIColor, appearCompletionHandler: @escaping (Cluster, UIColor) -> Void, moveCompletionHandler: @escaping ([Cluster], UIColor) -> Void) {
+    init(mapView: NaverMapView, markerColor: UIColor, appearCompletionHandler: @escaping (Cluster, UIColor) -> Void, moveCompletionHandler: @escaping ([Cluster], UIColor) -> Void,
+         animationMaker: AnimationMaker) {
         self.mapView = mapView.mapView
         self.animationLayer = mapView.animationLayer
         self.appearCompletionHandler = appearCompletionHandler
@@ -53,6 +55,7 @@ class BasicAnimator: AnimatorManager {
         self.naverMapView = mapView
         self.markerFactory = MarkerFactory()
         self.markerColor = markerColor
+        self.animationMaker = animationMaker
     }
     
     func animate(before: [Cluster], after: [Cluster], type: AnimationType) {
@@ -92,38 +95,34 @@ class BasicAnimator: AnimatorManager {
     
     func animateOneView(startPoint: CGPoint, cluster: Cluster) {
         let markerLayer = markerFactory.makeCmarkerView(frame: CGRect(x: -100, y: -100, width: width, height: height), color: markerColor, text: "\(cluster.places.count)")
+        let scaleUpAnimation = self.animationMaker.scaleY()
+
         animationLayer.addSublayer(markerLayer.layer)
         markerLayer.layer.position = startPoint
         markerLayer.layer.anchorPoint = CGPoint(x: 0.5, y: 1)
         count += 1
         queue.async {
             CATransaction.begin()
-            let scaleUpAnimation = CABasicAnimation(keyPath: "transform.scale.y")
-            scaleUpAnimation.fromValue = 0
-            scaleUpAnimation.toValue = 1
-            scaleUpAnimation.duration = 0.4
             CATransaction.setCompletionBlock {
                 self.count -= 1
                 markerLayer.layer.removeFromSuperlayer()
                 self.appearCompletionHandler(cluster, self.markerColor)
             }
-            markerLayer.layer.add(scaleUpAnimation, forKey: "transform.scale.y")
+            markerLayer.layer.add(scaleUpAnimation, forKey: nil)
             CATransaction.commit()
         }
     }
         
     func animateOneView(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster]) {
         let markerLayer = markerFactory.makeCmarkerView(frame: CGRect(x: -100, y: -100, width: width, height: height), color: markerColor, text: "\(beforeCluster.places.count)")
+        let markerAnimation = animationMaker.position(start: startPoint, end: endPoint)
         animationLayer.addSublayer(markerLayer.layer)
         markerLayer.layer.anchorPoint = CGPoint(x: 0.5, y: 1)
         isAnimating = true
         count += 1
         queue.async {
             CATransaction.begin()
-            let markerAnimation = CABasicAnimation(keyPath: "position")
-            markerAnimation.duration = 0.4
-            markerAnimation.fromValue = CGPoint(x: startPoint.x, y: startPoint.y)
-            markerAnimation.toValue = CGPoint(x: endPoint.x, y: endPoint.y)
+
             CATransaction.setCompletionBlock {
                 self.count -= 1
                 markerLayer.layer.removeFromSuperlayer()
@@ -136,5 +135,4 @@ class BasicAnimator: AnimatorManager {
             CATransaction.commit()
         }
     }
-
 }
