@@ -13,7 +13,21 @@ extension MainViewController: PullUpViewDelegate {
         let camUpdate = NMFCameraUpdate(position: NMFCameraPosition(NMGLatLng(lat: lat - 0.00001, lng: lng), zoom: 20))
         camUpdate.animation = .fly
         camUpdate.animationDuration = 2
-        mapView.moveCamera(camUpdate)
+        mapView.moveCamera(camUpdate) { [weak self] _ in
+            guard let self = self else { return }
+            var findLeap = false
+            for marker in self.naverMapView.clusterMarkers {
+                if marker.position.lat == lat && marker.position.lng == lng {
+                    self.naverMapView.selectedLeafMarker = marker
+                    findLeap = true
+                    break
+                }
+            }
+            if !findLeap {
+                self.naverMapView.selectedLeafMarker = nil
+            }
+            
+        }
     }
     
     func dismissPullUpVC() {

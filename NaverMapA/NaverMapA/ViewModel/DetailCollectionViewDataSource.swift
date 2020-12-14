@@ -42,7 +42,6 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
         } else {
             return UICollectionViewCell()
         }
-        
     }
     
 }

@@ -10,7 +10,7 @@ import NMapsMap
 import CoreData
 
 class MainViewController: UIViewController {
-
+    
     // MARK: - Properties
     
     var naverMapView: NaverMapView!
@@ -89,7 +89,7 @@ class MainViewController: UIViewController {
     }
     
     // MARK: - Initailize
-
+    
     private func setUpMapView() {
         naverMapView = NaverMapView(frame: view.frame)
         naverMapView.mapView.addCameraDelegate(delegate: self)
@@ -143,7 +143,7 @@ class MainViewController: UIViewController {
             updateMapView()
         }
     }
-
+    
     func bindViewModel() {
         guard let viewModel = viewModel else { return }
         viewModel.animationMarkers.bind { (beforeClusters, afterClusters) in
@@ -157,20 +157,41 @@ class MainViewController: UIViewController {
                         $0.mapView = nil
                     }
                     // 3. 현재 바운드에 맞는 마커 바로 맵뷰에 추가
+                    self.naverMapView.clusterObjects = afterClusters
                     self.naverMapView.configureNewMarkers(afterClusters: afterClusters, markerColor: self.animator.markerColor)
                 } else { // 애니메이션중이 아닐때
                     self.naverMapView.deleteBeforeMarkers()
                     self.naverMapView.clusterObjects = afterClusters
+                    var findLeap = false
+                    for cluster in afterClusters {
+                        if cluster.latitude == self.naverMapView.selectedLeafMarker?.position.lat && cluster.longitude == self.naverMapView.selectedLeafMarker?.position.lng {
+                            findLeap = true
+                            break
+                        }
+                    }
+                    if !findLeap {
+                        self.naverMapView.selectedLeafMarker = nil
+                    }
                     self.animator.animate(before: beforeClusters, after: afterClusters, type: .move)
                 }
             }
         }
-
+        
         viewModel.markers.bind { afterClusters in
             DispatchQueue.main.async {
                 self.naverMapView.deleteBeforeMarkers()
                 self.naverMapView.clusterObjects = afterClusters
                 self.animator.animate(before: [], after: afterClusters, type: .appear)
+                var findLeap = false
+                for cluster in afterClusters {
+                    if cluster.latitude == self.naverMapView.selectedLeafMarker?.position.lat && cluster.longitude == self.naverMapView.selectedLeafMarker?.position.lng {
+                        findLeap = true
+                        break
+                    }
+                }
+                if !findLeap {
+                    self.naverMapView.selectedLeafMarker = nil
+                }
             }
         }
     }
@@ -181,7 +202,24 @@ class MainViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
             let places = self.fetchPlaceInScreen()
             self.viewModel?.fetchedPlaces = places
-            self.viewModel?.updatePlaces(places: places, bounds: self.naverMapView.coordBounds)
+            self.viewModel?.updatePlaces(places: places, bounds: self.naverMapView.coordBounds) {
+                DispatchQueue.main.async {
+                    if self.naverMapView.selectedLeafMarker == nil {
+                        return
+                    }
+                    var findLeap = false
+                    for marker in self.naverMapView.clusterMarkers {
+                        if marker.position.lat == self.naverMapView.selectedLeafMarker?.position.lat && marker.position.lng == self.naverMapView.selectedLeafMarker?.position.lng {
+                            self.naverMapView.selectedLeafMarker = marker
+                            findLeap = true
+                            break
+                        }
+                    }
+                    if !findLeap {
+                        self.naverMapView.selectedLeafMarker = nil
+                    }
+                }
+            }
         })
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: {
             self.fetchBtn.endAnimation()
