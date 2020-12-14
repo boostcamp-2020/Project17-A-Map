@@ -62,4 +62,15 @@ class LaunchViewController: UIViewController {
         innerCircle.fillColor = UIColor.white.cgColor
         return innerCircle
     }
+    
+    func changeVC() {
+        let MainViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainScene")
+        MainViewController.modalPresentationStyle = .fullScreen
+        //MainViewController.modalTransitionStyle = .crossDissolve
+        let window = self.view.window
+        self.dismiss(animated: true) {
+            window?.rootViewController = MainViewController
+            window?.makeKeyAndVisible()
+        }
+    }
 }
