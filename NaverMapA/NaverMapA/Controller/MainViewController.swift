@@ -24,7 +24,8 @@ class MainViewController: UIViewController {
     var pullUpVC: DetailPullUpViewController?
     var fetchBtn: FetchButton!
     var animator: BasicAnimator!
-    
+    let container = DependencyContainer()
+
     @IBOutlet weak var settingButton: UIButton!
     
     // MARK: - ViewLifeCycle
@@ -39,6 +40,7 @@ class MainViewController: UIViewController {
         setUpCoreData()
         setUpOtherViews()
         setupViewModel()
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,17 +51,7 @@ class MainViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        switch Setting.Algorithm(rawValue: InfoSetting.algorithm) {
-        case .kims:
-            viewModel?.clusteringAlgorithm = ScaleBasedClustering()
-        case .kmeansElbow:
-            viewModel?.clusteringAlgorithm = KMeansClustering()
-        case .kmeansPenalty:
-            viewModel?.clusteringAlgorithm = PenaltyKmeans()
-        default:
-            viewModel?.clusteringAlgorithm = ScaleBasedClustering()
-        }
-        
+
         let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         let markerWidth = NMFMarker().iconImage.imageWidth * 1.4
         let markerHeight = NMFMarker().iconImage.imageHeight * 1.4
@@ -67,45 +59,16 @@ class MainViewController: UIViewController {
                               height: markerHeight,
                               color: markerColor)
         
-        switch Setting.Animation(rawValue: InfoSetting.animation) {
-        case .appleStyle:
-            animator = BasicAnimator(
-                mapView: self.naverMapView,
-                markerInfo: info,
-                animationMaker: AnimationMaker(pathMaker: PathMaker())
-            )
-        case .shootingStart:
-            animator = StarAnimation(
-                mapView: self.naverMapView,
-                markerInfo: info,
-                animationMaker: AnimationMaker(pathMaker: PathMaker())
-
-            )
-        default:
-            animator = BasicAnimator(
-                mapView: self.naverMapView,
-                markerInfo: info,
-                animationMaker: AnimationMaker(pathMaker: PathMaker())
-            )
-        }
+        viewModel?.clusteringAlgorithm = container.algorithm()
+        animator = container.animation(mapView: naverMapView, info: info)
         animator.delegate = self
-        bindViewModel()
         updateMapView()
     }
     
     // MARK: - Initailize
 
     func setupViewModel() {
-        switch Setting.Algorithm(rawValue: InfoSetting.algorithm) {
-        case .kims:
-            viewModel = MainViewModel(algorithm: ScaleBasedClustering())
-        case .kmeansElbow:
-            viewModel = MainViewModel(algorithm: KMeansClustering())
-        case .kmeansPenalty:
-            viewModel = MainViewModel(algorithm: PenaltyKmeans())
-        default:
-            viewModel = MainViewModel(algorithm: ScaleBasedClustering())
-        }
+        viewModel = MainViewModel(algorithm: container.algorithm())
     }
         
     private func setUpMapView() {
@@ -197,17 +160,13 @@ class MainViewController: UIViewController {
         guard !fetchBtn.isAnimating else { return }
         fetchBtn.animation()
         DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
-            let places = self.fetchPlaceInScreen()
+            let places = self.dataProvider.fetch(bounds: self.naverMapView.coordBounds)
             self.viewModel?.fetchedPlaces = places
             self.viewModel?.updatePlaces(places: places, bounds: self.naverMapView.coordBounds)
         })
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.6, execute: {
             self.fetchBtn.endAnimation()
         })
-    }
-    
-    func fetchPlaceInScreen() -> [Place] {
-        return self.dataProvider.fetch(bounds: naverMapView.coordBounds)
     }
     
     private func handleBatchOperationCompletion(error: Error?) {
@@ -278,7 +237,6 @@ extension MainViewController: NaverMapViewDelegate {
 }
 
 extension MainViewController: AnimatorDelegate {
-    
     func animator(_ animator: AnimatorManagable, didAppeared cluster: Cluster, color: UIColor) {
         self.naverMapView.configureNewMarker(afterCluster: cluster, markerColor: color)
     }
