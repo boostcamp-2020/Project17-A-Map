@@ -8,14 +8,21 @@
 import UIKit
 
 class LaunchViewController: UIViewController {
+    
+    var height: CGFloat = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        startSplash()
+    }
+    
+    func startSplash() {
         self.view.backgroundColor = .white
         let circle1 = drawSemiCircle(color: UIColor.systemPurple.cgColor)
         let circle2 = drawSemiCircle(color: UIColor.systemTeal.cgColor)
-        circle1.position = CGPoint(x: self.view.layer.bounds.midX + 40, y: self.view.layer.bounds.midY + 100)
-        circle2.position = CGPoint(x: self.view.layer.bounds.midX + 40, y: self.view.layer.bounds.midY + 100)
+        let plusX = self.view.frame.width / 8
+        circle1.position = CGPoint(x: self.view.layer.bounds.midX + plusX, y: self.view.layer.bounds.midY + (self.height / 2))
+        circle2.position = CGPoint(x: self.view.layer.bounds.midX + plusX, y: self.view.layer.bounds.midY + (self.height / 2))
         circle1.zPosition = 1
         circle2.transform = CATransform3DMakeRotation(-(2/8) * .pi, 0, 0, 1)
         
@@ -55,7 +62,7 @@ class LaunchViewController: UIViewController {
         positionAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         positionAnimation.beginTime = 0.3
         positionAnimation.fromValue = CGPoint(x: circle1.position.x, y: circle1.position.y)
-        positionAnimation.toValue = CGPoint(x: circle1.position.x, y: circle1.position.y + 2500)
+        positionAnimation.toValue = CGPoint(x: circle1.position.x, y: circle1.position.y * 5)
         positionAnimation.duration = 0.3
         
         let scaleUpAnimation2 = CABasicAnimation(keyPath: "transform.scale")
@@ -73,7 +80,7 @@ class LaunchViewController: UIViewController {
         positionAnimation2.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         positionAnimation2.beginTime = 0.3
         positionAnimation2.fromValue = CGPoint(x: circle2.position.x, y: circle2.position.y)
-        positionAnimation2.toValue = CGPoint(x: circle2.position.x, y: circle2.position.y + 2500)
+        positionAnimation2.toValue = CGPoint(x: circle2.position.x, y: circle2.position.y * 5)
         positionAnimation2.duration = 0.3
         
         group.animations = [
@@ -94,7 +101,7 @@ class LaunchViewController: UIViewController {
         CATransaction.setCompletionBlock({
             circle1.removeFromSuperlayer()
             circle2.removeFromSuperlayer()
-            self.changeScene()
+            //self.changeScene()
         })
         circle1.add(group, forKey: nil)
         circle2.add(group2, forKey: nil)
@@ -103,17 +110,20 @@ class LaunchViewController: UIViewController {
     
     func drawSemiCircle(color: CGColor) -> CAShapeLayer {
         let center: CGPoint = .zero
-        let radius: CGFloat = 100
+        let radius: CGFloat = self.view.frame.width / 4
+        let radius2: CGFloat = self.view.frame.width / 12
+        let height = radius * 1.5
+        self.height = height
         let bezierPath = UIBezierPath()
         bezierPath.move(to: center)
         bezierPath.addArc(
             withCenter: center,
-            radius: 20,
+            radius: radius2,
             startAngle: (1/8 * .pi),
             endAngle: (7/8 * .pi),
             clockwise: true
         )
-        let center2 = CGPoint(x: center.x, y: center.y - 170)
+        let center2 = CGPoint(x: center.x, y: center.y - height)
         bezierPath.addArc(
             withCenter: center2,
             radius: radius,
@@ -121,8 +131,8 @@ class LaunchViewController: UIViewController {
             endAngle: (1/8) * .pi,
             clockwise: true
         )
-        bezierPath.addLine(to: CGPoint(x: center.x + 20 * cos(.pi * (1/8)),
-                                       y: center.y + 20 * sin(.pi * (1/8))))
+        bezierPath.addLine(to: CGPoint(x: center.x + radius2 * cos(.pi * (1/8)),
+                                       y: center.y + radius2 * sin(.pi * (1/8))))
         bezierPath.close()
         let circle = CAShapeLayer()
         circle.path = bezierPath.cgPath
@@ -134,7 +144,7 @@ class LaunchViewController: UIViewController {
     }
     
     func configureInnerCircle(center: CGPoint) -> CAShapeLayer {
-        let radius: CGFloat = self.view.frame.width / 10
+        let radius: CGFloat = self.view.frame.width / 8
         let bezierPath = UIBezierPath()
         bezierPath.move(to: center)
         bezierPath.addArc(
@@ -154,7 +164,6 @@ class LaunchViewController: UIViewController {
     func changeScene() {
         let MainViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "MainScene")
         MainViewController.modalPresentationStyle = .fullScreen
-        //MainViewController.modalTransitionStyle = .crossDissolve
         let window = self.view.window
         self.dismiss(animated: true) {
             window?.rootViewController = MainViewController
