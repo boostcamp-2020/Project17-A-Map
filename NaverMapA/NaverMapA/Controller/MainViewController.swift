@@ -67,16 +67,12 @@ class MainViewController: UIViewController {
             animator = BasicAnimator(
                 mapView: self.naverMapView,
                 markerColor: markerColor,
-                appearCompletionHandler: self.naverMapView.configureNewMarker,
-                moveCompletionHandler: self.naverMapView.configureNewMarkers,
                 animationMaker: AnimationMaker(pathMaker: PathMaker())
             )
         case .shootingStart:
             animator = StarAnimation(
                 mapView: self.naverMapView,
                 markerColor: markerColor,
-                appearCompletionHandler: self.naverMapView.configureNewMarker,
-                moveCompletionHandler: self.naverMapView.configureNewMarkers,
                 animationMaker: AnimationMaker(pathMaker: PathMaker())
 
             )
@@ -84,12 +80,10 @@ class MainViewController: UIViewController {
             animator = BasicAnimator(
                 mapView: self.naverMapView,
                 markerColor: markerColor,
-                appearCompletionHandler: self.naverMapView.configureNewMarker,
-                moveCompletionHandler: self.naverMapView.configureNewMarkers,
                 animationMaker: AnimationMaker(pathMaker: PathMaker())
-
             )
         }
+        animator.delegate = self
         bindViewModel()
         updateMapView()
     }
@@ -275,5 +269,16 @@ extension MainViewController: NaverMapViewDelegate {
             self.dataProvider.delete(object: place, completionHandler: self.coreDataDeleteHandler)
         }
         AlertManager.shared.okCancel(controller: self, title: title, message: message, okHandler: okHandler, cancelHandler: nil)
+    }
+}
+
+extension MainViewController: AnimatorDelegate {
+    
+    func animator(_ animator: AnimatorManager, didAppeared cluster: Cluster, color: UIColor) {
+        self.naverMapView.configureNewMarker(afterCluster: cluster, markerColor: color)
+    }
+    
+    func animator(_ animator: AnimatorManager, didMoved clusters: [Cluster], color: UIColor) {
+        self.naverMapView.configureNewMarkers(afterClusters: clusters, markerColor: color)
     }
 }

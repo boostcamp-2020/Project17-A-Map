@@ -8,11 +8,11 @@
 import UIKit
 import NMapsMap
 
-class StarAnimation: BasicAnimator {
+final class StarAnimation: BasicAnimator {
 
     override func movingAnimation(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster]) {
-        let layerWidth = NMFMarker().iconImage.imageWidth
-        let layerHeight = NMFMarker().iconImage.imageHeight
+        let layerWidth = markerWidth / 1.4
+        let layerHeight = markerHeight / 1.4
         let animation = animationMaker.pathScale(start: startPoint, end: endPoint, duration: 0.6, repeatCount: 1, delay: 0)
         let markerLayer = markerFactory.starMarkerLayer(rect: CGRect(x: -100, y: -100, width: layerWidth, height: layerHeight), color: markerColor)
         markerLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
@@ -26,7 +26,7 @@ class StarAnimation: BasicAnimator {
                 markerLayer.removeFromSuperlayer()
                 if self.count == 0 && self.isAnimating {
                     self.isAnimating = false
-                    self.moveCompletionHandler(afterClusters, self.markerColor)
+                    self.delegate?.animator(self, didMoved: afterClusters, color: self.markerColor)
                 }
             }
             markerLayer.add(animation, forKey: "")

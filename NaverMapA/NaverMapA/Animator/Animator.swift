@@ -16,11 +16,9 @@ enum AnimationType {
 protocol AnimatorManager {
     var queue: DispatchQueue { get }
     var group: DispatchGroup { get }
-    var isAnimating: Bool { get }
+    var isAnimating: Bool { get set }
     var mapView: NMFMapView { get }
     var animationLayer: CALayer { get }
-    var appearCompletionHandler: (Cluster, UIColor) -> Void { get }
-    var moveCompletionHandler: ([Cluster], UIColor) -> Void { get }
     func appearAnimation(startPoint: CGPoint, cluster: Cluster)
     func movingAnimation(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster])
     func animateAllMove(before: [Cluster], after: [Cluster])
@@ -28,31 +26,32 @@ protocol AnimatorManager {
     func animate(before: [Cluster], after: [Cluster], type: AnimationType)
 }
 
-class BasicAnimator: AnimatorManager {
+protocol AnimatorDelegate: class {
+    func animator(_ animator: AnimatorManager, didAppeared cluster: Cluster, color: UIColor)
+    func animator(_ animator: AnimatorManager, didMoved clusters: [Cluster], color: UIColor)
+}
 
+class BasicAnimator: AnimatorManager {
+    
     var queue = DispatchQueue(label: "animator", attributes: .concurrent)
     var group = DispatchGroup()
     var isAnimating = false
     var mapView: NMFMapView
     var animationLayer: CALayer
-    var appearCompletionHandler: (Cluster, UIColor) -> Void
-    var moveCompletionHandler: ([Cluster], UIColor) -> Void
-    var naverMapView: NaverMapView
     var animationCount: Int = 0
-    var width = NMFMarker().iconImage.imageWidth * 1.4
-    var height = NMFMarker().iconImage.imageHeight * 1.4
+    var markerWidth = NMFMarker().iconImage.imageWidth * 1.4
+    var markerHeight = NMFMarker().iconImage.imageHeight * 1.4
     var markerFactory: MarkerFactory
     var markerColor: UIColor
+    weak var delegate: AnimatorDelegate?
     let animationMaker: AnimationMaker
     @Atomic(value: 0) var count
     
-    init(mapView: NaverMapView, markerColor: UIColor, appearCompletionHandler: @escaping (Cluster, UIColor) -> Void, moveCompletionHandler: @escaping ([Cluster], UIColor) -> Void,
+    init(mapView: NaverMapView,
+         markerColor: UIColor,
          animationMaker: AnimationMaker) {
         self.mapView = mapView.mapView
         self.animationLayer = mapView.animationLayer
-        self.appearCompletionHandler = appearCompletionHandler
-        self.moveCompletionHandler = moveCompletionHandler
-        self.naverMapView = mapView
         self.markerFactory = MarkerFactory()
         self.markerColor = markerColor
         self.animationMaker = animationMaker
@@ -75,7 +74,7 @@ class BasicAnimator: AnimatorManager {
                     let startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeCluster.latitude, lng: beforeCluster.longitude))
                     let endPoint = mapView.projection.point(from: NMGLatLng(lat: afterCluster.latitude, lng: afterCluster.longitude))
                     if startPoint == endPoint {
-                        appearCompletionHandler(afterCluster, markerColor)
+                        delegate?.animator(self, didAppeared: afterCluster, color: markerColor)
                     } else {
                         movingAnimation(startPoint: startPoint, endPoint: endPoint, beforeCluster: beforeCluster, afterClusters: after)
                     }
@@ -94,7 +93,7 @@ class BasicAnimator: AnimatorManager {
     }
     
     func appearAnimation(startPoint: CGPoint, cluster: Cluster) {
-        let lframe = CGRect(x: -100, y: -100, width: width, height: height)
+        let lframe = CGRect(x: -100, y: -100, width: markerWidth, height: markerHeight)
         let markerView = markerFactory.basicMarkerView(frame: lframe, color: markerColor, text: "\(cluster.places.count)")
         let markerLayer = markerView.layer
         let animation = self.animationMaker.scaleY()
@@ -109,7 +108,7 @@ class BasicAnimator: AnimatorManager {
             CATransaction.setCompletionBlock {
                 self.count -= 1
                 markerLayer.removeFromSuperlayer()
-                self.appearCompletionHandler(cluster, self.markerColor)
+                self.delegate?.animator(self, didAppeared: cluster, color: self.markerColor)
             }
             markerLayer.add(animation, forKey: nil)
             CATransaction.commit()
@@ -117,7 +116,7 @@ class BasicAnimator: AnimatorManager {
     }
         
     func movingAnimation(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster]) {
-        let lframe = CGRect(x: -100, y: -100, width: width, height: height)
+        let lframe = CGRect(x: -100, y: -100, width: markerWidth, height: markerHeight)
         let markerView = markerFactory.basicMarkerView(frame: lframe, color: markerColor, text: "\(beforeCluster.places.count)")
         let markerLayer = markerView.layer
         let animation = animationMaker.position(start: startPoint, end: endPoint)
@@ -134,7 +133,7 @@ class BasicAnimator: AnimatorManager {
                 markerLayer.removeFromSuperlayer()
                 if self.count == 0 && self.isAnimating {
                     self.isAnimating = false
-                    self.moveCompletionHandler(afterClusters, self.markerColor)
+                    self.delegate?.animator(self, didMoved: afterClusters, color: self.markerColor)
                 }
             }
             markerLayer.add(animation, forKey: nil)
