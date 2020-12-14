@@ -274,11 +274,11 @@ extension MainViewController: NaverMapViewDelegate {
 
 extension MainViewController: AnimatorDelegate {
     
-    func animator(_ animator: AnimatorManager, didAppeared cluster: Cluster, color: UIColor) {
+    func animator(_ animator: AnimatorManagable, didAppeared cluster: Cluster, color: UIColor) {
         self.naverMapView.configureNewMarker(afterCluster: cluster, markerColor: color)
     }
     
-    func animator(_ animator: AnimatorManager, didMoved clusters: [Cluster], color: UIColor) {
+    func animator(_ animator: AnimatorManagable, didMoved clusters: [Cluster], color: UIColor) {
         self.naverMapView.configureNewMarkers(afterClusters: clusters, markerColor: color)
     }
 }

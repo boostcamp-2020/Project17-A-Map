@@ -8,44 +8,20 @@
 import UIKit
 import NMapsMap
 
-enum AnimationType {
-    case move
-    case appear
-}
-
-protocol AnimatorManager {
-    var queue: DispatchQueue { get }
-    var group: DispatchGroup { get }
-    var isAnimating: Bool { get set }
-    var mapView: NMFMapView { get }
-    var animationLayer: CALayer { get }
-    func appearAnimation(startPoint: CGPoint, cluster: Cluster)
-    func movingAnimation(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster])
-    func animateAllMove(before: [Cluster], after: [Cluster])
-    func animateAllAppear(after: [Cluster])
-    func animate(before: [Cluster], after: [Cluster], type: AnimationType)
-}
-
-protocol AnimatorDelegate: class {
-    func animator(_ animator: AnimatorManager, didAppeared cluster: Cluster, color: UIColor)
-    func animator(_ animator: AnimatorManager, didMoved clusters: [Cluster], color: UIColor)
-}
-
-class BasicAnimator: AnimatorManager {
+class BasicAnimator: AnimatorManagable {
     
     var queue = DispatchQueue(label: "animator", attributes: .concurrent)
     var group = DispatchGroup()
     var isAnimating = false
     var mapView: NMFMapView
     var animationLayer: CALayer
-    var animationCount: Int = 0
     var markerWidth = NMFMarker().iconImage.imageWidth * 1.4
     var markerHeight = NMFMarker().iconImage.imageHeight * 1.4
     var markerFactory: MarkerFactory
     var markerColor: UIColor
     weak var delegate: AnimatorDelegate?
     let animationMaker: AnimationMaker
-    @Atomic(value: 0) var count
+    @Atomic(value: 0) var animationCount
     
     init(mapView: NaverMapView,
          markerColor: UIColor,
@@ -101,12 +77,12 @@ class BasicAnimator: AnimatorManager {
         animationLayer.addSublayer(markerLayer)
         markerLayer.position = startPoint
         markerLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
-        count += 1
+        animationCount += 1
         
         queue.async {
             CATransaction.begin()
             CATransaction.setCompletionBlock {
-                self.count -= 1
+                self.animationCount -= 1
                 markerLayer.removeFromSuperlayer()
                 self.delegate?.animator(self, didAppeared: cluster, color: self.markerColor)
             }
@@ -124,14 +100,14 @@ class BasicAnimator: AnimatorManager {
         animationLayer.addSublayer(markerLayer)
         markerLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         isAnimating = true
-        count += 1
+        animationCount += 1
         
         queue.async {
             CATransaction.begin()
             CATransaction.setCompletionBlock {
-                self.count -= 1
+                self.animationCount -= 1
                 markerLayer.removeFromSuperlayer()
-                if self.count == 0 && self.isAnimating {
+                if self.animationCount == 0 && self.isAnimating {
                     self.isAnimating = false
                     self.delegate?.animator(self, didMoved: afterClusters, color: self.markerColor)
                 }
