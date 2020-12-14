@@ -33,8 +33,6 @@
 		D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */; };
 		D4C2F82B2575193D00F784CE /* DetailPullUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */; };
 		D4C811652581ECA50097A3FA /* CacheData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C811642581ECA50097A3FA /* CacheData.swift */; };
-		D4FB056625808A220078EE09 /* AppearAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FB056525808A220078EE09 /* AppearAnimator.swift */; };
-		D4FB056B25808A3C0078EE09 /* Animatorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FB056A25808A3C0078EE09 /* Animatorable.swift */; };
 		D506A0E6CC326EDBF1BE4462 /* Pods_NaverMapA_NaverMapAUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE572E6A770EBAC94B87E86 /* Pods_NaverMapA_NaverMapAUITests.framework */; };
 		E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FA42563726900CE6BD7 /* AppDelegate.swift */; };
 		E0059FA72563726900CE6BD7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FA62563726900CE6BD7 /* SceneDelegate.swift */; };
@@ -50,7 +48,7 @@
 		E07AD79C2580592900D07EAF /* Unit.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD79B2580592900D07EAF /* Unit.swift */; };
 		E07AD7B82580F64800D07EAF /* NaverMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7B72580F64800D07EAF /* NaverMapView.swift */; };
 		E07AD7C32581087100D07EAF /* AlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7C22581087100D07EAF /* AlertManager.swift */; };
-		E07AD7CE25812C5000D07EAF /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7CD25812C5000D07EAF /* Animator.swift */; };
+		E07AD7CE25812C5000D07EAF /* BasicAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7CD25812C5000D07EAF /* BasicAnimator.swift */; };
 		E07AD7FD2581DF3F00D07EAF /* VHCTextLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07AD7FC2581DF3F00D07EAF /* VHCTextLayer.swift */; };
 		E0825C5A258230D4001F0569 /* FetchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0825C59258230D4001F0569 /* FetchButton.swift */; };
 		E0825C5F25824F7F001F0569 /* CABasicAnimation+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */; };
@@ -59,6 +57,14 @@
 		E08C28E82584C05700CC0259 /* String+UIsize.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28E72584C05700CC0259 /* String+UIsize.swift */; };
 		E08C28ED2584C07F00CC0259 /* String+subscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28EC2584C07F00CC0259 /* String+subscript.swift */; };
 		E08C28F22584C0AD00CC0259 /* CAKeyframeAnimation+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */; };
+		E08C291A2584FCDC00CC0259 /* StarAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29192584FCDB00CC0259 /* StarAnimator.swift */; };
+		E08C29B925872DEA00CC0259 /* PathMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29B825872DEA00CC0259 /* PathMaker.swift */; };
+		E08C29C12587311100CC0259 /* AnimationMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29C02587311100CC0259 /* AnimationMaker.swift */; };
+		E08C29C625874A0E00CC0259 /* AnimationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29C525874A0E00CC0259 /* AnimationType.swift */; };
+		E08C29CB25874A2000CC0259 /* AnimatorManagable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29CA25874A2000CC0259 /* AnimatorManagable.swift */; };
+		E08C29D025874A4000CC0259 /* AnimatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29CF25874A4000CC0259 /* AnimatorDelegate.swift */; };
+		E08C29E92587527300CC0259 /* MarkerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29E82587527300CC0259 /* MarkerInfo.swift */; };
+		E08C29F1258760D500CC0259 /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29F0258760D500CC0259 /* DependencyContainer.swift */; };
 		E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5424256F4AA700F799E1 /* MainViewModel.swift */; };
 		E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE542C256F4BC800F799E1 /* Dynamic.swift */; };
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
@@ -129,8 +135,6 @@
 		D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewDataSource.swift; sourceTree = "<group>"; };
 		D4C2F82A2575193D00F784CE /* DetailPullUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPullUpViewController.swift; sourceTree = "<group>"; };
 		D4C811642581ECA50097A3FA /* CacheData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheData.swift; sourceTree = "<group>"; };
-		D4FB056525808A220078EE09 /* AppearAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearAnimator.swift; sourceTree = "<group>"; };
-		D4FB056A25808A3C0078EE09 /* Animatorable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animatorable.swift; sourceTree = "<group>"; };
 		E0059FA12563726900CE6BD7 /* NaverMapA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaverMapA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0059FA42563726900CE6BD7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0059FA62563726900CE6BD7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -151,7 +155,7 @@
 		E07AD79B2580592900D07EAF /* Unit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Unit.swift; sourceTree = "<group>"; };
 		E07AD7B72580F64800D07EAF /* NaverMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NaverMapView.swift; sourceTree = "<group>"; };
 		E07AD7C22581087100D07EAF /* AlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertManager.swift; sourceTree = "<group>"; };
-		E07AD7CD25812C5000D07EAF /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
+		E07AD7CD25812C5000D07EAF /* BasicAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicAnimator.swift; sourceTree = "<group>"; };
 		E07AD7FC2581DF3F00D07EAF /* VHCTextLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VHCTextLayer.swift; sourceTree = "<group>"; };
 		E0825C59258230D4001F0569 /* FetchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchButton.swift; sourceTree = "<group>"; };
 		E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CABasicAnimation+.swift"; sourceTree = "<group>"; };
@@ -160,6 +164,14 @@
 		E08C28E72584C05700CC0259 /* String+UIsize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+UIsize.swift"; sourceTree = "<group>"; };
 		E08C28EC2584C07F00CC0259 /* String+subscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+subscript.swift"; sourceTree = "<group>"; };
 		E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAKeyframeAnimation+.swift"; sourceTree = "<group>"; };
+		E08C29192584FCDB00CC0259 /* StarAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarAnimator.swift; sourceTree = "<group>"; };
+		E08C29B825872DEA00CC0259 /* PathMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathMaker.swift; sourceTree = "<group>"; };
+		E08C29C02587311100CC0259 /* AnimationMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationMaker.swift; sourceTree = "<group>"; };
+		E08C29C525874A0E00CC0259 /* AnimationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationType.swift; sourceTree = "<group>"; };
+		E08C29CA25874A2000CC0259 /* AnimatorManagable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatorManagable.swift; sourceTree = "<group>"; };
+		E08C29CF25874A4000CC0259 /* AnimatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatorDelegate.swift; sourceTree = "<group>"; };
+		E08C29E82587527300CC0259 /* MarkerInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerInfo.swift; sourceTree = "<group>"; };
+		E08C29F0258760D500CC0259 /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 		E0AE5424256F4AA700F799E1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0AE542C256F4BC800F799E1 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
@@ -230,6 +242,7 @@
 				C816202625789C8A00DF61C4 /* MarkerFactory.swift */,
 				E07AD7B72580F64800D07EAF /* NaverMapView.swift */,
 				C87AE2B12582602400017EA5 /* GetMarkerColor.swift */,
+				E08C29E82587527300CC0259 /* MarkerInfo.swift */,
 			);
 			path = Marker;
 			sourceTree = "<group>";
@@ -272,10 +285,16 @@
 		D4FB0564258089F80078EE09 /* Animator */ = {
 			isa = PBXGroup;
 			children = (
-				D4FB056A25808A3C0078EE09 /* Animatorable.swift */,
-				D45B7D33257F7590009208D9 /* MoveAnimator.swift */,
-				D4FB056525808A220078EE09 /* AppearAnimator.swift */,
-				E07AD7CD25812C5000D07EAF /* Animator.swift */,
+				E08C29CA25874A2000CC0259 /* AnimatorManagable.swift */,
+				E07AD7CD25812C5000D07EAF /* BasicAnimator.swift */,
+				E08C29192584FCDB00CC0259 /* StarAnimator.swift */,
+				E08C29C525874A0E00CC0259 /* AnimationType.swift */,
+				E08C29CF25874A4000CC0259 /* AnimatorDelegate.swift */,
+				E08C29B825872DEA00CC0259 /* PathMaker.swift */,
+				E08C29C02587311100CC0259 /* AnimationMaker.swift */,
+				E0825C63258266D3001F0569 /* AnimationKeyPath.swift */,
+				E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */,
+				E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */,
 			);
 			path = Animator;
 			sourceTree = "<group>";
@@ -356,9 +375,6 @@
 			isa = PBXGroup;
 			children = (
 				C8C1FB49257F6D4200D98A92 /* UIView+Rendering.swift */,
-				E0825C63258266D3001F0569 /* AnimationKeyPath.swift */,
-				E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */,
-				E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */,
 				E08C28E72584C05700CC0259 /* String+UIsize.swift */,
 				E08C28EC2584C07F00CC0259 /* String+subscript.swift */,
 			);
@@ -380,6 +396,7 @@
 				E0AE5424256F4AA700F799E1 /* MainViewModel.swift */,
 				D44B6FC925783BD700E912BB /* DetailViewModel.swift */,
 				D499BFD825765E0800EF369E /* DetailCollectionViewDataSource.swift */,
+				E08C29F0258760D500CC0259 /* DependencyContainer.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -712,34 +729,38 @@
 				E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */,
 				E08C28E22584BFE000CC0259 /* AniTextLayer.swift in Sources */,
 				E0059FA92563726900CE6BD7 /* MainViewController.swift in Sources */,
+				E08C29D025874A4000CC0259 /* AnimatorDelegate.swift in Sources */,
+				E08C29C12587311100CC0259 /* AnimationMaker.swift in Sources */,
 				8893786C257D415400A5B5C5 /* SettingTableViewCell.swift in Sources */,
 				E0EFA23D25754F0D00995B0C /* PenaltyCluster.swift in Sources */,
 				E0825C64258266D3001F0569 /* AnimationKeyPath.swift in Sources */,
 				C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */,
 				88F1F54F258398EA001A7056 /* DetailCollectionViewCell.swift in Sources */,
 				E07AD7B82580F64800D07EAF /* NaverMapView.swift in Sources */,
-				D45B7D34257F7590009208D9 /* MoveAnimator.swift in Sources */,
+				E08C291A2584FCDC00CC0259 /* StarAnimator.swift in Sources */,
 				E07AD79C2580592900D07EAF /* Unit.swift in Sources */,
 				E0AE5437256F50D900F799E1 /* Clusterable.swift in Sources */,
+				E08C29CB25874A2000CC0259 /* AnimatorManagable.swift in Sources */,
 				E0AE5492257128A700F799E1 /* penaltyKmeans.swift in Sources */,
 				E0EFA24B25754F2D00995B0C /* BasicCluster.swift in Sources */,
-				D4FB056B25808A3C0078EE09 /* Animatorable.swift in Sources */,
 				C87AE2B22582602400017EA5 /* GetMarkerColor.swift in Sources */,
 				8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */,
 				D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */,
-				E07AD7CE25812C5000D07EAF /* Animator.swift in Sources */,
+				E07AD7CE25812C5000D07EAF /* BasicAnimator.swift in Sources */,
 				88A67A02257E73AF004CA6C7 /* Geocoding.swift in Sources */,
 				E08C28ED2584C07F00CC0259 /* String+subscript.swift in Sources */,
 				E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */,
+				E08C29E92587527300CC0259 /* MarkerInfo.swift in Sources */,
 				C8D647D8256F66FB00E3BB14 /* MainViewController+NaverMap.swift in Sources */,
 				D44558E525661638006D9D66 /* NaverMapA.xcdatamodeld in Sources */,
 				D41830D6257842CF005AD9F0 /* MainViewController+PullUpViewDelegate.swift in Sources */,
 				E0059FA72563726900CE6BD7 /* SceneDelegate.swift in Sources */,
+				E08C29F1258760D500CC0259 /* DependencyContainer.swift in Sources */,
 				E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */,
 				E08C28E82584C05700CC0259 /* String+UIsize.swift in Sources */,
 				E0AE5442256F859B00F799E1 /* CoordinateBounds.swift in Sources */,
+				E08C29B925872DEA00CC0259 /* PathMaker.swift in Sources */,
 				E08C28F22584C0AD00CC0259 /* CAKeyframeAnimation+.swift in Sources */,
-				D4FB056625808A220078EE09 /* AppearAnimator.swift in Sources */,
 				88A679FD257E7317004CA6C7 /* NaverMapAPI.swift in Sources */,
 				D44558DB256615CF006D9D66 /* Place.swift in Sources */,
 				D44B6FCA25783BD700E912BB /* DetailViewModel.swift in Sources */,
@@ -749,6 +770,7 @@
 				E0BCC6C625638972005AD87F /* Environment.swift in Sources */,
 				E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */,
 				E07AD780257F728700D07EAF /* UserInfo.swift in Sources */,
+				E08C29C625874A0E00CC0259 /* AnimationType.swift in Sources */,
 				D4C2F82B2575193D00F784CE /* DetailPullUpViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

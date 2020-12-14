@@ -35,7 +35,7 @@ class NaverMapView: NMFNaverMapView {
             let w = selectedLeafMarker!.iconImage.imageWidth * 1.4
             let h = selectedLeafMarker!.iconImage.imageHeight * 1.4
             let tframe = CGRect(x: 0, y: 0, width: w, height: h)
-            let tview = markerFactory.makeCmarkerView(frame: tframe, color: .systemRed, text: "1", isShawdow: true)
+            let tview = markerFactory.basicMarkerView(frame: tframe, color: .systemRed, text: "1", isShawdow: true)
             selectedLeafMarker!.iconImage = NMFOverlayImage(image: tview.getImage())
             isAnimation = true
         }
@@ -71,7 +71,8 @@ class NaverMapView: NMFNaverMapView {
                                       northEastLat: cbounds.northEastLat)
         return bounds
     }
-    
+    @Unit(wrappedValue: 18, threshold: 0.5) var zoomLevelCheck
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commomInit(position: defaultPosition)
@@ -142,7 +143,7 @@ class NaverMapView: NMFNaverMapView {
                 maxLongitude = place.longitude
             }
         }
-        let camUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 50)
+        let camUpdate = NMFCameraUpdate(fit: NMGLatLngBounds(southWest: NMGLatLng(lat: minLatitude, lng: maxLongitude), northEast: NMGLatLng(lat: maxLatitude, lng: minLongitude)), padding: 10)
         camUpdate.animation = .fly
         camUpdate.animationDuration = 1
         mapView.moveCamera(camUpdate) { _ in
@@ -159,7 +160,7 @@ class NaverMapView: NMFNaverMapView {
         let h = marker.iconImage.imageHeight * 1.4
         let tframe = CGRect(x: 0, y: 0, width: w, height: h)
         let text = "\(afterCluster.places.count)"
-        let tview = markerFactory.makeCmarkerView(frame: tframe, color: markerColor, text: text, isShawdow: true)
+        let tview = markerFactory.basicMarkerView(frame: tframe, color: markerColor, text: text, isShawdow: true)
         marker.iconImage = NMFOverlayImage(image: tview.getImage())
         marker.zIndex = 1
         marker.mapView = self.mapView

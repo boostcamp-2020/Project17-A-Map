@@ -49,6 +49,15 @@ extension CABasicAnimation {
         animation.duration = duration
         return animation
     }
+    
+    static func position(fromValue: CGPoint, toValue: CGPoint, duration: Double) -> CABasicAnimation {
+        let animation = CABasicAnimation()
+        animation.keyPath = AnimationKeyPath.position.rawValue
+        animation.fromValue = fromValue
+        animation.toValue = toValue
+        animation.duration = duration
+        return animation
+    }
 
     // MARK: Transfrom
 
@@ -58,16 +67,6 @@ extension CABasicAnimation {
         animation.valueFunction = CAValueFunction(name: valueFunctionName)
         animation.fromValue = fromValue
         animation.toValue = toValue
-        animation.duration = duration
-        return animation
-    }
-    
-    static func transform(fromValue: (Double, Double, Double), toValue: (Double, Double, Double), valueFunctionName: CAValueFunctionName, duration: Double) -> CABasicAnimation {
-        let animation = CABasicAnimation()
-        animation.keyPath = AnimationKeyPath.transform.rawValue
-        animation.valueFunction = CAValueFunction(name: valueFunctionName)
-        animation.fromValue = [fromValue.0, fromValue.1, fromValue.2]
-        animation.toValue = [toValue.0, toValue.1, toValue.2]
         animation.duration = duration
         return animation
     }

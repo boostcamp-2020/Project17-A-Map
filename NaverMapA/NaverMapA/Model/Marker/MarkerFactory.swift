@@ -10,24 +10,33 @@ import NMapsMap
 
 class MarkerFactory {
     
-    func setLayout(label: UILabel, markerImageView: UIImageView) {
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.layer.cornerRadius = 10
-        label.leadingAnchor.constraint(equalTo: markerImageView.leadingAnchor, constant: 8).isActive = true
-        label.trailingAnchor.constraint(equalTo: markerImageView.trailingAnchor, constant: -8).isActive = true
-        label.topAnchor.constraint(equalTo: markerImageView.topAnchor, constant: 8).isActive = true
-        label.bottomAnchor.constraint(equalTo: markerImageView.bottomAnchor, constant: -18).isActive = true
-    }
-    
-    func makeCmarkerView(frame: CGRect, color: UIColor, text: String = "", isShawdow: Bool = false) -> UIView {
+    let colorSet = [
+        [
+            UIColor(named: "gradient1-1")?.cgColor,
+            UIColor(named: "gradient1-2")?.cgColor,
+            UIColor(named: "gradient1-3")?.cgColor
+        ],
+        [
+            UIColor(named: "gradient2-1")?.cgColor,
+            UIColor(named: "gradient2-2")?.cgColor,
+            UIColor(named: "gradient2-3")?.cgColor
+        ],
+        [
+            UIColor(named: "gradient3-1")?.cgColor,
+            UIColor(named: "gradient3-2")?.cgColor,
+            UIColor(named: "gradient3-3")?.cgColor
+        ]
+    ]
+
+    func basicMarkerView(frame: CGRect, color: UIColor, text: String = "", isShawdow: Bool = false) -> UIView {
         let mRect = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
-        let mlayer = makeCMarkerLayer(rect: mRect, color: color, text: text, isShawdow: isShawdow)
+        let mlayer = basicMarkerLayer(rect: mRect, color: color, text: text, isShawdow: isShawdow)
         let mView = UIView(frame: frame)
         mView.layer.addSublayer(mlayer)
         return mView
     }
     
-    func makeCMarkerLayer(rect: CGRect, color: UIColor, text: String = "", isShawdow: Bool = false) -> CALayer {
+    func basicMarkerLayer(rect: CGRect, color: UIColor, text: String = "", isShawdow: Bool = false) -> CALayer {
         let centerX = rect.midX
         let centerY = rect.midY
         let radius = rect.width / 3
@@ -64,7 +73,28 @@ class MarkerFactory {
         
         markerLayer.addSublayer(circleLayer)
         markerLayer.addSublayer(textLayer)
-        
         return markerLayer
+    }
+    
+    func starMarkerView(frame: CGRect, color: UIColor, text: String = "", isShawdow: Bool = false) -> UIView {
+        let mRect = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+        let mlayer = starMarkerLayer(rect: mRect, color: color, text: text, isShawdow: isShawdow)
+        let mView = UIView(frame: frame)
+        mView.layer.addSublayer(mlayer)
+        return mView
+    }
+    
+    func starMarkerLayer(rect: CGRect, color: UIColor, text: String = "", isShawdow: Bool = false) -> CALayer {
+        let starShape = CAShapeLayer()
+        starShape.path = PathMaker().starRounded(width: rect.width, height: rect.height).cgPath
+    
+        let newLayer = CAGradientLayer()
+        newLayer.frame = rect
+        newLayer.colors = colorSet[Int.random(in: 0..<colorSet.count)] as [Any]
+        newLayer.locations = [0, 0.5, 1]
+        newLayer.startPoint = CGPoint(x: 0, y: 0)
+        newLayer.endPoint = CGPoint(x: 1, y: 1)
+        newLayer.mask = starShape    
+        return newLayer
     }
 }
