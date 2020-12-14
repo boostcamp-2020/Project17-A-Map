@@ -62,24 +62,30 @@ class MainViewController: UIViewController {
         }
         
         let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
+        let markerWidth = NMFMarker().iconImage.imageWidth * 1.4
+        let markerHeight = NMFMarker().iconImage.imageHeight * 1.4
+        let info = MarkerInfo(width: markerWidth,
+                              height: markerHeight,
+                              color: markerColor)
+        
         switch Setting.Animation(rawValue: InfoSetting.animation) {
         case .appleStyle:
             animator = BasicAnimator(
                 mapView: self.naverMapView,
-                markerColor: markerColor,
+                markerInfo: info,
                 animationMaker: AnimationMaker(pathMaker: PathMaker())
             )
         case .shootingStart:
             animator = StarAnimation(
                 mapView: self.naverMapView,
-                markerColor: markerColor,
+                markerInfo: info,
                 animationMaker: AnimationMaker(pathMaker: PathMaker())
 
             )
         default:
             animator = BasicAnimator(
                 mapView: self.naverMapView,
-                markerColor: markerColor,
+                markerInfo: info,
                 animationMaker: AnimationMaker(pathMaker: PathMaker())
             )
         }
@@ -170,7 +176,7 @@ class MainViewController: UIViewController {
                         $0.mapView = nil
                     }
                     // 3. 현재 바운드에 맞는 마커 바로 맵뷰에 추가
-                    self.naverMapView.configureNewMarkers(afterClusters: afterClusters, markerColor: self.animator.markerColor)
+                    self.naverMapView.configureNewMarkers(afterClusters: afterClusters, markerColor: self.animator.markerInfo.color)
                 } else { // 애니메이션중이 아닐때
                     self.naverMapView.deleteBeforeMarkers()
                     self.naverMapView.clusterObjects = afterClusters

@@ -15,21 +15,19 @@ class BasicAnimator: AnimatorManagable {
     var isAnimating = false
     var mapView: NMFMapView
     var animationLayer: CALayer
-    var markerWidth = NMFMarker().iconImage.imageWidth * 1.4
-    var markerHeight = NMFMarker().iconImage.imageHeight * 1.4
     var markerFactory: MarkerFactory
-    var markerColor: UIColor
+    let markerInfo: MarkerInfo
     weak var delegate: AnimatorDelegate?
     let animationMaker: AnimationMaker
     @Atomic(value: 0) var animationCount
     
     init(mapView: NaverMapView,
-         markerColor: UIColor,
+         markerInfo: MarkerInfo,
          animationMaker: AnimationMaker) {
         self.mapView = mapView.mapView
         self.animationLayer = mapView.animationLayer
         self.markerFactory = MarkerFactory()
-        self.markerColor = markerColor
+        self.markerInfo = markerInfo
         self.animationMaker = animationMaker
     }
     
@@ -50,7 +48,7 @@ class BasicAnimator: AnimatorManagable {
                     let startPoint = mapView.projection.point(from: NMGLatLng(lat: beforeCluster.latitude, lng: beforeCluster.longitude))
                     let endPoint = mapView.projection.point(from: NMGLatLng(lat: afterCluster.latitude, lng: afterCluster.longitude))
                     if startPoint == endPoint {
-                        delegate?.animator(self, didAppeared: afterCluster, color: markerColor)
+                        delegate?.animator(self, didAppeared: afterCluster, color: markerInfo.color)
                     } else {
                         movingAnimation(startPoint: startPoint, endPoint: endPoint, beforeCluster: beforeCluster, afterClusters: after)
                     }
@@ -68,8 +66,8 @@ class BasicAnimator: AnimatorManagable {
     }
     
     func appearAnimation(startPoint: CGPoint, cluster: Cluster) {
-        let lframe = CGRect(x: -100, y: -100, width: markerWidth, height: markerHeight)
-        let markerView = markerFactory.basicMarkerView(frame: lframe, color: markerColor, text: "\(cluster.places.count)")
+        let lframe = CGRect(x: -100, y: -100, width: markerInfo.width, height: markerInfo.height)
+        let markerView = markerFactory.basicMarkerView(frame: lframe, color: markerInfo.color, text: "\(cluster.places.count)")
         let markerLayer = markerView.layer
         let animation = self.animationMaker.scaleY()
 
@@ -83,7 +81,7 @@ class BasicAnimator: AnimatorManagable {
             CATransaction.setCompletionBlock {
                 self.animationCount -= 1
                 markerLayer.removeFromSuperlayer()
-                self.delegate?.animator(self, didAppeared: cluster, color: self.markerColor)
+                self.delegate?.animator(self, didAppeared: cluster, color: self.markerInfo.color)
             }
             markerLayer.add(animation, forKey: nil)
             CATransaction.commit()
@@ -91,8 +89,8 @@ class BasicAnimator: AnimatorManagable {
     }
         
     func movingAnimation(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster]) {
-        let lframe = CGRect(x: -100, y: -100, width: markerWidth, height: markerHeight)
-        let markerView = markerFactory.basicMarkerView(frame: lframe, color: markerColor, text: "\(beforeCluster.places.count)")
+        let lframe = CGRect(x: -100, y: -100, width: markerInfo.width, height: markerInfo.height)
+        let markerView = markerFactory.basicMarkerView(frame: lframe, color: markerInfo.color, text: "\(beforeCluster.places.count)")
         let markerLayer = markerView.layer
         let animation = animationMaker.position(start: startPoint, end: endPoint)
         
@@ -108,7 +106,7 @@ class BasicAnimator: AnimatorManagable {
                 markerLayer.removeFromSuperlayer()
                 if self.animationCount == 0 && self.isAnimating {
                     self.isAnimating = false
-                    self.delegate?.animator(self, didMoved: afterClusters, color: self.markerColor)
+                    self.delegate?.animator(self, didMoved: afterClusters, color: self.markerInfo.color)
                 }
             }
             markerLayer.add(animation, forKey: nil)

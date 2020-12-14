@@ -90,7 +90,7 @@ class MarkerFactory {
     
         let newLayer = CAGradientLayer()
         newLayer.frame = rect
-        newLayer.colors = colorSet[Int.random(in: 0..<colorSet.count)]
+        newLayer.colors = colorSet[Int.random(in: 0..<colorSet.count)] as [Any]
         newLayer.locations = [0, 0.5, 1]
         newLayer.startPoint = CGPoint(x: 0, y: 0)
         newLayer.endPoint = CGPoint(x: 1, y: 1)

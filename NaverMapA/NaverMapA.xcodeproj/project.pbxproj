@@ -65,6 +65,7 @@
 		E08C29C625874A0E00CC0259 /* AnimationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29C525874A0E00CC0259 /* AnimationType.swift */; };
 		E08C29CB25874A2000CC0259 /* AnimatorManagable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29CA25874A2000CC0259 /* AnimatorManagable.swift */; };
 		E08C29D025874A4000CC0259 /* AnimatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29CF25874A4000CC0259 /* AnimatorDelegate.swift */; };
+		E08C29E92587527300CC0259 /* MarkerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29E82587527300CC0259 /* MarkerInfo.swift */; };
 		E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5424256F4AA700F799E1 /* MainViewModel.swift */; };
 		E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE542C256F4BC800F799E1 /* Dynamic.swift */; };
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
@@ -172,6 +173,7 @@
 		E08C29C525874A0E00CC0259 /* AnimationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationType.swift; sourceTree = "<group>"; };
 		E08C29CA25874A2000CC0259 /* AnimatorManagable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatorManagable.swift; sourceTree = "<group>"; };
 		E08C29CF25874A4000CC0259 /* AnimatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimatorDelegate.swift; sourceTree = "<group>"; };
+		E08C29E82587527300CC0259 /* MarkerInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerInfo.swift; sourceTree = "<group>"; };
 		E0AE5424256F4AA700F799E1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0AE542C256F4BC800F799E1 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				C816202625789C8A00DF61C4 /* MarkerFactory.swift */,
 				E07AD7B72580F64800D07EAF /* NaverMapView.swift */,
 				C87AE2B12582602400017EA5 /* GetMarkerColor.swift */,
+				E08C29E82587527300CC0259 /* MarkerInfo.swift */,
 			);
 			path = Marker;
 			sourceTree = "<group>";
@@ -752,6 +755,7 @@
 				E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */,
 				D499BFCC2575C40700EF369E /* DetailCollectionViewListCell.swift in Sources */,
 				D4C8115F2581DC790097A3FA /* AsyncFetcherOperation.swift in Sources */,
+				E08C29E92587527300CC0259 /* MarkerInfo.swift in Sources */,
 				D4C8115225812CDD0097A3FA /* AsyncFetcher.swift in Sources */,
 				C8D647D8256F66FB00E3BB14 /* MainViewController+NaverMap.swift in Sources */,
 				D44558E525661638006D9D66 /* NaverMapA.xcdatamodeld in Sources */,
