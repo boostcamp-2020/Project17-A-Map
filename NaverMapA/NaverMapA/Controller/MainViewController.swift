@@ -157,6 +157,7 @@ class MainViewController: UIViewController {
                         $0.mapView = nil
                     }
                     // 3. 현재 바운드에 맞는 마커 바로 맵뷰에 추가
+                    self.naverMapView.clusterObjects = afterClusters
                     self.naverMapView.configureNewMarkers(afterClusters: afterClusters, markerColor: self.animator.markerColor)
                 } else { // 애니메이션중이 아닐때
                     self.naverMapView.deleteBeforeMarkers()
