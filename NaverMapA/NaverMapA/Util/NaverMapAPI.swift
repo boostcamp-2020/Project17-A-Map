@@ -19,11 +19,7 @@ final class NaverMapAPI {
         request.httpMethod = "GET"
         request.setValue(Environment.clientId, forHTTPHeaderField: "X-NCP-APIGW-API-KEY-ID")
         request.setValue(Environment.clientSecret, forHTTPHeaderField: "X-NCP-APIGW-API-KEY")
-        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, _, error in
-            guard error == nil else {
-                print(error!)
-                return
-            }
+        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, _, _ in
             guard let data = data else {
                 return
             }

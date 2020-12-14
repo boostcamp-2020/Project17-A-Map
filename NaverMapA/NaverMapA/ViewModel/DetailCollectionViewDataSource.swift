@@ -32,17 +32,15 @@ final class DetailCollectionViewDataSource: NSObject, UICollectionViewDataSource
         }
         let viewModel = viewModels[indexPath.item]
         if placeCount == 1,
-           let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewDetailCell.identifier, for: indexPath) as? DetailCollectionViewDetailCell {
+           let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailPullUpViewController.detailCollectionViewDetailCell, for: indexPath) as? DetailCollectionViewCell {
             cell.configure(viewModel: viewModel)
             return cell
         } else if
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailCollectionViewListCell.identifier, for: indexPath) as? DetailCollectionViewListCell {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DetailPullUpViewController.detailCollectionViewListCell, for: indexPath) as? DetailCollectionViewCell {
             cell.configure(viewModel: viewModel)
             return cell
         } else {
             return UICollectionViewCell()
         }
-        
     }
-    
 }

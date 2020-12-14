@@ -13,9 +13,10 @@ protocol PullUpViewDelegate: class {
 }
 
 class DetailPullUpViewController: UIViewController {
-    
+    static let detailCollectionViewListCell = "DetailCollectionViewListCell"
+    static let detailCollectionViewDetailCell = "DetailCollectionViewDetailCell"
     static let identifier: String = String(describing: DetailPullUpViewController.self)
-
+    
     private enum State {
         case full
         case half
@@ -24,7 +25,7 @@ class DetailPullUpViewController: UIViewController {
     
     private let panGestureVelocityThreshold: CGFloat = 200
     private let animationDuration = 0.4
-
+    
     // MARK: - Properties
     
     private var fullViewPosition: CGFloat {
@@ -110,8 +111,8 @@ class DetailPullUpViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = dataSource
         collectionView.backgroundColor = .systemGray6
-        collectionView.register(UINib(nibName: DetailCollectionViewListCell.identifier, bundle: .main), forCellWithReuseIdentifier: DetailCollectionViewListCell.identifier)
-        collectionView.register(UINib(nibName: DetailCollectionViewDetailCell.identifier, bundle: .main), forCellWithReuseIdentifier: DetailCollectionViewDetailCell.identifier)
+        collectionView.register(UINib(nibName: DetailPullUpViewController.detailCollectionViewListCell, bundle: .main), forCellWithReuseIdentifier: DetailPullUpViewController.detailCollectionViewListCell)
+        collectionView.register(UINib(nibName: DetailPullUpViewController.detailCollectionViewDetailCell, bundle: .main), forCellWithReuseIdentifier: DetailPullUpViewController.detailCollectionViewDetailCell)
     }
     
     // MARK: - Methods
@@ -218,7 +219,7 @@ class DetailPullUpViewController: UIViewController {
             }
         }
     }
-
+    
     // MARK: IBActions
     
     @IBAction private func touchedCloseButton(_ sender: Any) {
