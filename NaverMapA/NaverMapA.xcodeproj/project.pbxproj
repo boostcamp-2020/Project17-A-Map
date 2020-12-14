@@ -294,6 +294,9 @@
 				E08C29CF25874A4000CC0259 /* AnimatorDelegate.swift */,
 				E08C29B825872DEA00CC0259 /* PathMaker.swift */,
 				E08C29C02587311100CC0259 /* AnimationMaker.swift */,
+				E0825C63258266D3001F0569 /* AnimationKeyPath.swift */,
+				E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */,
+				E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */,
 			);
 			path = Animator;
 			sourceTree = "<group>";
@@ -374,9 +377,6 @@
 			isa = PBXGroup;
 			children = (
 				C8C1FB49257F6D4200D98A92 /* UIView+Rendering.swift */,
-				E0825C63258266D3001F0569 /* AnimationKeyPath.swift */,
-				E0825C5E25824F7F001F0569 /* CABasicAnimation+.swift */,
-				E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */,
 				E08C28E72584C05700CC0259 /* String+UIsize.swift */,
 				E08C28EC2584C07F00CC0259 /* String+subscript.swift */,
 			);

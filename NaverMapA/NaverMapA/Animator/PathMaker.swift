@@ -103,7 +103,7 @@ class PathMaker {
 
     }
     
-    func pointFrom(_ angle: CGFloat, radius: CGFloat, offset: CGPoint) -> CGPoint {
+    private func pointFrom(_ angle: CGFloat, radius: CGFloat, offset: CGPoint) -> CGPoint {
         return CGPoint(x: radius * cos(angle) + offset.x,
                        y: radius * sin(angle) + offset.y)
     }

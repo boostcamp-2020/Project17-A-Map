@@ -65,7 +65,6 @@ class BasicAnimator: AnimatorManagable {
             let point = mapView.projection.point(from: NMGLatLng(lat: cluster.latitude, lng: cluster.longitude))
             appearAnimation(startPoint: point, cluster: cluster)
         }
-
     }
     
     func appearAnimation(startPoint: CGPoint, cluster: Cluster) {
