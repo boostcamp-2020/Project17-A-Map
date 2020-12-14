@@ -94,44 +94,50 @@ class BasicAnimator: AnimatorManager {
     }
     
     func appearAnimation(startPoint: CGPoint, cluster: Cluster) {
-        let markerLayer = markerFactory.makeCmarkerView(frame: CGRect(x: -100, y: -100, width: width, height: height), color: markerColor, text: "\(cluster.places.count)")
-        let scaleUpAnimation = self.animationMaker.scaleY()
+        let lframe = CGRect(x: -100, y: -100, width: width, height: height)
+        let markerView = markerFactory.basicMarkerView(frame: lframe, color: markerColor, text: "\(cluster.places.count)")
+        let markerLayer = markerView.layer
+        let animation = self.animationMaker.scaleY()
 
-        animationLayer.addSublayer(markerLayer.layer)
-        markerLayer.layer.position = startPoint
-        markerLayer.layer.anchorPoint = CGPoint(x: 0.5, y: 1)
+        animationLayer.addSublayer(markerLayer)
+        markerLayer.position = startPoint
+        markerLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         count += 1
+        
         queue.async {
             CATransaction.begin()
             CATransaction.setCompletionBlock {
                 self.count -= 1
-                markerLayer.layer.removeFromSuperlayer()
+                markerLayer.removeFromSuperlayer()
                 self.appearCompletionHandler(cluster, self.markerColor)
             }
-            markerLayer.layer.add(scaleUpAnimation, forKey: nil)
+            markerLayer.add(animation, forKey: nil)
             CATransaction.commit()
         }
     }
         
     func movingAnimation(startPoint: CGPoint, endPoint: CGPoint, beforeCluster: Cluster, afterClusters: [Cluster]) {
-        let markerLayer = markerFactory.makeCmarkerView(frame: CGRect(x: -100, y: -100, width: width, height: height), color: markerColor, text: "\(beforeCluster.places.count)")
-        let markerAnimation = animationMaker.position(start: startPoint, end: endPoint)
-        animationLayer.addSublayer(markerLayer.layer)
-        markerLayer.layer.anchorPoint = CGPoint(x: 0.5, y: 1)
+        let lframe = CGRect(x: -100, y: -100, width: width, height: height)
+        let markerView = markerFactory.basicMarkerView(frame: lframe, color: markerColor, text: "\(beforeCluster.places.count)")
+        let markerLayer = markerView.layer
+        let animation = animationMaker.position(start: startPoint, end: endPoint)
+        
+        animationLayer.addSublayer(markerLayer)
+        markerLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         isAnimating = true
         count += 1
+        
         queue.async {
             CATransaction.begin()
-
             CATransaction.setCompletionBlock {
                 self.count -= 1
-                markerLayer.layer.removeFromSuperlayer()
+                markerLayer.removeFromSuperlayer()
                 if self.count == 0 && self.isAnimating {
                     self.isAnimating = false
                     self.moveCompletionHandler(afterClusters, self.markerColor)
                 }
             }
-            markerLayer.layer.add(markerAnimation, forKey: "position")
+            markerLayer.add(animation, forKey: nil)
             CATransaction.commit()
         }
     }
