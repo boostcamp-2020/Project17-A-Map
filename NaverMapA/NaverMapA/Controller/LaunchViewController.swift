@@ -19,59 +19,85 @@ class LaunchViewController: UIViewController {
         circle1.zPosition = 1
         circle2.transform = CATransform3DMakeRotation(-(2/8) * .pi, 0, 0, 1)
         
+        let group = CAAnimationGroup()
+        let group2 = CAAnimationGroup()
+        
         let scaleDownAnimation = CABasicAnimation(keyPath: "transform.scale")
-        scaleDownAnimation.repeatCount = 1
         scaleDownAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        scaleDownAnimation.isRemovedOnCompletion = false
+        scaleDownAnimation.fillMode = .backwards
+        scaleDownAnimation.beginTime = 0
         scaleDownAnimation.fromValue = 1
         scaleDownAnimation.toValue = 0.9
         scaleDownAnimation.duration = 0.3
         
         let scaleDownAnimation2 = CABasicAnimation(keyPath: "transform.scale")
         scaleDownAnimation2.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        scaleDownAnimation2.isRemovedOnCompletion = false
+        scaleDownAnimation2.fillMode = .backwards
+        scaleDownAnimation2.beginTime = 0
         scaleDownAnimation2.fromValue = 1
         scaleDownAnimation2.toValue = 0.9
         scaleDownAnimation2.duration = 0.3
        
         let scaleUpAnimation = CABasicAnimation(keyPath: "transform.scale")
+        scaleUpAnimation.isRemovedOnCompletion = false
+        scaleUpAnimation.fillMode = .forwards
         scaleUpAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        scaleUpAnimation.beginTime = 0.3
         scaleUpAnimation.fromValue = 1
-        scaleUpAnimation.toValue = 8
+        scaleUpAnimation.toValue = 14
         scaleUpAnimation.duration = 0.3
         
         let positionAnimation = CABasicAnimation(keyPath: "position")
+        positionAnimation.isRemovedOnCompletion = false
+        positionAnimation.fillMode = .forwards
         positionAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        positionAnimation.beginTime = 0.3
         positionAnimation.fromValue = CGPoint(x: circle1.position.x, y: circle1.position.y)
-        positionAnimation.toValue = CGPoint(x: circle1.position.x, y: circle1.position.y + 1200)
+        positionAnimation.toValue = CGPoint(x: circle1.position.x, y: circle1.position.y + 2500)
         positionAnimation.duration = 0.3
         
         let scaleUpAnimation2 = CABasicAnimation(keyPath: "transform.scale")
+        scaleUpAnimation2.isRemovedOnCompletion = false
+        scaleUpAnimation2.fillMode = .forwards
         scaleUpAnimation2.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        scaleUpAnimation2.beginTime = 0.3
         scaleUpAnimation2.fromValue = 1
-        scaleUpAnimation2.toValue = 8
+        scaleUpAnimation2.toValue = 14
         scaleUpAnimation2.duration = 0.3
         
         let positionAnimation2 = CABasicAnimation(keyPath: "position")
+        positionAnimation2.isRemovedOnCompletion = false
+        positionAnimation2.fillMode = .forwards
         positionAnimation2.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        positionAnimation2.beginTime = 0.3
         positionAnimation2.fromValue = CGPoint(x: circle2.position.x, y: circle2.position.y)
-        positionAnimation2.toValue = CGPoint(x: circle2.position.x, y: circle2.position.y + 1200)
+        positionAnimation2.toValue = CGPoint(x: circle2.position.x, y: circle2.position.y + 2500)
         positionAnimation2.duration = 0.3
+        
+        group.animations = [
+            scaleDownAnimation,
+            scaleUpAnimation,
+            positionAnimation
+        ]
+        group.duration = 0.6
+        
+        group2.animations = [
+            scaleDownAnimation2,
+            scaleUpAnimation2,
+            positionAnimation2
+        ]
+        group2.duration = 0.6
         
         CATransaction.begin()
         CATransaction.setCompletionBlock({
-            CATransaction.begin()
-            CATransaction.setCompletionBlock({
-                circle1.removeFromSuperlayer()
-                circle2.removeFromSuperlayer()
-                self.changeScene()
-            })
-            circle1.add(scaleUpAnimation, forKey: "transform.scale")
-            circle2.add(scaleUpAnimation2, forKey: "transform.scale")
-            circle1.add(positionAnimation, forKey: "position")
-            circle2.add(positionAnimation2, forKey: "position")
-            CATransaction.commit()
+            circle1.removeFromSuperlayer()
+            circle2.removeFromSuperlayer()
+            self.changeScene()
         })
-        circle1.add(scaleDownAnimation, forKey: "transform.scale")
-        circle2.add(scaleDownAnimation2, forKey: "transform.scale")
+        circle1.add(group, forKey: nil)
+        circle2.add(group2, forKey: nil)
         CATransaction.commit()
     }
     
