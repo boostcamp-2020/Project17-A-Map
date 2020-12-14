@@ -11,19 +11,36 @@ class LaunchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func drawSemiCircle(color: CGColor) -> CAShapeLayer {
+        let center: CGPoint = .zero
+        let radius: CGFloat = 100
+        let bezierPath = UIBezierPath()
+        bezierPath.move(to: center)
+        bezierPath.addArc(
+            withCenter: center,
+            radius: 20,
+            startAngle: (1/8 * .pi),
+            endAngle: (7/8 * .pi),
+            clockwise: true
+        )
+        let center2 = CGPoint(x: center.x, y: center.y - 170)
+        bezierPath.addArc(
+            withCenter: center2,
+            radius: radius,
+            startAngle: .pi * (7/8),
+            endAngle: (1/8) * .pi,
+            clockwise: true
+        )
+        bezierPath.addLine(to: CGPoint(x: center.x + 20 * cos(.pi * (1/8)),
+                                       y: center.y + 20 * sin(.pi * (1/8))))
+        bezierPath.close()
+        let circle = CAShapeLayer()
+        circle.path = bezierPath.cgPath
+        circle.fillColor = color
+        self.view.layer.addSublayer(circle)
+        
+        return circle
     }
-    */
-
 }
