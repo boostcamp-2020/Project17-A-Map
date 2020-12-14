@@ -13,7 +13,7 @@ enum AnimationType {
     case appear
 }
 
-protocol Animator {
+protocol AnimatorManager {
     var queue: DispatchQueue { get }
     var group: DispatchGroup { get }
     var isAnimating: Bool { get }
@@ -28,7 +28,7 @@ protocol Animator {
     func animate(before: [Cluster], after: [Cluster], type: AnimationType)
 }
 
-class MoveAnimator1: Animator {
+class BasicAnimator: AnimatorManager {
 
     var queue = DispatchQueue(label: "animator", attributes: .concurrent)
     var group = DispatchGroup()

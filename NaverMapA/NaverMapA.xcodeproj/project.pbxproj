@@ -26,7 +26,6 @@
 		D44558DB256615CF006D9D66 /* Place.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44558D9256615CF006D9D66 /* Place.swift */; };
 		D44558E525661638006D9D66 /* NaverMapA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D44558E325661638006D9D66 /* NaverMapA.xcdatamodeld */; };
 		D44B6FCA25783BD700E912BB /* DetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44B6FC925783BD700E912BB /* DetailViewModel.swift */; };
-		D45B7D34257F7590009208D9 /* MoveAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45B7D33257F7590009208D9 /* MoveAnimator.swift */; };
 		D499BFCC2575C40700EF369E /* DetailCollectionViewListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFCA2575C40700EF369E /* DetailCollectionViewListCell.swift */; };
 		D499BFCD2575C40700EF369E /* DetailCollectionViewListCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */; };
 		D499BFD32575C41400EF369E /* DetailCollectionViewDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */; };
@@ -36,8 +35,6 @@
 		D4C8115225812CDD0097A3FA /* AsyncFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C8115125812CDD0097A3FA /* AsyncFetcher.swift */; };
 		D4C8115F2581DC790097A3FA /* AsyncFetcherOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C8115E2581DC790097A3FA /* AsyncFetcherOperation.swift */; };
 		D4C811652581ECA50097A3FA /* CacheData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4C811642581ECA50097A3FA /* CacheData.swift */; };
-		D4FB056625808A220078EE09 /* AppearAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FB056525808A220078EE09 /* AppearAnimator.swift */; };
-		D4FB056B25808A3C0078EE09 /* Animatorable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4FB056A25808A3C0078EE09 /* Animatorable.swift */; };
 		D506A0E6CC326EDBF1BE4462 /* Pods_NaverMapA_NaverMapAUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEE572E6A770EBAC94B87E86 /* Pods_NaverMapA_NaverMapAUITests.framework */; };
 		E0059FA52563726900CE6BD7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FA42563726900CE6BD7 /* AppDelegate.swift */; };
 		E0059FA72563726900CE6BD7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0059FA62563726900CE6BD7 /* SceneDelegate.swift */; };
@@ -63,6 +60,7 @@
 		E08C28ED2584C07F00CC0259 /* String+subscript.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28EC2584C07F00CC0259 /* String+subscript.swift */; };
 		E08C28F22584C0AD00CC0259 /* CAKeyframeAnimation+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */; };
 		E08C291A2584FCDC00CC0259 /* StarAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29192584FCDB00CC0259 /* StarAnimator.swift */; };
+		E08C29B925872DEA00CC0259 /* PathMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C29B825872DEA00CC0259 /* PathMaker.swift */; };
 		E0AE5425256F4AA700F799E1 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5424256F4AA700F799E1 /* MainViewModel.swift */; };
 		E0AE542D256F4BC800F799E1 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE542C256F4BC800F799E1 /* Dynamic.swift */; };
 		E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0AE5431256F4F0200F799E1 /* Cluster.swift */; };
@@ -126,7 +124,6 @@
 		D44558D9256615CF006D9D66 /* Place.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Place.swift; path = NaverMapA/Model/Place/Place.swift; sourceTree = SOURCE_ROOT; };
 		D44558E425661638006D9D66 /* NaverMapA.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = NaverMapA.xcdatamodel; sourceTree = "<group>"; };
 		D44B6FC925783BD700E912BB /* DetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewModel.swift; sourceTree = "<group>"; };
-		D45B7D33257F7590009208D9 /* MoveAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveAnimator.swift; sourceTree = "<group>"; };
 		D499BFCA2575C40700EF369E /* DetailCollectionViewListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewListCell.swift; sourceTree = "<group>"; };
 		D499BFCB2575C40700EF369E /* DetailCollectionViewListCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailCollectionViewListCell.xib; sourceTree = "<group>"; };
 		D499BFD12575C41400EF369E /* DetailCollectionViewDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCollectionViewDetailCell.swift; sourceTree = "<group>"; };
@@ -136,8 +133,6 @@
 		D4C8115125812CDD0097A3FA /* AsyncFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetcher.swift; sourceTree = "<group>"; };
 		D4C8115E2581DC790097A3FA /* AsyncFetcherOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncFetcherOperation.swift; sourceTree = "<group>"; };
 		D4C811642581ECA50097A3FA /* CacheData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheData.swift; sourceTree = "<group>"; };
-		D4FB056525808A220078EE09 /* AppearAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearAnimator.swift; sourceTree = "<group>"; };
-		D4FB056A25808A3C0078EE09 /* Animatorable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animatorable.swift; sourceTree = "<group>"; };
 		E0059FA12563726900CE6BD7 /* NaverMapA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaverMapA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0059FA42563726900CE6BD7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0059FA62563726900CE6BD7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -168,6 +163,7 @@
 		E08C28EC2584C07F00CC0259 /* String+subscript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+subscript.swift"; sourceTree = "<group>"; };
 		E08C28F12584C0AD00CC0259 /* CAKeyframeAnimation+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CAKeyframeAnimation+.swift"; sourceTree = "<group>"; };
 		E08C29192584FCDB00CC0259 /* StarAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StarAnimator.swift; sourceTree = "<group>"; };
+		E08C29B825872DEA00CC0259 /* PathMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathMaker.swift; sourceTree = "<group>"; };
 		E0AE5424256F4AA700F799E1 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
 		E0AE542C256F4BC800F799E1 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 		E0AE5431256F4F0200F799E1 /* Cluster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cluster.swift; sourceTree = "<group>"; };
@@ -283,11 +279,9 @@
 		D4FB0564258089F80078EE09 /* Animator */ = {
 			isa = PBXGroup;
 			children = (
-				D4FB056A25808A3C0078EE09 /* Animatorable.swift */,
-				D45B7D33257F7590009208D9 /* MoveAnimator.swift */,
-				D4FB056525808A220078EE09 /* AppearAnimator.swift */,
 				E07AD7CD25812C5000D07EAF /* Animator.swift */,
 				E08C29192584FCDB00CC0259 /* StarAnimator.swift */,
+				E08C29B825872DEA00CC0259 /* PathMaker.swift */,
 			);
 			path = Animator;
 			sourceTree = "<group>";
@@ -729,13 +723,11 @@
 				E0825C64258266D3001F0569 /* AnimationKeyPath.swift in Sources */,
 				C816202725789C8A00DF61C4 /* MarkerFactory.swift in Sources */,
 				E07AD7B82580F64800D07EAF /* NaverMapView.swift in Sources */,
-				D45B7D34257F7590009208D9 /* MoveAnimator.swift in Sources */,
 				E08C291A2584FCDC00CC0259 /* StarAnimator.swift in Sources */,
 				E07AD79C2580592900D07EAF /* Unit.swift in Sources */,
 				E0AE5437256F50D900F799E1 /* Clusterable.swift in Sources */,
 				E0AE5492257128A700F799E1 /* penaltyKmeans.swift in Sources */,
 				E0EFA24B25754F2D00995B0C /* BasicCluster.swift in Sources */,
-				D4FB056B25808A3C0078EE09 /* Animatorable.swift in Sources */,
 				C87AE2B22582602400017EA5 /* GetMarkerColor.swift in Sources */,
 				8898E855256D914C00CFE5B4 /* ScaleBasedClustering.swift in Sources */,
 				D499BFD925765E0800EF369E /* DetailCollectionViewDataSource.swift in Sources */,
@@ -754,8 +746,8 @@
 				E0AE5432256F4F0200F799E1 /* Cluster.swift in Sources */,
 				E08C28E82584C05700CC0259 /* String+UIsize.swift in Sources */,
 				E0AE5442256F859B00F799E1 /* CoordinateBounds.swift in Sources */,
+				E08C29B925872DEA00CC0259 /* PathMaker.swift in Sources */,
 				E08C28F22584C0AD00CC0259 /* CAKeyframeAnimation+.swift in Sources */,
-				D4FB056625808A220078EE09 /* AppearAnimator.swift in Sources */,
 				88A679FD257E7317004CA6C7 /* NaverMapAPI.swift in Sources */,
 				D44558DB256615CF006D9D66 /* Place.swift in Sources */,
 				D44B6FCA25783BD700E912BB /* DetailViewModel.swift in Sources */,

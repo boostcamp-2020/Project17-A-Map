@@ -23,7 +23,7 @@ class MainViewController: UIViewController {
     }()
     var pullUpVC: DetailPullUpViewController?
     var fetchBtn: FetchButton!
-    var animator: MoveAnimator1!
+    var animator: BasicAnimator!
     @Unit(wrappedValue: 18, threshold: 0.5) var zoomLevelCheck
     
     @IBOutlet weak var settingButton: UIButton!
@@ -64,7 +64,7 @@ class MainViewController: UIViewController {
         let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         switch Setting.Animation(rawValue: InfoSetting.animation) {
         case .appleStyle:
-            animator = MoveAnimator1(
+            animator = BasicAnimator(
                 mapView: self.naverMapView,
                 markerColor: markerColor,
                 appearCompletionHandler: self.naverMapView.configureNewMarker,
@@ -78,7 +78,7 @@ class MainViewController: UIViewController {
                 moveCompletionHandler: self.naverMapView.configureNewMarkers
             )
         default:
-            animator = MoveAnimator1(
+            animator = BasicAnimator(
                 mapView: self.naverMapView,
                 markerColor: markerColor,
                 appearCompletionHandler: self.naverMapView.configureNewMarker,
