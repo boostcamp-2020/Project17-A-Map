@@ -38,7 +38,7 @@ class LaunchViewController: UIViewController {
         scaleDownAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         scaleDownAnimation.isRemovedOnCompletion = false
         scaleDownAnimation.fillMode = .backwards
-        scaleDownAnimation.beginTime = 0
+        scaleDownAnimation.beginTime = 0.3
         scaleDownAnimation.fromValue = 1
         scaleDownAnimation.toValue = 0.9
         scaleDownAnimation.duration = 0.3
@@ -47,7 +47,7 @@ class LaunchViewController: UIViewController {
         scaleDownAnimation2.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         scaleDownAnimation2.isRemovedOnCompletion = false
         scaleDownAnimation2.fillMode = .backwards
-        scaleDownAnimation2.beginTime = 0
+        scaleDownAnimation2.beginTime = 0.3
         scaleDownAnimation2.fromValue = 1
         scaleDownAnimation2.toValue = 0.9
         scaleDownAnimation2.duration = 0.3
@@ -56,7 +56,7 @@ class LaunchViewController: UIViewController {
         scaleUpAnimation.isRemovedOnCompletion = false
         scaleUpAnimation.fillMode = .forwards
         scaleUpAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        scaleUpAnimation.beginTime = 0.3
+        scaleUpAnimation.beginTime = 0.6
         scaleUpAnimation.fromValue = 1
         scaleUpAnimation.toValue = 14
         scaleUpAnimation.duration = 0.3
@@ -65,7 +65,7 @@ class LaunchViewController: UIViewController {
         positionAnimation.isRemovedOnCompletion = false
         positionAnimation.fillMode = .forwards
         positionAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        positionAnimation.beginTime = 0.3
+        positionAnimation.beginTime = 0.6
         positionAnimation.fromValue = CGPoint(x: circle1.position.x, y: circle1.position.y)
         positionAnimation.toValue = CGPoint(x: circle1.position.x, y: circle1.position.y * 5)
         positionAnimation.duration = 0.3
@@ -74,7 +74,7 @@ class LaunchViewController: UIViewController {
         scaleUpAnimation2.isRemovedOnCompletion = false
         scaleUpAnimation2.fillMode = .forwards
         scaleUpAnimation2.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        scaleUpAnimation2.beginTime = 0.3
+        scaleUpAnimation2.beginTime = 0.6
         scaleUpAnimation2.fromValue = 1
         scaleUpAnimation2.toValue = 14
         scaleUpAnimation2.duration = 0.3
@@ -83,7 +83,7 @@ class LaunchViewController: UIViewController {
         positionAnimation2.isRemovedOnCompletion = false
         positionAnimation2.fillMode = .forwards
         positionAnimation2.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
-        positionAnimation2.beginTime = 0.3
+        positionAnimation2.beginTime = 0.6
         positionAnimation2.fromValue = CGPoint(x: circle2.position.x, y: circle2.position.y)
         positionAnimation2.toValue = CGPoint(x: circle2.position.x, y: circle2.position.y * 5)
         positionAnimation2.duration = 0.3
@@ -93,7 +93,7 @@ class LaunchViewController: UIViewController {
             scaleUpAnimation,
             positionAnimation
         ]
-        group.duration = 0.6
+        group.duration = 0.9
         group.isRemovedOnCompletion = false
         group.fillMode = .forwards
         
@@ -102,7 +102,7 @@ class LaunchViewController: UIViewController {
             scaleUpAnimation2,
             positionAnimation2
         ]
-        group2.duration = 0.6
+        group2.duration = 0.9
         group2.isRemovedOnCompletion = false
         group2.fillMode = .forwards
         
