@@ -11,21 +11,21 @@ import NMapsMap
 class MarkerFactory {
     
     let colorSet = [
-         [
-         UIColor(red: 255/255, green: 151/255, blue: 96/255, alpha: 1).cgColor,
-         UIColor(red: 255/255, green: 218/255, blue: 140/255, alpha: 1).cgColor,
-         UIColor(red: 255/255, green: 159/255, blue: 195/255, alpha: 1).cgColor
-         ],
-         [
-         UIColor(red: 140/255, green: 122/255, blue: 250/255, alpha: 1).cgColor,
-         UIColor(red: 127/255, green: 164/255, blue: 250/255, alpha: 1).cgColor,
-         UIColor(red: 109/255, green: 206/255, blue: 244/255, alpha: 1).cgColor
-         ],
-         [
-         UIColor(red: 104/255, green: 186/255, blue: 197/255, alpha: 1).cgColor,
-         UIColor(red: 140/255, green: 206/255, blue: 185/255, alpha: 1).cgColor,
-         UIColor(red: 199/255, green: 237/255, blue: 173/255, alpha: 1).cgColor
-         ]
+        [
+            UIColor(named: "gradient1-1")?.cgColor,
+            UIColor(named: "gradient1-2")?.cgColor,
+            UIColor(named: "gradient1-3")?.cgColor
+        ],
+        [
+            UIColor(named: "gradient2-1")?.cgColor,
+            UIColor(named: "gradient2-2")?.cgColor,
+            UIColor(named: "gradient2-3")?.cgColor
+        ],
+        [
+            UIColor(named: "gradient3-1")?.cgColor,
+            UIColor(named: "gradient3-2")?.cgColor,
+            UIColor(named: "gradient3-3")?.cgColor
+        ]
     ]
 
     func basicMarkerView(frame: CGRect, color: UIColor, text: String = "", isShawdow: Bool = false) -> UIView {

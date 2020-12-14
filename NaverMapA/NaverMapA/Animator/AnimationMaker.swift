@@ -27,7 +27,6 @@ class AnimationMaker {
         groupAnimation.animations = [rotate, pathAnimation]
         groupAnimation.duration = duration * Double(repeatCount)
         groupAnimation.beginTime = CACurrentMediaTime() + delay * 1
-        
         return groupAnimation
     }
     
