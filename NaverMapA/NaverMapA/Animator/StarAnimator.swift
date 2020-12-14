@@ -14,7 +14,7 @@ class StarAnimation: BasicAnimator {
         let layerWidth = NMFMarker().iconImage.imageWidth
         let layerHeight = NMFMarker().iconImage.imageHeight
         let animation = animationMaker.pathScale(start: startPoint, end: endPoint, duration: 0.6, repeatCount: 1, delay: 0)
-        let markerLayer = markerFactory.makeStarLayer(rect: CGRect(x: -100, y: -100, width: layerWidth, height: layerHeight), color: markerColor)
+        let markerLayer = markerFactory.starMarkerLayer(rect: CGRect(x: -100, y: -100, width: layerWidth, height: layerHeight), color: markerColor)
         markerLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         animationLayer.addSublayer(markerLayer)
         isAnimating = true
