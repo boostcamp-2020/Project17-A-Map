@@ -115,7 +115,7 @@ class FetchButton: UIButton {
         btnUpAnimation.valueFunction = CAValueFunction(name: .translateY)
         btnUpAnimation.keyTimes = [0, 0.2, 1]
         btnUpAnimation.values = [0, 20, -100]
-        btnUpAnimation.duration = 0.3
+        btnUpAnimation.duration = 0.2
         btnUpAnimation.timingFunctions = [CAMediaTimingFunction(name: .easeOut)]
         btnUpAnimation.beginTime = CACurrentMediaTime() + 1.4
         btnUpAnimation.isRemovedOnCompletion = false

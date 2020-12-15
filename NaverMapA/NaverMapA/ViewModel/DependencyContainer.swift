@@ -13,8 +13,6 @@ class DependencyContainer {
         switch Setting.Algorithm(rawValue: InfoSetting.algorithm) {
         case .kims:
             return ScaleBasedClustering()
-        case .kmeansElbow:
-            return KMeansClustering()
         case .kmeansPenalty:
             return PenaltyKmeans()
         default:

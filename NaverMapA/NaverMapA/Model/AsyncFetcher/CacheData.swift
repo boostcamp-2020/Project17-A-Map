@@ -34,8 +34,12 @@ final class CacheData {
         }
         let task = URLSession(configuration: .default).dataTask(with: url) { (data, _, error) in
             DispatchQueue.main.async {
-                guard let responseData = data, let image = UIImage(data: responseData), error == nil else {
-                    self.cachedImages.setObject(UIImage(systemName: "xmark.circle")!, forKey: urlStr)
+                guard error == nil else {
+                    completion(nil)
+                    return
+                }
+                guard let responseData = data, let image = UIImage(data: responseData) else {
+                    self.cachedImages.setObject(self.placeholderImage, forKey: urlStr)
                     completion(nil)
                     return
                 }
