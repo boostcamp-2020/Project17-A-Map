@@ -78,20 +78,20 @@ class PathMaker {
         let pointsOnStar = 5
         var angle: CGFloat = -CGFloat(Double.pi / 2.0)
         let angleIncrement = CGFloat(Double.pi * 2.0 / Double(pointsOnStar))
-        let pointAngle: CGFloat = CGFloat(Double.pi * 30 / 180)
+        let pointAngle: CGFloat = (.pi - angleIncrement) / 2
         let starExtrusion: CGFloat = width / 4
 
-        let edgeRadiusPoint = pointFrom(angle, radius: radius * 0.8, offset: center)
+        let edgeRadiusPoint = pointFrom(angle, radius: radius * 0.9, offset: center)
         let path = UIBezierPath(arcCenter: edgeRadiusPoint,
-                                radius: radius * 0.2,
+                                radius: radius * 0.1,
                                 startAngle: angle - pointAngle,
                                 endAngle: angle + pointAngle,
                                 clockwise: true)
         for _ in 1..<pointsOnStar {
             let midPoint = pointFrom(angle + angleIncrement / 2.0, radius: starExtrusion, offset: center)
-            let edgeRadiusPoint = pointFrom(angle + angleIncrement, radius: radius * 0.8, offset: center)
+            let edgeRadiusPoint = pointFrom(angle + angleIncrement, radius: radius * 0.9, offset: center)
             path.addLine(to: midPoint)
-            path.addArc(withCenter: edgeRadiusPoint, radius: radius * 0.2, startAngle: angle + angleIncrement - pointAngle, endAngle: angle + angleIncrement + pointAngle, clockwise: true)
+            path.addArc(withCenter: edgeRadiusPoint, radius: radius * 0.1, startAngle: angle + angleIncrement - pointAngle, endAngle: angle + angleIncrement + pointAngle, clockwise: true)
             angle += angleIncrement
             
         }
