@@ -17,7 +17,6 @@ struct Setting {
     
     enum Algorithm: String, CaseIterable {
         case kims = "Kim's Algorithm"
-        case kmeansElbow = "K-means with Elbow"
         case kmeansPenalty = "Penalty K-means"
     }
     
