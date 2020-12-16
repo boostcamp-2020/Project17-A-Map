@@ -18,18 +18,18 @@ class LaunchViewController: UIViewController {
     
     func startSplash() {
         self.view.backgroundColor = .white
-        let circle1 = drawSemiCircle(color: UIColor.systemPurple.cgColor)
-        let circle2 = drawSemiCircle(color: UIColor.systemTeal.cgColor)
+        let marker1 = drawMarker(color: UIColor.systemPurple.cgColor)
+        let marker2 = drawMarker(color: UIColor.systemTeal.cgColor)
         let plusX = self.view.frame.width / 8
-        circle1.position = CGPoint(x: self.view.layer.bounds.midX + plusX, y: self.view.layer.bounds.midY + (self.height / 2))
-        circle2.position = CGPoint(x: self.view.layer.bounds.midX + plusX, y: self.view.layer.bounds.midY + (self.height / 2))
-        circle1.zPosition = 1
-        circle2.transform = CATransform3DMakeRotation(-(2/8) * .pi, 0, 0, 1)
+        marker1.position = CGPoint(x: self.view.layer.bounds.midX + plusX, y: self.view.layer.bounds.midY + (self.height / 2))
+        marker2.position = CGPoint(x: self.view.layer.bounds.midX + plusX, y: self.view.layer.bounds.midY + (self.height / 2))
+        marker1.zPosition = 1
+        marker2.transform = CATransform3DMakeRotation(-(2/8) * .pi, 0, 0, 1)
         
-        circle1.shadowOpacity = 1
-        circle2.shadowOpacity = 1
-        circle1.shadowColor = UIColor.systemGray3.cgColor
-        circle2.shadowColor = UIColor.systemGray.cgColor
+        marker1.shadowOpacity = 1
+        marker2.shadowOpacity = 1
+        marker1.shadowColor = UIColor.systemGray3.cgColor
+        marker2.shadowColor = UIColor.systemGray.cgColor
         
         let group = CAAnimationGroup()
         let group2 = CAAnimationGroup()
@@ -66,8 +66,8 @@ class LaunchViewController: UIViewController {
         positionAnimation.fillMode = .forwards
         positionAnimation.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         positionAnimation.beginTime = 0.6
-        positionAnimation.fromValue = CGPoint(x: circle1.position.x, y: circle1.position.y)
-        positionAnimation.toValue = CGPoint(x: circle1.position.x, y: circle1.position.y * 5)
+        positionAnimation.fromValue = CGPoint(x: marker1.position.x, y: marker1.position.y)
+        positionAnimation.toValue = CGPoint(x: marker1.position.x, y: marker1.position.y * 5)
         positionAnimation.duration = 0.3
         
         let scaleUpAnimation2 = CABasicAnimation(keyPath: "transform.scale")
@@ -84,8 +84,8 @@ class LaunchViewController: UIViewController {
         positionAnimation2.fillMode = .forwards
         positionAnimation2.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
         positionAnimation2.beginTime = 0.6
-        positionAnimation2.fromValue = CGPoint(x: circle2.position.x, y: circle2.position.y)
-        positionAnimation2.toValue = CGPoint(x: circle2.position.x, y: circle2.position.y * 5)
+        positionAnimation2.fromValue = CGPoint(x: marker2.position.x, y: marker2.position.y)
+        positionAnimation2.toValue = CGPoint(x: marker2.position.x, y: marker2.position.y * 5)
         positionAnimation2.duration = 0.3
         
         group.animations = [
@@ -108,16 +108,16 @@ class LaunchViewController: UIViewController {
         
         CATransaction.begin()
         CATransaction.setCompletionBlock({
-            circle1.removeFromSuperlayer()
-            circle2.removeFromSuperlayer()
+            marker1.removeFromSuperlayer()
+            marker2.removeFromSuperlayer()
             self.changeScene()
         })
-        circle1.add(group, forKey: nil)
-        circle2.add(group2, forKey: nil)
+        marker1.add(group, forKey: nil)
+        marker2.add(group2, forKey: nil)
         CATransaction.commit()
     }
     
-    func drawSemiCircle(color: CGColor) -> CAShapeLayer {
+    func drawMarker(color: CGColor) -> CAShapeLayer {
         let center: CGPoint = .zero
         let radius: CGFloat = self.view.frame.width / 4
         let radius2: CGFloat = self.view.frame.width / 12
