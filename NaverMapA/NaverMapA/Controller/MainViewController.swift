@@ -90,7 +90,7 @@ class MainViewController: UIViewController {
         settingButton.layer.shadowOpacity = 0.4
         settingButton.layer.shadowOffset = CGSize(width: 1, height: 1)
         let backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: self, action: nil)
-        backBarButtonItem.tintColor = .black
+        backBarButtonItem.tintColor = .label
         self.navigationItem.backBarButtonItem = backBarButtonItem
         setupFetchButton()
     }
