@@ -26,24 +26,7 @@ extension MainViewController: NMFMapViewCameraDelegate {
             let filtedPlaces = viewModel.fetchedPlaces(with: coordBounds)
             self.naverMapView.zoomLevelCheck = mapView.zoomLevel
             if self.naverMapView.$zoomLevelCheck {
-                viewModel.updatePlacesAndAnimation(places: filtedPlaces, bounds: self.naverMapView.coordBounds) {
-                    DispatchQueue.main.async {
-                        if self.naverMapView.selectedLeafMarker == nil {
-                            return
-                        }
-                        var findLeap = false
-                        for marker in self.naverMapView.clusterMarkers {
-                            if marker.position.lat == self.naverMapView.selectedLeafMarker?.position.lat && marker.position.lng == self.naverMapView.selectedLeafMarker?.position.lng {
-                                self.naverMapView.selectedLeafMarker = marker
-                                findLeap = true
-                                break
-                            }
-                        }
-                        if !findLeap {
-                            self.naverMapView.selectedLeafMarker = nil
-                        }
-                    }
-                }
+                viewModel.updatePlacesAndAnimation(places: filtedPlaces, bounds: self.naverMapView.coordBounds)
             }
         }
     }

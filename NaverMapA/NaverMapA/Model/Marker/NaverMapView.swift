@@ -72,7 +72,7 @@ class NaverMapView: NMFNaverMapView {
         return bounds
     }
     @Unit(wrappedValue: 18, threshold: 0.5) var zoomLevelCheck
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commomInit(position: defaultPosition)
@@ -178,14 +178,14 @@ class NaverMapView: NMFNaverMapView {
         afterClusters.forEach {afterCluster in
             configureNewMarker(afterCluster: afterCluster, markerColor: markerColor)
         }
-        var findLeap = false
+        var findLeaf = false
         for marker in self.clusterMarkers {
             if marker.position.lat == selectedLeafMarker?.position.lat && marker.position.lng == selectedLeafMarker?.position.lng {
-                findLeap = true
+                findLeaf = true
                 break
             }
         }
-        if !findLeap {
+        if !findLeaf {
             self.selectedLeafMarker = nil
         }
     }
