@@ -178,14 +178,14 @@ class NaverMapView: NMFNaverMapView {
         afterClusters.forEach {afterCluster in
             configureNewMarker(afterCluster: afterCluster, markerColor: markerColor)
         }
-        var findLeap = false
+        var findLeaf = false
         for marker in self.clusterMarkers {
             if marker.position.lat == selectedLeafMarker?.position.lat && marker.position.lng == selectedLeafMarker?.position.lng {
-                findLeap = true
+                findLeaf = true
                 break
             }
         }
-        if !findLeap {
+        if !findLeaf {
             self.selectedLeafMarker = nil
         }
     }
