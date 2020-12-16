@@ -19,7 +19,8 @@ class BasicAnimator: AnimatorManagable {
     let markerInfo: MarkerInfo
     weak var delegate: AnimatorDelegate?
     let animationMaker: AnimationMaker
-    @Atomic(value: 0) var animationCount
+    var animationCount = 0
+    var semaphore = DispatchSemaphore(value: 1)
     
     init(mapView: NaverMapView,
          markerInfo: MarkerInfo,
@@ -79,7 +80,9 @@ class BasicAnimator: AnimatorManagable {
         queue.async {
             CATransaction.begin()
             CATransaction.setCompletionBlock {
+                _ = self.semaphore.wait(timeout: .distantFuture)
                 self.animationCount -= 1
+                self.semaphore.signal()
                 markerLayer.removeFromSuperlayer()
                 self.delegate?.animator(self, didAppeared: cluster, color: self.markerInfo.color)
             }
@@ -102,7 +105,9 @@ class BasicAnimator: AnimatorManagable {
         queue.async {
             CATransaction.begin()
             CATransaction.setCompletionBlock {
+                _ = self.semaphore.wait(timeout: .distantFuture)
                 self.animationCount -= 1
+                self.semaphore.signal()
                 markerLayer.removeFromSuperlayer()
                 if self.animationCount == 0 && self.isAnimating {
                     self.isAnimating = false
