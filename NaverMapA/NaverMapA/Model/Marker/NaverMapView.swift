@@ -72,7 +72,7 @@ class NaverMapView: NMFNaverMapView {
         return bounds
     }
     @Unit(wrappedValue: 18, threshold: 0.5) var zoomLevelCheck
-
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commomInit(position: defaultPosition)
