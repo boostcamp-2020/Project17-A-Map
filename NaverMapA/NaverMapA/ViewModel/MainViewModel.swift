@@ -15,7 +15,6 @@ class MainViewModel {
     var beforeMarkers: [Cluster] = []
     var fetchedPlaces: [Place] = []
     let queue = OperationQueue()
-    let animationQueue = OperationQueue.main
     
     init(algorithm: Clusterable) {
         clusteringAlgorithm = algorithm

@@ -239,7 +239,6 @@ extension MainViewController {
             $0.removeFromSuperlayer()
         }
         viewModel?.queue.cancelAllOperations()
-        viewModel?.animationQueue.cancelAllOperations()
         
         guard !fetchBtn.isAnimating else { return }
         fetchBtn.removeFromSuperview()
