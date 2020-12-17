@@ -32,6 +32,7 @@ class MainViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         guard let _ = NMFAuthManager.shared().clientId else {
             AlertManager.shared.clientIdIsNil(controller: self)
             return
@@ -132,7 +133,9 @@ class MainViewController: UIViewController {
                 if self.animator.isAnimating { // 애니메이션중일때
                     // 1. 애니메이션중인 레이어 모두 지우기
                     self.animator.isAnimating = false // 새로운 마커를 그리지 않음
-                    self.animationLayer.sublayers?.removeAll()
+                    self.animationLayer.sublayers?.forEach {
+                        $0.removeFromSuperlayer()
+                    }
                     // 2. 맵뷰에 있는 모든 마커 삭제
                     self.naverMapView.clusterMarkers.forEach {
                         $0.mapView = nil
