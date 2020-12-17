@@ -25,7 +25,7 @@ class MainViewController: UIViewController {
     var fetchBtn: FetchButton!
     var animator: BasicAnimator!
     let container = DependencyContainer()
-
+    
     @IBOutlet weak var settingButton: UIButton!
     
     // MARK: - ViewLifeCycle
@@ -52,7 +52,7 @@ class MainViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
+        
         let markerColor = GetMarkerColor.getColor(colorString: InfoSetting.markerColor)
         let markerWidth = NMFMarker().iconImage.imageWidth * 1.4
         let markerHeight = NMFMarker().iconImage.imageHeight * 1.4
@@ -67,11 +67,11 @@ class MainViewController: UIViewController {
     }
     
     // MARK: - Initailize
-
+    
     func setupViewModel() {
         viewModel = MainViewModel(algorithm: container.algorithm())
     }
-        
+    
     private func setUpMapView() {
         naverMapView = NaverMapView(frame: view.frame)
         naverMapView.mapView.addCameraDelegate(delegate: self)
@@ -146,14 +146,14 @@ class MainViewController: UIViewController {
                 } else { // 애니메이션중이 아닐때
                     self.naverMapView.deleteBeforeMarkers()
                     self.naverMapView.clusterObjects = afterClusters
-                    var findLeap = false
+                    var findLeaf = false
                     for cluster in afterClusters {
                         if cluster.latitude == self.naverMapView.selectedLeafMarker?.position.lat && cluster.longitude == self.naverMapView.selectedLeafMarker?.position.lng {
-                            findLeap = true
+                            findLeaf = true
                             break
                         }
                     }
-                    if !findLeap {
+                    if !findLeaf {
                         self.naverMapView.selectedLeafMarker = nil
                     }
                     self.animator.animate(before: beforeClusters, after: afterClusters, type: .move)
@@ -191,15 +191,15 @@ class MainViewController: UIViewController {
                     if self.naverMapView.selectedLeafMarker == nil {
                         return
                     }
-                    var findLeap = false
+                    var findLeaf = false
                     for marker in self.naverMapView.clusterMarkers {
                         if marker.position.lat == self.naverMapView.selectedLeafMarker?.position.lat && marker.position.lng == self.naverMapView.selectedLeafMarker?.position.lng {
                             self.naverMapView.selectedLeafMarker = marker
-                            findLeap = true
+                            findLeaf = true
                             break
                         }
                     }
-                    if !findLeap {
+                    if !findLeaf {
                         self.naverMapView.selectedLeafMarker = nil
                     }
                 }
