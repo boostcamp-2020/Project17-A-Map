@@ -18,7 +18,7 @@ class SettingTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        titleLabel.textColor = .black
+        titleLabel.textColor = .label
         colorView.isHidden = false
     }
 

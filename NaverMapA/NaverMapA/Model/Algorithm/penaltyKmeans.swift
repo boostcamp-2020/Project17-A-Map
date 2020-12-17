@@ -12,8 +12,8 @@ final class PenaltyKmeans: Operation, Clusterable {
     var places: [Place] = []
     var bounds: CoordinateBounds = CoordinateBounds(southWestLng: 0, northEastLng: 0, southWestLat: 0, northEastLat: 0)
     var clusters: [Cluster] = []
-    @AtomicArray<[PenaltyCluster]> var candidates
-
+    var candidates: [[PenaltyCluster]] = []
+    
     override func main() {
         candidates = []
         if isCancelled {
@@ -32,10 +32,13 @@ final class PenaltyKmeans: Operation, Clusterable {
         let maximumK = determinateMaxK(count: places.count)
         let clusterQueue = DispatchQueue(label: "cluster", attributes: .concurrent)
         let group = DispatchGroup()
+        let semaphore = DispatchSemaphore(value: 1)
         for k in 1...maximumK where !isCancelled {
             clusterQueue.async(group: group) {
                 let clusters = self.clustering(places: places, k: k)
+                _ = semaphore.wait(timeout: .distantFuture)
                 self.candidates.append(clusters)
+                semaphore.signal()
             }
         }
         
@@ -108,7 +111,7 @@ final class PenaltyKmeans: Operation, Clusterable {
         let iterationCount = 5
         centroids = distributeToCentroid(places: places, centroids: centroids)
 
-        for _ in 0..<iterationCount {
+        for _ in 0..<iterationCount where !isCancelled {
             var newCentroids = centroids.map { PenaltyCluster(lat: $0.averageLatitude, lng: $0.averageLongitude, places: [])}
             newCentroids = distributeToCentroid(places: places, centroids: newCentroids)
             centroids = newCentroids.map {
