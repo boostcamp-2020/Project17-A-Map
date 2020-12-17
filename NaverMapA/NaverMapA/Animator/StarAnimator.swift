@@ -18,16 +18,12 @@ final class StarAnimation: BasicAnimator {
         markerLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         animationLayer.addSublayer(markerLayer)
         isAnimating = true
-        animationCount += 1
+        self.group.enter()
         queue.async {
             CATransaction.begin()
             CATransaction.setCompletionBlock {
-                self.animationCount -= 1
+                self.group.leave()
                 markerLayer.removeFromSuperlayer()
-                if self.animationCount == 0 && self.isAnimating {
-                    self.isAnimating = false
-                    self.delegate?.animator(self, didMoved: afterClusters, color: self.markerInfo.color)
-                }
             }
             markerLayer.add(animation, forKey: "")
             CATransaction.commit()

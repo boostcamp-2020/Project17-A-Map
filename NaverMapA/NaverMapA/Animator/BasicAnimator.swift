@@ -19,9 +19,7 @@ class BasicAnimator: AnimatorManagable {
     let markerInfo: MarkerInfo
     weak var delegate: AnimatorDelegate?
     let animationMaker: AnimationMaker
-    var animationCount = 0
-    var semaphore = DispatchSemaphore(value: 1)
-    
+
     init(mapView: NaverMapView,
          markerInfo: MarkerInfo,
          animationMaker: AnimationMaker) {
@@ -57,6 +55,12 @@ class BasicAnimator: AnimatorManagable {
                 }
             }
         }
+        group.notify(queue: .main) {
+            if self.isAnimating {
+                self.isAnimating = false
+                self.delegate?.animator(self, didMoved: after, color: self.markerInfo.color)
+            }
+        }
     }
     
     func animateAllAppear(after: [Cluster]) {
@@ -75,14 +79,11 @@ class BasicAnimator: AnimatorManagable {
         animationLayer.addSublayer(markerLayer)
         markerLayer.position = startPoint
         markerLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
-        animationCount += 1
         
         queue.async {
             CATransaction.begin()
             CATransaction.setCompletionBlock {
-                _ = self.semaphore.wait(timeout: .distantFuture)
-                self.animationCount -= 1
-                self.semaphore.signal()
+
                 markerLayer.removeFromSuperlayer()
                 self.delegate?.animator(self, didAppeared: cluster, color: self.markerInfo.color)
             }
@@ -100,22 +101,16 @@ class BasicAnimator: AnimatorManagable {
         animationLayer.addSublayer(markerLayer)
         markerLayer.anchorPoint = CGPoint(x: 0.5, y: 1)
         isAnimating = true
-        animationCount += 1
-        
+        self.group.enter()
         queue.async {
             CATransaction.begin()
             CATransaction.setCompletionBlock {
-                _ = self.semaphore.wait(timeout: .distantFuture)
-                self.animationCount -= 1
-                self.semaphore.signal()
+                self.group.leave()
                 markerLayer.removeFromSuperlayer()
-                if self.animationCount == 0 && self.isAnimating {
-                    self.isAnimating = false
-                    self.delegate?.animator(self, didMoved: afterClusters, color: self.markerInfo.color)
-                }
             }
             markerLayer.add(animation, forKey: nil)
             CATransaction.commit()
+
         }
     }
 }
